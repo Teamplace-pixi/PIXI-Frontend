@@ -19,9 +19,7 @@
 
   ## 버전관리
 
-- (base) shinsang-won@sangwon frontend % npm -v
-10.9.2
-- (base) shinsang-won@sangwon frontend % node -v
-v22.14.0
+- npm -v -> 10.9.2
+- node -v -> v22.14.0
 
 
