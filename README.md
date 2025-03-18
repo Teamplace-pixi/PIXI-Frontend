@@ -17,4 +17,11 @@
 - [Rename]: 파일명, 폴더명 변경
 - [Remove]: 파일 삭제
 
+  ## 버전관리
+
+- (base) shinsang-won@sangwon frontend % npm -v
+10.9.2
+- (base) shinsang-won@sangwon frontend % node -v
+v22.14.0
+
 
