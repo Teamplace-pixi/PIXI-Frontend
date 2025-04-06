@@ -1,9 +1,7 @@
+import StartScreen from './StartScreen';
+
 function App() {
-  return (
-    <div>
-      Hello FIXI!
-    </div>
-  );
+  return <StartScreen />;
 }
 
 export default App;
