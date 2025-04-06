@@ -21,7 +21,7 @@ function App() {
         <Route path="/page3" element={<DictionaryScreen3 />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/startlogin" element={<StartLogin />} />
-        <Route path="/signup" element={<SignUpScreen />} /> {/* ✅ 이 줄도 포함 */}
+        <Route path="/signup" element={<SignUpScreen />} /> 
       </Routes>
     </Router>
   );
