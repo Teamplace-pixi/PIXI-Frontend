@@ -1,0 +1,73 @@
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+  }
+  
+  .login-container {
+    width: 375px;
+    height: 812px;
+    background-color: #0047BB;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    border-radius: 20px;
+  }
+  
+  .fixi-logo {
+    width: 180px;
+    margin-bottom: 20px;
+  }
+  
+  .login-subtitle {
+    color: #FFD700;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: auto;
+    line-height: 1.5;
+  }
+  
+  .button-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: auto;
+    margin-bottom: 40px;
+  }
+  
+  .kakao-btn {
+    background-color: #FEE500;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #3C1E1E;
+    cursor: pointer;
+  }
+  
+  .kakao-btn .icon {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+  
+  .login-btn {
+    background-color: white;
+    color: #0047BB;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
