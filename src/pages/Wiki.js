@@ -82,6 +82,7 @@ export default function Wiki() {
         </div>
       </div>
 
+      {/* 하단 네비게이션
       <div
         style={{
           position: 'fixed',
@@ -92,15 +93,26 @@ export default function Wiki() {
           borderTop: '1px solid #ccc',
           display: 'flex',
           justifyContent: 'space-around',
-          padding: '8px 0',
+          padding: '10px 0',
         }}
       >
-        {['홈', '백과사전', '이슈체크', 'AI견적', '프로필'].map((tab) => (
-          <button key={tab} style={{ fontSize: '12px' }}>
-            {tab}
-          </button>
-        ))}
-      </div>
+        {['홈', '백과사전', '이슈체크', 'AI견적', '프로필'].map(
+          (tab, index) => (
+            <button
+              key={index}
+              style={{
+                fontSize: '12px',
+                color: tab === '백과사전' ? '#1A4EC0' : '#666',
+                fontWeight: tab === '백과사전' ? '600' : '400',
+                background: 'none',
+                border: 'none',
+              }}
+            >
+              {tab}
+            </button>
+          )
+        )}
+      </div> */}
     </div>
   );
 }
