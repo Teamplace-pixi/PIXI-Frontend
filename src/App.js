@@ -11,7 +11,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Subscribe />} />
-          <Route path="/wiki" element={<Wiki />} />
           <Route path="/mypage" element={<MyPage />} />
         </Route>
       </Routes>

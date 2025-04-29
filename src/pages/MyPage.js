@@ -2,10 +2,24 @@ import React from 'react';
 
 export default function MyPage() {
   return (
-    <div style={{ padding: '16px', fontFamily: 'sans-serif', paddingBottom: '80px' }}>
+    <div
+      style={{
+        padding: '16px',
+        fontFamily: 'sans-serif',
+        paddingBottom: '80px',
+      }}
+    >
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e40af' }}>My Page</h1>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e40af' }}>
+          My Page
+        </h1>
         <div
           style={{
             width: '24px',
@@ -17,7 +31,14 @@ export default function MyPage() {
       </div>
 
       {/* Profile Section */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '24px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '24px',
+        }}
+      >
         <div
           style={{
             width: '96px',
@@ -26,13 +47,17 @@ export default function MyPage() {
             backgroundColor: '#ddd',
           }}
         />
-        <div style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>일반 회원</div>
+        <div style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+          일반 회원
+        </div>
       </div>
 
       {/* Name and Address */}
       <div style={{ marginTop: '24px' }}>
         <div style={{ marginBottom: '16px' }}>
-          <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>이름</div>
+          <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>
+            이름
+          </div>
           <input
             type="text"
             value="배별하"
@@ -47,7 +72,9 @@ export default function MyPage() {
           />
         </div>
         <div>
-          <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>주소</div>
+          <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>
+            주소
+          </div>
           <input
             type="text"
             value="상암동"
@@ -58,6 +85,8 @@ export default function MyPage() {
               borderRadius: '8px',
               border: '1px solid #ccc',
               fontSize: '16px',
+              display: 'flex',
+              marginRight: '25px',
             }}
           />
         </div>
@@ -65,7 +94,11 @@ export default function MyPage() {
 
       {/* My 수리 요청 */}
       <div style={{ marginTop: '32px' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>My 수리 요청</h2>
+        <h2
+          style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}
+        >
+          My 수리 요청
+        </h2>
         <div
           style={{
             display: 'flex',
@@ -86,7 +119,9 @@ export default function MyPage() {
           />
           <div style={{ marginLeft: '12px' }}>
             <div style={{ fontWeight: 'bold' }}>아이폰16 Pro</div>
-            <div style={{ fontSize: '14px', color: '#2563eb', marginTop: '4px' }}>
+            <div
+              style={{ fontSize: '14px', color: '#2563eb', marginTop: '4px' }}
+            >
               화면이 나오지 않음
             </div>
             <div style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
@@ -127,8 +162,7 @@ export default function MyPage() {
           justifyContent: 'space-around',
           alignItems: 'center',
         }}
-      >
-      </div>
+      ></div>
     </div>
   );
 }
