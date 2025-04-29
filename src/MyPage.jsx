@@ -1,4 +1,5 @@
 import React from 'react';
+import BottomNav from './components/BottomNav';
 
 export default function MyPage() {
   return (
@@ -163,6 +164,7 @@ export default function MyPage() {
           alignItems: 'center',
         }}
       ></div>
+      <BottomNav />
     </div>
   );
 }

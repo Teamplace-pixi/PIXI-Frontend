@@ -6,11 +6,11 @@ const BottomNav = () => {
   const location = useLocation();
 
   const tabs = [
-    { label: '홈', path: '/' },
-    { label: '백과사전', path: '/wiki' },
-    { label: '이슈체크', path: '/issue' },
+    { label: '홈', path: '/home' },
+    { label: 'Finder', path: '/Finder' },
+    { label: 'AI챗봇', path: '/aichat' },
     { label: 'AI견적', path: '/ai' },
-    { label: '프로필', path: '/mypage' },
+    { label: '마이페이지', path: '/mypage' },
   ];
 
   return (
