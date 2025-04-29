@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   method: 'POST',
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'http://fixi-env.eba-kpimqmzt.ap-northeast-2.elasticbeanstalk.com',
   withCredentials: true,
 });
 
