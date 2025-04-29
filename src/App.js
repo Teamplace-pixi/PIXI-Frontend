@@ -2,8 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import MyPage from './pages/MyPage';
-import Wiki from './pages/Wiki';
-import WikiNewDocs from './pages/WikiNewDocs';
 import Subscribe from './pages/Subscribe';
 import Layout from './layout/Layout';
 

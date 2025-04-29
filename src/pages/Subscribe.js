@@ -25,8 +25,11 @@ export default function SubscriptionPage() {
             lineHeight: '1.4',
           }}
         >
-          이민서 님의 적정 구독 플랜은 <br />
-          <span style={{ color: '#FFD43A' }}>스탠다드 구독</span>입니다
+          <span style={{ color: '#FFD43A' }}>FIXI</span>의 모든 기능을 <br />
+          월 2,900원에, <br />
+          <span style={{ fontSize: '16px' }}>
+            수리에 더욱 도움이 될 거에요!
+          </span>
         </h1>
       </div>
 
@@ -35,14 +38,14 @@ export default function SubscriptionPage() {
         <h2
           style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}
         >
-          스탠다드 구독
+          FIXI 프라임으로 전환
         </h2>
 
         <ul style={{ listStyle: 'none', padding: 0, marginBottom: '32px' }}>
           {[
-            '연간 최대 N대의 기기 수리비 얼마 지원',
-            'Wiki chat 제공',
-            '웰컴 키트 제공',
+            'AI 견적 월 5회 이용권',
+            "'구해요' 게시글 상단 배치",
+            '첫 결제 시 웰컴 키트 제공',
           ].map((item, idx) => (
             <li
               key={idx}
@@ -69,23 +72,10 @@ export default function SubscriptionPage() {
 
         {/* 가격 및 버튼 */}
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>월 33,000원</h1>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>월 2,900원</h1>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <button
-            style={{
-              border: '1px solid #1A4EC0',
-              backgroundColor: '#fff',
-              color: '#1A4EC0',
-              padding: '12px',
-              borderRadius: '10px',
-              fontWeight: '500',
-              fontSize: '14px',
-            }}
-          >
-            기기 변경하기
-          </button>
           <button
             style={{
               backgroundColor: '#1A4EC0',
@@ -101,38 +91,6 @@ export default function SubscriptionPage() {
           </button>
         </div>
       </div>
-
-      {/* 하단 네비게이션
-      <div
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          backgroundColor: '#fff',
-          borderTop: '1px solid #ccc',
-          display: 'flex',
-          justifyContent: 'space-around',
-          padding: '10px 0',
-        }}
-      >
-        {['홈', '백과사전', '이슈체크', 'AI견적', '프로필'].map(
-          (tab, index) => (
-            <button
-              key={index}
-              style={{
-                fontSize: '12px',
-                color: tab === '백과사전' ? '#1A4EC0' : '#666',
-                fontWeight: tab === '백과사전' ? '600' : '400',
-                background: 'none',
-                border: 'none',
-              }}
-            >
-              {tab}
-            </button>
-          )
-        )}
-      </div> */}
     </div>
   );
 }

@@ -2,199 +2,133 @@ import React from 'react';
 
 export default function MyPage() {
   return (
-    <div style={{ padding: '16px', fontFamily: 'sans-serif' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e40af' }}>
-          My Page
-        </h1>
-        <text>설정</text>
-      </div>
-
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: '16px' }}>
-        <img
-          src=""
+    <div style={{ padding: '16px', fontFamily: 'sans-serif', paddingBottom: '80px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e40af' }}>My Page</h1>
+        <div
           style={{
-            width: '64px',
-            height: '64px',
+            width: '24px',
+            height: '24px',
+            backgroundColor: '#ccc',
             borderRadius: '50%',
-            border: '1px solid #ccc',
           }}
         />
-        <div style={{ marginLeft: '16px' }}>
-          <div style={{ fontSize: '18px', fontWeight: '600' }}>
-            이민서 회원님
-          </div>
-          <div
-            style={{
-              backgroundColor: '#2563eb',
-              color: '#fff',
-              fontWeight: 'bold',
-              borderRadius: '12px',
-              padding: '4px 8px',
-              marginTop: '4px',
-              fontSize: '12px',
-              display: 'inline-block',
-            }}
-          >
-            FIXER
-          </div>
-        </div>
-        <div
-          style={{
-            marginLeft: 'auto',
-            textAlign: 'right',
-            flex: 1,
-            flexDirection: 'column',
-            width: '50px',
-          }}
-        >
-          <button style={{ padding: '4px 8px' }}>회원정보 변경</button>
-          <div>
-            <button>북마크</button>
-          </div>
-          <div>
-            <button>로그아웃</button>
-          </div>
-        </div>
       </div>
 
-      <div style={{ marginTop: '24px' }}>
-        <div style={{ overflow: 'scroll' }}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <h2>페이백</h2>
-            <button>청구하기</button>
-          </div>
-          <div style={{ marginTop: '8px' }}>
-            <div
-              style={{
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                padding: '8px',
-                marginBottom: '8px',
-              }}
-            >
-              등록 날짜: 4090.03.09
-              <br />
-              금액: 33,000원
-              <br />
-              상태: 검토중
-            </div>
-            <div
-              style={{
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                padding: '8px',
-              }}
-            >
-              등록 날짜: 4090.03.09
-              <br />
-              금액: 33,000원
-              <br />
-              상태: 완료
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style={{ marginTop: '24px' }}>
+      {/* Profile Section */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '24px' }}>
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            width: '96px',
+            height: '96px',
+            borderRadius: '50%',
+            backgroundColor: '#ddd',
           }}
-        >
-          <h2>스탠다드 구독</h2>
-          <button>플랜변경</button>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '8px',
-          }}
-        >
-          {['핸드폰', '노트북', '태블릿', '액세서리'].map((item) => (
-            <div
-              key={item}
-              style={{
-                flex: 1,
-                textAlign: 'center',
-                padding: '8px',
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                margin: '0 4px',
-              }}
-            >
-              {item}
-            </div>
-          ))}
-        </div>
+        />
+        <div style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>일반 회원</div>
       </div>
 
+      {/* Name and Address */}
       <div style={{ marginTop: '24px' }}>
-        <h2>등록 기기</h2>
-        {[1, 2, 3, 4].map((idx) => (
-          <div
-            key={idx}
+        <div style={{ marginBottom: '16px' }}>
+          <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>이름</div>
+          <input
+            type="text"
+            value="배별하"
+            readOnly
             style={{
-              border: '1px solid #ccc',
+              width: '100%',
+              padding: '10px',
               borderRadius: '8px',
-              padding: '8px',
-              marginTop: '8px',
+              border: '1px solid #ccc',
+              fontSize: '16px',
             }}
-          >
-            <div style={{ fontWeight: 'bold' }}>아이폰 16</div>
-            <div style={{ fontSize: '14px', color: '#555' }}>
-              2년 3개월째 사용중
-            </div>
-          </div>
-        ))}
+          />
+        </div>
+        <div>
+          <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>주소</div>
+          <input
+            type="text"
+            value="상암동"
+            readOnly
+            style={{
+              width: '100%',
+              padding: '10px',
+              borderRadius: '8px',
+              border: '1px solid #ccc',
+              fontSize: '16px',
+            }}
+          />
+        </div>
       </div>
 
-      {/* 하단 네비게이션
+      {/* My 수리 요청 */}
+      <div style={{ marginTop: '32px' }}>
+        <h2 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>My 수리 요청</h2>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            border: '1px solid #ccc',
+            borderRadius: '12px',
+            padding: '12px',
+            backgroundColor: '#f9f9f9',
+          }}
+        >
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              backgroundColor: '#ddd',
+              borderRadius: '8px',
+            }}
+          />
+          <div style={{ marginLeft: '12px' }}>
+            <div style={{ fontWeight: 'bold' }}>아이폰16 Pro</div>
+            <div style={{ fontSize: '14px', color: '#2563eb', marginTop: '4px' }}>
+              화면이 나오지 않음
+            </div>
+            <div style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
+              관리를 잘 하시는군요?!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 사업자 등록 버튼 */}
+      <button
+        style={{
+          width: '100%',
+          backgroundColor: '#2563eb',
+          color: '#fff',
+          padding: '14px',
+          borderRadius: '12px',
+          fontWeight: 'bold',
+          fontSize: '16px',
+          marginTop: '32px',
+          border: 'none',
+        }}
+      >
+        사업자 등록
+      </button>
+
+      {/* Bottom Navigation */}
       <div
         style={{
           position: 'fixed',
           bottom: 0,
           left: 0,
-          width: '100%',
+          right: 0,
+          height: '70px',
           backgroundColor: '#fff',
-          borderTop: '1px solid #ccc',
+          borderTop: '1px solid #ddd',
           display: 'flex',
           justifyContent: 'space-around',
-          padding: '10px 0',
+          alignItems: 'center',
         }}
       >
-        {['홈', '백과사전', '이슈체크', 'AI견적', '프로필'].map(
-          (tab, index) => (
-            <button
-              key={index}
-              style={{
-                fontSize: '12px',
-                color: tab === '백과사전' ? '#1A4EC0' : '#666',
-                fontWeight: tab === '백과사전' ? '600' : '400',
-                background: 'none',
-                border: 'none',
-              }}
-            >
-              {tab}
-            </button>
-          )
-        )}
-      </div> */}
+      </div>
     </div>
   );
 }
