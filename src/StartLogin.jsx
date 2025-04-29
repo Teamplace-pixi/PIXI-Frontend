@@ -1,16 +1,40 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import api from './api';
 import './MobileLayout.css';
 
 function StartLogin() {
   const navigate = useNavigate();
+  const [loginId, setLoginId] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const goToSignUp = () => {
     navigate('/signup');
   };
 
-  const goToFixiHome = () => {
-    navigate('/home');
+  // 로그인 관리하는 코드
+  const handleLogin = async (loginId, password) => {
+    try {
+      const response = await api.post(
+        '/users/login',
+        new URLSearchParams({
+          loginId,
+          password,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          withCredentials: true,
+        }
+      );
+
+      navigate('/home');
+    } catch (error) {
+      setErrorMsg('아이디 또는 비밀번호가 잘못되었습니다.');
+      console.error('로그인 에러:', error);
+    }
   };
 
   return (
@@ -28,6 +52,8 @@ function StartLogin() {
         <input
           type="text"
           placeholder="Username"
+          value={loginId}
+          onChange={(e) => setLoginId(e.target.value)}
           style={{
             width: '80%',
             padding: '12px',
@@ -40,6 +66,8 @@ function StartLogin() {
         <input
           type="password"
           placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           style={{
             width: '80%',
             padding: '12px',
@@ -49,8 +77,13 @@ function StartLogin() {
             outline: 'none',
           }}
         />
+        {errorMsg && (
+          <div style={{ color: 'red', fontSize: '12px', marginTop: '8px' }}>
+            {errorMsg}
+          </div>
+        )}
         <button
-          onClick={goToFixiHome}
+          onClick={handleLogin}
           style={{
             width: '80%',
             padding: '12px',
