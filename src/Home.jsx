@@ -2,7 +2,6 @@ import React from 'react';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import Banner from './components/Banner';
-import CategorySection from './components/CategorySection';
 import StoreListSection from './components/StoreListSection';
 import TalentSection from './components/TalentSection';
 import BottomNav from './components/BottomNav';
@@ -15,7 +14,6 @@ function Home() {
         
         <SearchBar />
         <Banner />
-        <CategorySection />
         <StoreListSection />
         <TalentSection />
       </div>
@@ -28,7 +26,8 @@ const styles = {
   container: {
     position: 'relative',
     minHeight: '100vh',
-    paddingBottom: '60px', 
+    paddingTop: '60px',
+    paddingBottom: '16px', 
     backgroundColor: '#fff',
   },
   mainContent: {

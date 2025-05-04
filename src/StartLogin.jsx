@@ -34,6 +34,8 @@ function StartLogin() {
     } catch (error) {
       setErrorMsg('아이디 또는 비밀번호가 잘못되었습니다.');
       console.error('로그인 에러:', error);
+      //임시 화면 전환 코드
+      navigate('/home');
     }
   };
 
