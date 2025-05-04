@@ -21,9 +21,9 @@ function App() {
       <Routes>
         <Route path="/" element={<StartScreen />} />
         <Route path="/dictionary" element={<Page1 />} />
-        <Route path="/page2" element={<Page2 />} /> 
-        <Route path="/page3" element={<Page3 />} /> 
-        <Route path="/page4" element={<Page4 />} /> 
+        <Route path="/page2" element={<Page2 />} />
+        <Route path="/page3" element={<Page3 />} />
+        <Route path="/page4" element={<Page4 />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/startlogin" element={<StartLogin />} />
         <Route path="/signup" element={<SignUpScreen />} />
@@ -32,7 +32,7 @@ function App() {
         <Route path="/finder" element={<Finder />} />
         <Route path="/aichat" element={<AIChat />} />
         <Route path="/ai" element={<AIHowMuch />} />
-        <Route path="/search" element={<SearchPage />} /> 
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
     </Router>
   );

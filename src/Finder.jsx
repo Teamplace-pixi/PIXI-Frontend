@@ -1,7 +1,11 @@
 import React from 'react';
+import Header from './components/Header';
+import DevicePath from './components/DevicePath';
+import DeviceInfo from './components/DeviceInfo';
+import StoreListSection from './components/StoreListSection';
 import BottomNav from './components/BottomNav';
 
-export default function Finder() {
+function Finder() {
   const parts = [
     { name: '액정 교체', price: '420,000원' },
     { name: '배터리 교체', price: '188,000원' },
@@ -9,99 +13,12 @@ export default function Finder() {
   ];
 
   return (
-    <div
-      style={{
-        fontFamily: 'sans-serif',
-        padding: '16px',
-        paddingBottom: '80px',
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <h1 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e40af' }}>
-          FIX Finder
-        </h1>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <div
-            style={{
-              width: '24px',
-              height: '24px',
-              backgroundColor: '#ccc',
-              borderRadius: '50%',
-            }}
-          />
-          <div
-            style={{
-              width: '24px',
-              height: '24px',
-              border: '2px solid #1e40af',
-              borderRadius: '50%',
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Path & Product Image */}
-      <div style={{ marginTop: '16px', color: '#777', fontSize: '14px' }}>
-        핸드폰 &gt;{' '}
-        <span style={{ color: '#1e40af', fontWeight: 'bold' }}>
-          아이폰16 Pro
-        </span>
-      </div>
-
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          marginTop: '12px',
-        }}
-      >
-        <div
-          style={{
-            width: '120px',
-            height: '120px',
-            backgroundColor: '#ddd',
-            borderRadius: '16px',
-          }}
-        />
-        <div style={{ marginTop: '8px', fontWeight: 'bold', fontSize: '16px' }}>
-          아이폰16 Pro
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          marginTop: '24px',
-        }}
-      >
-        {['부품 가격', '수리센터', '구해요'].map((tab, index) => (
-          <button
-            key={index}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '20px',
-              border: tab === '부품 가격' ? 'none' : '1px solid #ccc',
-              backgroundColor: tab === '부품 가격' ? '#2563eb' : '#fff',
-              color: tab === '부품 가격' ? '#fff' : '#333',
-              fontWeight: 'bold',
-            }}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      {/* Scrollable Part List */}
+    <div className="finder-container" style={styles.container}>
+      <Header />
+      <div className="main-content" style={styles.mainContent}>
+        <DevicePath />
+        <DeviceInfo />
+        {/* Scrollable Part List */}
       <div
         style={{
           marginTop: '24px',
@@ -162,7 +79,23 @@ export default function Finder() {
           </div>
         ))}
       </div>
+      </div>
       <BottomNav />
     </div>
   );
 }
+
+const styles = {
+  container: {
+    position: 'relative',
+    minHeight: '100vh',
+    paddingTop: '60px',
+    paddingBottom: '16px',
+    backgroundColor: '#fff',
+  },
+  mainContent: {
+    paddingBottom: '16px',
+  },
+};
+
+export default Finder;
