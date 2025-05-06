@@ -4,10 +4,12 @@ import api from '../api';
 
 // isSearchPage prop을 받도록 수정
 export default function SearchBar({ isSearchPage }) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [name, setSearchQuery] = useState('');
   // Home 페이지에서는 자동완성 목록을 아예 표시하지 않도록 초기값 설정
   const [showSuggestions, setShowSuggestions] = useState(isSearchPage);
   const [suggestions, setSuggestions] = useState([]);
+  const [deviceId, setDeviceId] = useState(null); // deviceId 상태 추가
+  const [deviceName, setDeviceName] = useState(null); // deviceName 상태 추가
   const navigate = useNavigate();
 
   // 검색창 input 엘리먼트에 접근하기 위한 ref
@@ -23,18 +25,18 @@ export default function SearchBar({ isSearchPage }) {
     }
 
     // SearchPage일 때만 기존 자동완성 로직 실행
-    if (searchQuery.length === 0) {
+    if (name.length === 0) {
       setShowSuggestions(false);
       setSuggestions([]);
       return;
     }
 
     const debounceTimer = setTimeout(() => {
-      fetchSuggestions(searchQuery);
+      fetchSuggestions(name);
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [searchQuery, isSearchPage]); // isSearchPage도 의존성 배열에 추가
+  }, [name, isSearchPage]); // isSearchPage도 의존성 배열에 추가
 
   const fetchSuggestions = async (query) => {
     // SearchPage가 아니면 API 호출 안 함
@@ -83,6 +85,8 @@ export default function SearchBar({ isSearchPage }) {
     // SearchPage일 때만 자동완성 항목 클릭 처리
     if (isSearchPage) {
       setSearchQuery(suggestion.deviceName);
+      setDeviceId(suggestion.deviceId); // deviceId 상태 업데이트
+      setDeviceName(suggestion.deviceName); // deviceName 상태 업데이트
       setSuggestions([]);
       setShowSuggestions(false);
     }
@@ -92,9 +96,14 @@ export default function SearchBar({ isSearchPage }) {
   const handleSearchStart = () => {
     // SearchPage일 때만 검색 시작 로직 실행
     if (isSearchPage) {
-      if (searchQuery.length > 0) {
+      if (name.length > 0) {
         // 검색어가 있을 때만 이동
-        navigate(`/Finder?q=${encodeURIComponent(searchQuery)}`);
+        navigate('/Finder', {
+          state: { id: deviceId, name: deviceName },
+        });
+        console.log(
+          `SearchBar: 검색 -> Finder로 이동. ID: ${deviceId}, Name: ${deviceName}`
+        );
         setShowSuggestions(false);
       }
     } else {
@@ -189,7 +198,7 @@ export default function SearchBar({ isSearchPage }) {
         ref={inputRef} // ref 연결
         type="text"
         placeholder="Search"
-        value={searchQuery}
+        value={name}
         onChange={handleSearchChange}
         onKeyPress={handleKeyPress}
         onClick={isSearchPage ? handleInputClick : undefined} // SearchPage일 때만 input 자체 클릭 이벤트 처리
