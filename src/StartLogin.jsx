@@ -13,15 +13,10 @@ function StartLogin() {
     navigate('/signup');
   };
 
-  const handleLogin = async (loginId, password) => {
+  const handleLogin = async () => {
+    navigate('/home');
     try {
-      const response = await api.post(
-        '/users/login',
-        { loginId, password },
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await api.post('/users/login', { loginId, password });
 
       const token = response.data?.token;
       if (token) {

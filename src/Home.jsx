@@ -1,14 +1,20 @@
 import React from 'react';
 import Header from './components/Header';
-import ChatUI from './components/ChatUI';
+import SearchBar from './components/SearchBar';
+import Banner from './components/Banner';
+import StoreListSection from './components/StoreListSection';
+import TalentSection from './components/TalentSection';
 import BottomNav from './components/BottomNav';
 
-function AIChat() {
+function Home() {
   return (
-    <div className="aiChat-container" style={styles.container}>
-      <Header title="AI Chat" />
+    <div className="home-container" style={styles.container}>
+      <Header />
       <div className="main-content" style={styles.mainContent}>
-        <ChatUI />
+        <SearchBar />
+        <Banner />
+        <StoreListSection />
+        <TalentSection />
       </div>
       <BottomNav />
     </div>
@@ -20,14 +26,12 @@ const styles = {
     position: 'relative',
     minHeight: '100vh',
     paddingTop: '60px',
-    paddingBottom: '16px',
+    paddingBottom: '16px', 
     backgroundColor: '#fff',
   },
   mainContent: {
     paddingBottom: '16px',
-    flex: 1,
-    minHeight: 0,
   },
 };
 
-export default AIChat;
+export default Home;
