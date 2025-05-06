@@ -19,66 +19,70 @@ function Finder() {
         <DevicePath />
         <DeviceInfo />
         {/* Scrollable Part List */}
-      <div
-        style={{
-          marginTop: '24px',
-          maxHeight: '300px',
-          overflowY: 'auto',
-          paddingRight: '4px',
-        }}
-      >
-        {parts.map((part, idx) => (
-          <div
-            key={idx}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              border: '1px solid #ddd',
-              borderRadius: '16px',
-              padding: '12px',
-              marginBottom: '12px',
-              backgroundColor: '#fff',
-            }}
-          >
-            {/* 이미지 대체 사각형 */}
+        <div
+          style={{
+            marginTop: '24px',
+            maxHeight: '300px',
+            overflowY: 'auto',
+            paddingRight: '4px',
+          }}
+        >
+          {parts.map((part, idx) => (
             <div
+              key={idx}
               style={{
-                width: '48px',
-                height: '48px',
-                backgroundColor: '#ccc',
-                borderRadius: '12px',
-                marginRight: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                border: '1px solid #ddd',
+                borderRadius: '16px',
+                padding: '12px',
+                marginBottom: '12px',
+                backgroundColor: '#fff',
               }}
-            />
-            {/* 텍스트 정보 */}
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                {part.name}
-              </div>
-              <div
-                style={{ color: '#2563eb', fontSize: '14px', marginTop: '4px' }}
-              >
-                {part.price}
-              </div>
-            </div>
-            {/* 태그 (선택적) */}
-            {part.tag && (
+            >
+              {/* 이미지 대체 사각형 */}
               <div
                 style={{
-                  backgroundColor: '#f97316',
-                  color: '#fff',
-                  padding: '4px 8px',
-                  fontSize: '12px',
-                  fontWeight: 'bold',
-                  borderRadius: '8px',
+                  width: '48px',
+                  height: '48px',
+                  backgroundColor: '#ccc',
+                  borderRadius: '12px',
+                  marginRight: '12px',
                 }}
-              >
-                {part.tag}
+              />
+              {/* 텍스트 정보 */}
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                  {part.name}
+                </div>
+                <div
+                  style={{
+                    color: '#2563eb',
+                    fontSize: '14px',
+                    marginTop: '4px',
+                  }}
+                >
+                  {part.price}
+                </div>
               </div>
-            )}
-          </div>
-        ))}
-      </div>
+              {/* 태그 (선택적) */}
+              {part.tag && (
+                <div
+                  style={{
+                    backgroundColor: '#f97316',
+                    color: '#fff',
+                    padding: '4px 8px',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    borderRadius: '8px',
+                  }}
+                >
+                  {part.tag}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
       <BottomNav />
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from './api';
 import './MobileLayout.css';
 
@@ -22,13 +22,17 @@ function StartLogin() {
           withCredentials: true,
         }
       );
-      console.log('로그인 성공:', response.data);
-      navigate('/home');
+
+      const token = response.data?.token;
+      if (token) {
+        localStorage.setItem('token', token);
+        navigate('/home');
+      } else {
+        setErrorMsg('로그인 실패: 토큰이 없습니다.');
+      }
     } catch (error) {
-      console.error('로그인 에러:', error.response?.data || error.message);
       setErrorMsg('아이디 또는 비밀번호가 잘못되었습니다.');
-      // 임시로 넘어가는 코드
-      navigate('/home');
+      console.error('로그인 실패:', error);
     }
   };
 
