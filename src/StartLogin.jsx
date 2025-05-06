@@ -14,7 +14,6 @@ function StartLogin() {
   };
 
   const handleLogin = async () => {
-    navigate('/home');
     try {
       const response = await api.post('/users/login', { loginId, password });
 
