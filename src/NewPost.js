@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function NewPost({ onAddPost }) {
   const [title, setTitle] = useState('');
   const [model, setModel] = useState('');
   const [price, setPrice] = useState('');
   const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
+  const [address, setAddress] = useState('');
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const deviceId = location.state?.deviceId;
+  const deviceName = location.state?.deviceName;
 
   const handleSubmit = () => {
     if (!title || !model) {
@@ -17,6 +20,7 @@ export default function NewPost({ onAddPost }) {
     }
 
     const newPost = {
+      id: Date.now().toString(),
       title,
       model,
       price: price || '협의 가능',
@@ -26,7 +30,7 @@ export default function NewPost({ onAddPost }) {
     };
 
     onAddPost(newPost);
-    navigate('/finder');
+    navigate('/finder', { state: { id: deviceId, name: deviceName } });
   };
 
   return (
@@ -71,8 +75,8 @@ export default function NewPost({ onAddPost }) {
 
       <label>위치</label>
       <input
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
         placeholder="예: 경기도 광명시"
         style={inputStyle}
       />

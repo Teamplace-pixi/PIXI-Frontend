@@ -4,7 +4,7 @@ import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import api from './api';
 
-export default function Finder() {
+export default function Finder({ posts }) {
   // 부품 가격 용
   const [selectedTab, setSelectedTab] = useState('부품 가격');
   const [partPrices, setPartPrices] = useState(null);
@@ -132,6 +132,10 @@ export default function Finder() {
 
   const handleNavigateToNewPost = () => {
     navigate('/new-post');
+  };
+
+  const handleCenterClick = (centerId) => {
+    navigate(`/service-center/${centerId}`);
   };
 
   const styles = {
@@ -404,7 +408,21 @@ export default function Finder() {
             <h2 style={styles.sectionTitle}>내 주변 수리 센터</h2>
             {shopList.length > 0 ? (
               shopList.map((shop, idx) => (
-                <div key={idx} style={styles.repairCenterItem}>
+                <div
+                  key={idx}
+                  onClick={() => handleCenterClick(shop.id)}
+                  style={styles.repairCenterItem}
+                >
+                  <img
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '12px',
+                      marginRigh: '12px',
+                    }}
+                    src={shop.thumb || 'FIXIicon.png'} // 기본 이미지 URL로 변경 필요
+                    alt="camera"
+                  />
                   <div style={styles.repairCenterName}>{shop.shopName}</div>
                   <div style={styles.repairCenterAddress}>{shop.shopLoc}</div>
                 </div>
@@ -425,7 +443,19 @@ export default function Finder() {
             </div>
             {boardList.length > 0 ? (
               boardList.map((post, idx) => (
-                <div key={idx} style={styles.requestItem}>
+                <div
+                  key={idx}
+                  onClick={() =>
+                    navigate('/post', {
+                      state: {
+                        id: post.id,
+                        deviceId: deviceId,
+                        deviceName: deviceName,
+                      },
+                    })
+                  }
+                  style={styles.requestItem}
+                >
                   <div style={styles.requestTitle}>{post.boardTitle}</div>
                   <div style={styles.requestDetails}>
                     <div>📄 {post.boardCost.toLocaleString()}원</div>
@@ -433,11 +463,6 @@ export default function Finder() {
                   </div>
                   <div style={styles.requestTagsContainer}>
                     <div style={styles.requestTag}>{post.deviceBrand}</div>
-                    {post.tags.map((tag, i) => (
-                      <div key={i} style={styles.requestTag}>
-                        {tag}
-                      </div>
-                    ))}
                   </div>
                 </div>
               ))

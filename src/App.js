@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import StartScreen from './StartScreen';
 import Page1 from './pages/Page1';
@@ -14,8 +14,17 @@ import Finder from './Finder';
 import AIChat from './AIChat';
 import AIHowMuch from './AIHowMuch';
 import SearchPage from './SearchPage';
+import NewPost from './NewPost';
+import ServiceCenter from './ServiceCenter';
+import PostDetail from './PostDetail';
 
 function App() {
+  const [posts, setPosts] = useState([]);
+
+  //구해요
+  const handleAddPost = (newPost) => {
+    setPosts((prev) => [...prev, newPost]);
+  };
   return (
     <Router>
       <Routes>
@@ -29,10 +38,17 @@ function App() {
         <Route path="/signup" element={<SignUpScreen />} />
         <Route path="/home" element={<Home />} />
         <Route path="/mypage" element={<MyPage />} />
-        <Route path="/finder" element={<Finder />} />
+        <Route path="/finder" element={<Finder posts={posts} />} />
         <Route path="/aichat" element={<AIChat />} />
         <Route path="/ai" element={<AIHowMuch />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route
+          path="/new-post"
+          element={<NewPost onAddPost={handleAddPost} />}
+        />{' '}
+        {/* 작성기능 전달 */}
+        <Route path="/service-center/:id" element={<ServiceCenter />} />
+        <Route path="/post/:id" element={<PostDetail posts={posts} />} />
       </Routes>
     </Router>
   );
