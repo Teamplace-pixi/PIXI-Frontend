@@ -13,28 +13,21 @@ function StartLogin() {
     navigate('/signup');
   };
 
-  // 로그인 관리하는 코드
   const handleLogin = async (loginId, password) => {
     try {
       const response = await api.post(
         '/users/login',
-        new URLSearchParams({
-          loginId,
-          password,
-        }),
+        { loginId, password },
         {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
           withCredentials: true,
         }
       );
-
+      console.log('로그인 성공:', response.data);
       navigate('/home');
     } catch (error) {
+      console.error('로그인 에러:', error.response?.data || error.message);
       setErrorMsg('아이디 또는 비밀번호가 잘못되었습니다.');
-      console.error('로그인 에러:', error);
-      //임시 화면 전환 코드
+      // 임시로 넘어가는 코드
       navigate('/home');
     }
   };

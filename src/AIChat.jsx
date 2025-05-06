@@ -1,23 +1,14 @@
 import React from 'react';
 import Header from './components/Header';
-import SearchBar from './components/SearchBar';
-import Banner from './components/Banner';
-import CategorySection from './components/CategorySection';
-import StoreListSection from './components/StoreListSection';
-import TalentSection from './components/TalentSection';
+import ChatUI from './components/ChatUI';
 import BottomNav from './components/BottomNav';
 
 function AIChat() {
   return (
-    <div className="home-container" style={styles.container}>
-      <Header />
-      <div className="main-content" style={styles.mainContent}>
-        
-        <SearchBar />
-        <Banner />
-        <CategorySection />
-        <StoreListSection />
-        <TalentSection />
+    <div style={styles.container}>
+      <Header title="AI Chat" />
+      <div style={styles.mainContent}>
+        <ChatUI />
       </div>
       <BottomNav />
     </div>
@@ -28,11 +19,18 @@ const styles = {
   container: {
     position: 'relative',
     minHeight: '100vh',
-    paddingBottom: '60px', 
-    backgroundColor: '#fff',
+    paddingTop: '60px',
+    paddingBottom: '60px',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
   },
   mainContent: {
-    paddingBottom: '16px',
+    flexGrow: 1,
+    minHeight: 0,
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
   },
 };
 
