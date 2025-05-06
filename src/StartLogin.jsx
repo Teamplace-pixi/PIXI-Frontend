@@ -20,6 +20,7 @@ function StartLogin() {
       const token = response.data?.token;
       if (token) {
         localStorage.setItem('token', token);
+        console.log('로그인 성공:', token);
         navigate('/home');
       } else {
         setErrorMsg('로그인 실패: 토큰이 없습니다.');

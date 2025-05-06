@@ -9,7 +9,7 @@ function SearchPage() {
         <Header title="FIX Finder" />
       </div>
       <div style={styles.body}>
-        <SearchBar />
+        <SearchBar isSearchPage={true} />
       </div>
     </div>
   );
@@ -30,7 +30,7 @@ const styles = {
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
   body: {
-    marginTop: '40px', 
+    marginTop: '40px',
     padding: '10px',
   },
 };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
+import api from './api';
 
 export default function Finder() {
   const [selectedTab, setSelectedTab] = useState('부품 가격');
@@ -11,10 +12,13 @@ export default function Finder() {
     navigate('/new-post');
   };
 
+
   const parts = [
     { name: '액정 교체', price: '420,000원' },
-    { name: '배터리 교체', price: '188,000원' },
     { name: '후면 교체', price: '250,000원' },
+    { name: '카메라 교체', price: '500,000원' },
+    { name: '배터리 교체', price: '188,000원' },
+    { name: '기기 금액', price: '1,200,000원' },
   ];
 
   const repairCenters = [

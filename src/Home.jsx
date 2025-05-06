@@ -11,7 +11,7 @@ function Home() {
     <div className="home-container" style={styles.container}>
       <Header />
       <div className="main-content" style={styles.mainContent}>
-        <SearchBar />
+        <SearchBar isSearchPage={false} />
         <Banner />
         <StoreListSection />
         <TalentSection />
@@ -26,7 +26,7 @@ const styles = {
     position: 'relative',
     minHeight: '100vh',
     paddingTop: '60px',
-    paddingBottom: '16px', 
+    paddingBottom: '16px',
     backgroundColor: '#fff',
   },
   mainContent: {
