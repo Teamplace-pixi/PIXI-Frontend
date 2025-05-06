@@ -1,12 +1,18 @@
+// components/Header.jsx
 import React from 'react';
 
-
-function Header() {
+function Header({ title = 'FIXI' }) {
   return (
     <div style={styles.header}>
-      <img src="/FIXIlogo.png" alt="FIXI Logo" style={styles.logo} />
-      
-      
+      <span style={styles.logoText}>{title}</span>
+      <div style={styles.buttonContainer}>
+        <button style={styles.iconButton}>
+          <img src="setting.png" alt="icon 1" style={styles.icon1} />
+        </button>
+        <button style={styles.iconButton}>
+          <img src="mypage.png" alt="icon 2" style={styles.icon2} />
+        </button>
+      </div>
     </div>
   );
 }
@@ -18,22 +24,50 @@ const styles = {
     padding: '0 16px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between', 
     position: 'fixed',
     top: 0,
     backgroundColor: '#fff',
     zIndex: 1000,
     borderBottom: '1px solid #eee',
+    boxSizing: 'border-box',
   },
-  logo: {
-    height: '30px',
+  logoText: {
+    fontSize: '30px',  
+    fontWeight: 'bold', 
+    color: '#0047B1',
+    fontFamily: '"Shrikhand", serif',
+    marginRight: '20px', 
+    flex: 1, 
   },
-  icons: {
+  buttonContainer: {
     display: 'flex',
-    gap: '16px',
+    alignItems: 'center',
+    justifyContent: 'flex-end', 
   },
-  icon: {
+  iconButton: {
+    background: 'transparent',
+    border: 'none',
+    marginLeft: '0px',
     cursor: 'pointer',
+  },
+  icon1: {
+    width: '30px', 
+    height: '30px', 
+  },
+  icon2: {
+    width: '40px', 
+    height: '40px', 
+  },
+  
+  '@media (max-width: 768px)': {
+    logoText: {
+      fontSize: '24px', 
+    },
+    icon: {
+      width: '20px', 
+      height: '20px',
+    },
   },
 };
 
