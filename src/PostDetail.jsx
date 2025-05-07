@@ -6,7 +6,7 @@ import BottomNav from './components/BottomNav';
 
 export default function PostDetail() {
   const location = useLocation();
-  const { id: boardId, deviceName: passedDeviceName } = location.state || {}; // state에서 값 꺼내기
+  const boardId = location.state?.id; // URL 파라미터에서 id 가져오기
 
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -42,8 +42,10 @@ export default function PostDetail() {
     <>
       <Header />
       <div style={{ padding: '80px 16px 120px', fontFamily: 'sans-serif' }}>
-        <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>{post.boardTitle}</h2>
-        <p style={{ color: '#555' }}>기종: {post.deviceName || passedDeviceName}</p>
+        <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>
+          {post.boardTitle}
+        </h2>
+        <p style={{ color: '#555' }}>기종: {post.deviceName}</p>
         <p style={{ color: '#555' }}>가능 금액: {post.boardCost}원</p>
         <p style={{ color: '#555' }}>필요 날짜: {post.boardDate}</p>
         <p style={{ color: '#555' }}>위치: {post.boardLoc}</p>

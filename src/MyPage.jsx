@@ -125,9 +125,6 @@ export default function MyPage() {
             >
               화면이 나오지 않음
             </div>
-            <div style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
-              관리를 잘 하시는군요?!
-            </div>
           </div>
         </div>
       </div>

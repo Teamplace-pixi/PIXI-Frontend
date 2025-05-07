@@ -19,6 +19,7 @@ export default function Finder({ posts }) {
   const location = useLocation();
 
   const deviceId = location.state?.id;
+  const deviceImg = location.state?.img || '/iphone.png'; // 기본 이미지 URL
   const passedDeviceName = location.state?.name;
 
   // 컴포넌트가 마운트되거나 deviceId가 변경될 때 API 호출
@@ -119,7 +120,9 @@ export default function Finder({ posts }) {
   };
 
   const handleNavigateToNewPost = (boardId) => {
-    navigate(`/new-post/${boardId}`);
+    navigate('/new-post/', {
+      state: { id: boardId },
+    });
   };
 
   const handleCenterClick = (centerId) => {
@@ -151,7 +154,7 @@ export default function Finder({ posts }) {
       marginTop: '12px',
     },
     deviceImage: {
-      width: '120px',
+      width: '180px',
       height: '120px',
     },
     deviceNameStyle: {
@@ -312,9 +315,8 @@ export default function Finder({ posts }) {
             </div>
 
             <div style={styles.deviceInfoSection}>
-              {/* 이미지 URL도 넘겨받는다면 여기 사용 */}
               <img
-                src="/iphone.png" // 실제 기기 이미지 URL로 변경 필요 (현재는 하드코딩)
+                src={deviceImg}
                 alt={deviceName} // alt 텍스트도 실제 기기 이름 사용
                 style={styles.deviceImage}
               />
@@ -436,9 +438,9 @@ export default function Finder({ posts }) {
                 <div
                   key={idx}
                   onClick={() =>
-                    navigate('/post/', {
+                    navigate('/post', {
                       state: {
-                        id: post.id,
+                        id: post.boardId,
                         deviceId: deviceId,
                         deviceName: deviceName,
                       },

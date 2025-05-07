@@ -1,23 +1,16 @@
 import React from 'react';
-import Header from './components/Header';
-import SearchBar from './components/SearchBar';
-import Banner from './components/Banner';
-import CategorySection from './components/CategorySection';
-import StoreListSection from './components/StoreListSection';
-import TalentSection from './components/TalentSection';
 import BottomNav from './components/BottomNav';
 
 function AIHowMuch() {
   return (
     <div className="home-container" style={styles.container}>
-      <Header />
       <div className="main-content" style={styles.mainContent}>
-        
-        <SearchBar />
-        <Banner />
-        <CategorySection />
-        <StoreListSection />
-        <TalentSection />
+        <img
+          src="123.png"
+          width="400px"
+          height="800px"
+          style={{ display: 'flex', padding: '25px' }}
+        />
       </div>
       <BottomNav />
     </div>
@@ -28,7 +21,7 @@ const styles = {
   container: {
     position: 'relative',
     minHeight: '100vh',
-    paddingBottom: '60px', 
+    paddingBottom: '60px',
     backgroundColor: '#fff',
   },
   mainContent: {

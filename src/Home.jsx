@@ -23,6 +23,7 @@ function Home() {
 
 const styles = {
   container: {
+    fontFamily: 'sans-serif',
     position: 'relative',
     minHeight: '100vh',
     paddingTop: '60px',

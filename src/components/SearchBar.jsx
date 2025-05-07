@@ -10,6 +10,7 @@ export default function SearchBar({ isSearchPage }) {
   const [suggestions, setSuggestions] = useState([]);
   const [deviceId, setDeviceId] = useState(null); // deviceId 상태 추가
   const [deviceName, setDeviceName] = useState(null); // deviceName 상태 추가
+  const [deviceImg, setDeviceImg] = useState(null); // deviceImg 상태 추가
   const navigate = useNavigate();
 
   // 검색창 input 엘리먼트에 접근하기 위한 ref
@@ -87,6 +88,7 @@ export default function SearchBar({ isSearchPage }) {
       setSearchQuery(suggestion.deviceName);
       setDeviceId(suggestion.deviceId); // deviceId 상태 업데이트
       setDeviceName(suggestion.deviceName); // deviceName 상태 업데이트
+      setDeviceImg(suggestion.deviceImg); // deviceImg 상태 업데이트
       setSuggestions([]);
       setShowSuggestions(false);
     }
@@ -99,7 +101,7 @@ export default function SearchBar({ isSearchPage }) {
       if (name.length > 0) {
         // 검색어가 있을 때만 이동
         navigate('/Finder', {
-          state: { id: deviceId, name: deviceName },
+          state: { id: deviceId, name: deviceName, img: deviceImg },
         });
         console.log(
           `SearchBar: 검색 -> Finder로 이동. ID: ${deviceId}, Name: ${deviceName}`

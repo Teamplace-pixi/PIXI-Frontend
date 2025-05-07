@@ -2,7 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../MobileLayout.css';
 
-function DictionaryScreen({ title, mainTitle, description, path, titleColor = '#FFD700' }) {
+function DictionaryScreen({
+  title,
+  mainTitle,
+  description,
+  path,
+  titleColor = '#FFD700',
+}) {
   const navigate = useNavigate();
 
   const handleClick = () => {

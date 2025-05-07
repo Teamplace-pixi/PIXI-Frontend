@@ -4,8 +4,14 @@ import DictionaryScreen from '../components/DictionaryScreen';
 function Page1() {
   return (
     <DictionaryScreen
-      title="백과사전"
-      mainTitle={<>실시간으로 업데이트되는<br />제품가격 확인</>}
+      title="FIX Finder"
+      mainTitle={
+        <>
+          실시간으로 업데이트되는
+          <br />
+          제품가격 확인
+        </>
+      }
       description="#실시간으로 변동되는 제품 가격을 바탕으로 예상 수리 비용 정보를 제공해드려요"
       path="/page2"
     />
