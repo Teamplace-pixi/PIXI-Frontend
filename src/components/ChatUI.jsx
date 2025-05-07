@@ -30,16 +30,16 @@ const ChatUI = () => {
             >
               <Avatar src={AVATAR_IMAGE} name="Akane" />
               <Message.CustomContent>
-                <strong>This is strong text</strong>
+                <strong>FIXI</strong>
                 <br />
-                Message content is provided as{' '}
-                <span style={{ color: 'red' }}>custom elements</span> from child{' '}
-                <strong>Message.CustomContent</strong> element
+                안녕하세요? 저는 당신을 도와드릴{' '}
+                <span style={{ color: 'blue' }}>AI 챗봇 FIXI</span> 입니다!{' '}
+                <strong>뭐든지 물어보세요 !!</strong>
               </Message.CustomContent>
             </Message>
             <Message
               model={{
-                message: 'Hello my friend',
+                message: '안녕 반가워',
                 sentTime: '15 mins ago',
                 direction: 'outgoing',
                 position: 'first',
@@ -50,11 +50,11 @@ const ChatUI = () => {
                 direction: 'incoming',
                 payload: (
                   <Message.CustomContent>
-                    <strong>This is strong text</strong>
+                    <strong>FIXI</strong>
                     <br />
-                    Message content is provided as{' '}
-                    <span style={{ color: 'red' }}>custom elements</span> from
-                    payload property
+                    궁금한 것을 여쭤봐주세요{' '}
+                    <span style={{ color: 'red' }}>뭐든지요!</span> 어떤 것을
+                    알아봐드릴까요?
                   </Message.CustomContent>
                 ),
               }}

@@ -47,8 +47,8 @@ function App() {
           element={<NewPost onAddPost={handleAddPost} />}
         />{' '}
         {/* 작성기능 전달 */}
-        <Route path="/service-center/:id" element={<ServiceCenter />} />
-        <Route path="/post/:id" element={<PostDetail posts={posts} />} />
+        <Route path="/service-center/" element={<ServiceCenter />} />
+        <Route path="/post/" element={<PostDetail />} />
       </Routes>
     </Router>
   );

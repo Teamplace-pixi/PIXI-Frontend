@@ -79,18 +79,6 @@ export default function Finder({ posts }) {
     }
   };
 
-  const repairCenters = [
-    { name: '강남 스마트 수리센터', address: '서울 강남구 테헤란로 123' },
-    { name: '홍대 리페어존', address: '서울 마포구 와우산로 45' },
-  ];
-
-  const requests = new Array(3).fill({
-    title: '아이폰 후면 수리 가능하신 분?',
-    price: '가능 금액 협의 가능',
-    date: '필요 날짜 협의 가능',
-    tags: ['애플', '핸드폰'],
-  });
-
   // 여기서부턴 수리센터 api 연동
   const [shopList, setShopList] = useState([]);
 
@@ -130,12 +118,14 @@ export default function Finder({ posts }) {
     }
   };
 
-  const handleNavigateToNewPost = () => {
-    navigate('/new-post');
+  const handleNavigateToNewPost = (boardId) => {
+    navigate(`/new-post/${boardId}`);
   };
 
   const handleCenterClick = (centerId) => {
-    navigate(`/service-center/${centerId}`);
+    navigate('/service-center', {
+      state: { id: centerId },
+    });
   };
 
   const styles = {
@@ -410,7 +400,7 @@ export default function Finder({ posts }) {
               shopList.map((shop, idx) => (
                 <div
                   key={idx}
-                  onClick={() => handleCenterClick(shop.id)}
+                  onClick={() => handleCenterClick(shop.shopId)}
                   style={styles.repairCenterItem}
                 >
                   <img
@@ -420,7 +410,7 @@ export default function Finder({ posts }) {
                       borderRadius: '12px',
                       marginRigh: '12px',
                     }}
-                    src={shop.thumb || 'FIXIicon.png'} // 기본 이미지 URL로 변경 필요
+                    src={shop.thumb || 'FIXIBlackIcon.png'} // 기본 이미지 URL로 변경 필요
                     alt="camera"
                   />
                   <div style={styles.repairCenterName}>{shop.shopName}</div>
@@ -446,7 +436,7 @@ export default function Finder({ posts }) {
                 <div
                   key={idx}
                   onClick={() =>
-                    navigate('/post', {
+                    navigate('/post/', {
                       state: {
                         id: post.id,
                         deviceId: deviceId,
