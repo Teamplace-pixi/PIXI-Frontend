@@ -73,17 +73,6 @@ function SignUpScreen() {
         </div>
 
         <div className="form-group">
-          <label className="input-label">전화번호</label>
-          <input
-            type="tel"
-            placeholder="전화번호를 입력하세요"
-            value={formData.phone}
-            onChange={handleChange}
-            name="phone"
-          />
-        </div>
-
-        <div className="form-group">
           <label className="input-label">이메일 주소</label>
           <input
             type="email"
@@ -91,16 +80,6 @@ function SignUpScreen() {
             value={formData.email}
             onChange={handleChange}
             name="email"
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="input-label">생년월일</label>
-          <input
-            type="date"
-            value={formData.birth}
-            onChange={handleChange}
-            name="birth"
           />
         </div>
 
