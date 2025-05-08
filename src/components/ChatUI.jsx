@@ -20,7 +20,7 @@ const ChatUI = () => {
         <ChatContainer
           style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
         >
-          {/* 채팅 내용은 위쪽 공간을 꽉 채우고, 많아지면 스크롤 */}
+          
           <MessageList style={{ flex: 1, overflowY: 'auto' }}>
             <Message
               model={{
@@ -63,7 +63,7 @@ const ChatUI = () => {
             </Message>
           </MessageList>
 
-          {/* 입력창은 항상 하단에 고정 */}
+          
           <MessageInput placeholder="Type message here" />
         </ChatContainer>
       </MainContainer>

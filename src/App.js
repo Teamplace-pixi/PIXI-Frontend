@@ -17,6 +17,9 @@ import SearchPage from './SearchPage';
 import NewPost from './NewPost';
 import ServiceCenter from './ServiceCenter';
 import PostDetail from './PostDetail';
+import BusinessForm from './BusinessForm';
+import SettingsPage from './SettingsPage';
+import EditProfilePage from './EditProfilePage';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -49,6 +52,8 @@ function App() {
         {/* 작성기능 전달 */}
         <Route path="/service-center/" element={<ServiceCenter />} />
         <Route path="/post/" element={<PostDetail />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/edit-profile" element={<EditProfilePage />} />
       </Routes>
     </Router>
   );

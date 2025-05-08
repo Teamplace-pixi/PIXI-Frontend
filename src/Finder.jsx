@@ -450,8 +450,8 @@ export default function Finder({ posts }) {
                 >
                   <div style={styles.requestTitle}>{post.boardTitle}</div>
                   <div style={styles.requestDetails}>
-                    <div>📄 {post.boardCost.toLocaleString()}원</div>
-                    <div>🗓️ {post.boardDate}</div>
+                    <div>💰 {post.boardCost.toLocaleString()}원</div>
+                    <div>🕒 {post.boardDate}</div>
                   </div>
                   <div style={styles.requestTagsContainer}>
                     <div style={styles.requestTag}>{post.deviceBrand}</div>
@@ -470,8 +470,7 @@ export default function Finder({ posts }) {
           </div>
         )}
 
-        {/* deviceId나 deviceName이 없을 때 탭 내용을 아예 숨길 수 있습니다.
-            위 코드에서는 각 탭 내용 블록에도 deviceId && deviceName && ... 조건을 추가했습니다. */}
+        
       </div>
       <BottomNav />
     </>
