@@ -86,7 +86,7 @@ const centerInfoStyle = {
 };
 
 const logoStyle = {
-  width: '100px',
+  width: '120px',
   height: 'auto',
   display: 'block',
   margin: '0 auto',
@@ -102,12 +102,13 @@ const centerNameStyle = {
 const contactButtonStyle = {
   display: 'block',
   margin: '10px auto',
-  padding: '5px 200px',
+  padding: '5px 0px',
   backgroundColor: '#FFFFFF',
   color: '#2563eb',
   border: '1px solid #2563eb',
   borderRadius: '30px',
   cursor: 'pointer',
+  width: '300px'
 };
 
 const detailsStyle = {
