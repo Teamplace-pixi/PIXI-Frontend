@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.platform/nginx.conf
+Procfile
+.gitignore
+.ebextensions/00-makeFiles.config
+.github/workflows/deploy.yml
