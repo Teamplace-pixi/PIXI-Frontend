@@ -7,7 +7,7 @@ const BottomNav = () => {
 
   const tabs = [
     { label: '홈', path: '/home' },
-    { label: 'AI챗봇', path: '/aichat' },
+    { label: 'AI챗봇', path: '/aichatmain' },
     { label: 'AI견적', path: '/ai' },
     { label: '마이페이지', path: '/mypage' },
   ];

@@ -20,6 +20,9 @@ import PostDetail from './PostDetail';
 import BusinessForm from './BusinessForm';
 import SettingsPage from './SettingsPage';
 import EditProfilePage from './EditProfilePage';
+import FixerPage from './FixerPage';
+import FixerBusinessSetting from './FixerBusinessSetting';
+import AIchatmain from './AIchatmain';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -42,7 +45,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/finder" element={<Finder posts={posts} />} />
-        <Route path="/aichat" element={<AIChat />} />
+        <Route path="/aichatmain" element={<AIchatmain />} />
         <Route path="/ai" element={<AIHowMuch />} />
         <Route path="/search" element={<SearchPage />} />
         <Route
@@ -54,6 +57,9 @@ function App() {
         <Route path="/post/" element={<PostDetail />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
+        <Route path="/fixer" element={<FixerPage />} /> 
+        <Route path="/aichat" element={<AIChat />} />
+        <Route path="/fixer-business" element={<FixerBusinessSetting />} />
       </Routes>
     </Router>
   );

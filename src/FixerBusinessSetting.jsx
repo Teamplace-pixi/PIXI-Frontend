@@ -1,25 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BottomNav from './components/BottomNav';
 import SettingHeader from './components/SettingHeader';
+import BottomNav from './components/BottomNav';
 
-export default function BusinessForm() {
+export default function FixerBusinessSetting() {
   const navigate = useNavigate();
+
+  // 상태 정의
+  const [form, setForm] = useState({
+    name: '용산 수리수리 센터',
+    phone: '010-1122-9988',
+    address: '용산 어디어디',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = () => {
+    console.log('저장된 사업자 정보:', form);
+    alert('사업자 정보가 저장되었습니다!');
+    navigate('/fixer');
+  };
+
   return (
     <div style={{ padding: '16px', paddingBottom: '80px' }}>
-      
-      <SettingHeader title="사업자 정보 기입" />
-      <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>사업자 정보 기입</h2>
+      <SettingHeader title="등록 사업체 관리" />
 
-      {['상호명', '사업장 전화번호', '사업장 소재지'].map((label, i) => (
+      {/* 사업자 기본 입력 */}
+      {[
+        { label: '상호명', name: 'name', placeholder: '상호명을 입력하세요', value: form.name },
+        { label: '사업장 전화번호', name: 'phone', placeholder: '전화번호를 입력하세요', value: form.phone },
+        { label: '사업장 소재지', name: 'address', placeholder: '주소를 입력하세요', value: form.address },
+      ].map((item, i) => (
         <div key={i} style={{ marginTop: '16px' }}>
-          
           <div style={{ fontSize: '14px', marginBottom: '4px' }}>
-            {label} <span style={{ color: '#0047B1' }}>*</span>
+            {item.label} <span style={{ color: '#0047B1' }}>*</span>
           </div>
           <input
             type="text"
-            placeholder={`${label}을 입력해주세요`}
+            name={item.name}
+            placeholder={item.placeholder}
+            value={item.value}
+            onChange={handleChange}
             style={{
               width: '100%',
               padding: '12px',
@@ -65,7 +89,9 @@ export default function BusinessForm() {
         </div>
       ))}
 
-      <button onClick={() => navigate('/fixer')}
+      {/* 저장 버튼 */}
+      <button
+        onClick={handleSave}
         style={{
           width: '100%',
           backgroundColor: '#2563eb',
@@ -78,7 +104,7 @@ export default function BusinessForm() {
           border: 'none',
         }}
       >
-        등록하기
+        저장하기
       </button>
 
       <BottomNav />

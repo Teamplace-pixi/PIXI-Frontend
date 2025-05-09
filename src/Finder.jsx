@@ -412,7 +412,7 @@ export default function Finder({ posts }) {
                       borderRadius: '12px',
                       marginRigh: '12px',
                     }}
-                    src={shop.thumb || 'FIXIBlackIcon.png'} // 기본 이미지 URL로 변경 필요
+                    src={shop.thumb || 'FIXIBlackIcon.png'} 
                     alt="camera"
                   />
                   <div style={styles.repairCenterName}>{shop.shopName}</div>
@@ -425,7 +425,7 @@ export default function Finder({ posts }) {
           </div>
         )}
 
-        {/* 탭 내용 - '구해요' (deviceId와 deviceName이 있고 선택된 탭일 때만 표시) */}
+        
         {deviceId && deviceName && selectedTab === '구해요' && (
           <div style={styles.requestsSection}>
             <h2 style={styles.sectionTitle}>수리 부품/서비스 '구해요' 목록</h2>

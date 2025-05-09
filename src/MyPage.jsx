@@ -20,7 +20,7 @@ export default function MyPage() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '24px' }}>
         
         <img src="/profile.png" alt="사용자 프로필 이미지" 
-          style={{ marginTop: '30px',width: '137px', height: '137px', borderRadius: '50%', objectFit: 'cover',
+          style={{ marginTop: '30px',width: '137px', height: 'px', borderRadius: '50%', objectFit: 'cover',
           display: 'block', backgroundColor: '#0047B1' }} />
         
         <div style={{ marginTop: '10px', fontSize: '14px', color: '#666',padding: '5px 5px',
@@ -77,6 +77,7 @@ export default function MyPage() {
           }}
         >
           <div style={{ width: '48px', height: '48px', backgroundColor: '#ddd', borderRadius: '8px' }} />
+          
           <div style={{ marginLeft: '12px' }}>
             <div style={{ fontWeight: 'bold' }}>아이폰16 Pro</div>
             <div style={{ fontSize: '14px', color: '#2563eb', marginTop: '4px' }}>화면이 나오지 않음</div>
@@ -102,21 +103,7 @@ export default function MyPage() {
         사업자 등록
       </button>
 
-      {/* Bottom Navigation */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '70px',
-          backgroundColor: '#fff',
-          borderTop: '1px solid #ddd',
-          display: 'flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-        }}
-      ></div>
+      
       <BottomNav />
     </div>
   );
