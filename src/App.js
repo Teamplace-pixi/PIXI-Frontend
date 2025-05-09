@@ -17,7 +17,6 @@ import SearchPage from './SearchPage';
 import NewPost from './NewPost';
 import ServiceCenter from './ServiceCenter';
 import PostDetail from './PostDetail';
-import BusinessForm from './BusinessForm';
 import SettingsPage from './SettingsPage';
 import EditProfilePage from './EditProfilePage';
 import FixerPage from './FixerPage';

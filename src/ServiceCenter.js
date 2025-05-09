@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import {useLocation } from 'react-router-dom';
 import api from './api';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';

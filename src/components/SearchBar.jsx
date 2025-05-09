@@ -37,7 +37,7 @@ export default function SearchBar({ isSearchPage }) {
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [name, isSearchPage]); // isSearchPage도 의존성 배열에 추가
+  }, [name, isSearchPage, fetchSuggestions]); // isSearchPage도 의존성 배열에 추가
 
   const fetchSuggestions = async (query) => {
     // SearchPage가 아니면 API 호출 안 함

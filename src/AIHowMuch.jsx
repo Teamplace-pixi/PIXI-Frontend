@@ -9,6 +9,7 @@ function AIHowMuch() {
           src="123.png"
           width="400px"
           height="800px"
+          alt="대체사진"
           style={{ display: 'flex', padding: '25px' }}
         />
       </div>
