@@ -412,7 +412,7 @@ export default function Finder({ posts }) {
                       borderRadius: '12px',
                       marginRigh: '12px',
                     }}
-                    src={shop.thumb || 'FIXIBlackIcon.png'} // 기본 이미지 URL로 변경 필요
+                    src={shop.thumb || 'FIXIBlackIcon.png'} 
                     alt="camera"
                   />
                   <div style={styles.repairCenterName}>{shop.shopName}</div>
@@ -425,7 +425,7 @@ export default function Finder({ posts }) {
           </div>
         )}
 
-        {/* 탭 내용 - '구해요' (deviceId와 deviceName이 있고 선택된 탭일 때만 표시) */}
+        
         {deviceId && deviceName && selectedTab === '구해요' && (
           <div style={styles.requestsSection}>
             <h2 style={styles.sectionTitle}>수리 부품/서비스 '구해요' 목록</h2>
@@ -450,8 +450,8 @@ export default function Finder({ posts }) {
                 >
                   <div style={styles.requestTitle}>{post.boardTitle}</div>
                   <div style={styles.requestDetails}>
-                    <div>📄 {post.boardCost.toLocaleString()}원</div>
-                    <div>🗓️ {post.boardDate}</div>
+                    <div>💰 {post.boardCost.toLocaleString()}원</div>
+                    <div>🕒 {post.boardDate}</div>
                   </div>
                   <div style={styles.requestTagsContainer}>
                     <div style={styles.requestTag}>{post.deviceBrand}</div>
@@ -470,8 +470,7 @@ export default function Finder({ posts }) {
           </div>
         )}
 
-        {/* deviceId나 deviceName이 없을 때 탭 내용을 아예 숨길 수 있습니다.
-            위 코드에서는 각 탭 내용 블록에도 deviceId && deviceName && ... 조건을 추가했습니다. */}
+        
       </div>
       <BottomNav />
     </>

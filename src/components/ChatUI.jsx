@@ -14,61 +14,76 @@ const AVATAR_IMAGE = 'FIXIicon.png';
 const ChatUI = () => {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <MainContainer
-        style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
-      >
-        <ChatContainer
-          style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
-        >
-          {/* 채팅 내용은 위쪽 공간을 꽉 채우고, 많아지면 스크롤 */}
-          <MessageList style={{ flex: 1, overflowY: 'auto' }}>
+      <MainContainer style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <ChatContainer style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <MessageList style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+            {/* 챗봇 메시지 */}
             <Message
               model={{
                 direction: 'incoming',
                 type: 'custom',
               }}
             >
-              <Avatar src={AVATAR_IMAGE} name="Akane" />
+              <Avatar src={AVATAR_IMAGE} name="FIXI" />
               <Message.CustomContent>
-                <strong>FIXI</strong>
-                <br />
-                안녕하세요? 저는 당신을 도와드릴{' '}
-                <span style={{ color: 'blue' }}>AI 챗봇 FIXI</span> 입니다!{' '}
-                <strong>뭐든지 물어보세요 !!</strong>
+                <div style={styles.botBubble}>
+                  <div style={styles.botName}>FIXI</div>
+                  <div>안녕하세요! 무엇을 도와드릴까요?</div>
+                </div>
               </Message.CustomContent>
             </Message>
+
+            {/* 사용자 메시지 */}
             <Message
               model={{
-                message: '안녕 반가워',
-                sentTime: '15 mins ago',
+                message: '아이폰 배터리 교체하는 법 알려줘',
+                sentTime: 'just now',
                 direction: 'outgoing',
                 position: 'first',
               }}
-            />
-            <Message
-              model={{
-                direction: 'incoming',
-                payload: (
-                  <Message.CustomContent>
-                    <strong>FIXI</strong>
-                    <br />
-                    궁금한 것을 여쭤봐주세요{' '}
-                    <span style={{ color: 'red' }}>뭐든지요!</span> 어떤 것을
-                    알아봐드릴까요?
-                  </Message.CustomContent>
-                ),
-              }}
             >
-              <Avatar src={AVATAR_IMAGE} name="Joe" />
+              <Message.CustomContent>
+                <div style={styles.userBubble}>아이폰 배터리 교체하는 법 알려줘</div>
+              </Message.CustomContent>
             </Message>
           </MessageList>
 
-          {/* 입력창은 항상 하단에 고정 */}
-          <MessageInput placeholder="Type message here" />
+          <MessageInput placeholder="질문을 입력하세요..." style={styles.input} />
         </ChatContainer>
       </MainContainer>
     </div>
   );
+};
+
+const styles = {
+  botBubble: {
+    backgroundColor: '#F1F2F6',
+    borderRadius: '16px',
+    padding: '12px 16px',
+    maxWidth: '80%',
+    color: '#000',
+    fontSize: '15px',
+    marginLeft: '8px',
+  },
+  botName: {
+    fontWeight: 'bold',
+    color: '#3478F6',
+    marginBottom: '6px',
+  },
+  userBubble: {
+    backgroundColor: '#3478F6',
+    color: '#fff',
+    borderRadius: '16px',
+    padding: '12px 16px',
+    maxWidth: '80%',
+    alignSelf: 'flex-end',
+    marginRight: '8px',
+    fontSize: '15px',
+  },
+  input: {
+    borderTop: '1px solid #ccc',
+    padding: '8px',
+  },
 };
 
 export default ChatUI;

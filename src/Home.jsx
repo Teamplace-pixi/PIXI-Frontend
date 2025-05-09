@@ -5,14 +5,19 @@ import Banner from './components/Banner';
 import StoreListSection from './components/StoreListSection';
 import TalentSection from './components/TalentSection';
 import BottomNav from './components/BottomNav';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate();
+  const handleBannerClick = () => {
+    navigate('/aichatmain'); 
+  };
   return (
     <div className="home-container" style={styles.container}>
       <Header />
       <div className="main-content" style={styles.mainContent}>
         <SearchBar isSearchPage={false} />
-        <Banner />
+        <Banner onClick={handleBannerClick}/>
         <StoreListSection />
         <TalentSection />
       </div>

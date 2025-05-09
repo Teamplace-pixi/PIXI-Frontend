@@ -1,15 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function Header({ title = 'FIXI' }) {
+function MypageHeader({ title = 'My Page' }) {
+  const navigate = useNavigate();
   return (
     <div style={styles.header}>
       <span style={styles.logoText}>{title}</span>
       <div style={styles.buttonContainer}>
-        <button style={styles.iconButton}>
-          <img src="setting.png" alt="icon 1" style={styles.icon1} />
-        </button>
-        <button style={styles.iconButton}>
-          <img src="mypage.png" alt="icon 2" style={styles.icon2} />
+        <button style={styles.iconButton} onClick={() => navigate('/settings')}>
+          <img src="setting.png" alt="설정 아이콘" style={styles.icon1} />
         </button>
       </div>
     </div>
@@ -70,4 +69,4 @@ const styles = {
   },
 };
 
-export default Header;
+export default MypageHeader;
