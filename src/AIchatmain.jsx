@@ -31,7 +31,7 @@ export default function AIchatmain() {
       {/* 입력창 */}
       <div style={styles.inputBox}>
         <textarea
-          placeholder="아이폰 16 프로 배터리 교체하는 방법을 알려줘"
+          placeholder="ex)아이폰 16프로 배터리 교체하는 방법을 알려줘!"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           style={styles.textarea}
