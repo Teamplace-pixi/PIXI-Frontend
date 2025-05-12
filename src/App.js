@@ -22,6 +22,8 @@ import EditProfilePage from './EditProfilePage';
 import FixerPage from './FixerPage';
 import FixerBusinessSetting from './FixerBusinessSetting';
 import AIchatmain from './AIchatmain';
+import AIHowMuchLoading from './AIHowMuchLoading';
+import AIHowMuchResult from './AIHowMuchResult';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -59,6 +61,9 @@ function App() {
         <Route path="/fixer" element={<FixerPage />} /> 
         <Route path="/aichat" element={<AIChat />} />
         <Route path="/fixer-business" element={<FixerBusinessSetting />} />
+        <Route path="/loading" element={<AIHowMuchLoading />} />
+        <Route path="/result" element={<AIHowMuchResult />} />
+
       </Routes>
     </Router>
   );

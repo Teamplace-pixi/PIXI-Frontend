@@ -1,0 +1,142 @@
+.receipt-container {
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    height: 100vh;
+    background-color: #f2f2f2;
+    overflow: hidden;
+  }
+  
+  
+  .blue-banner {
+    background-color: #0038a8;
+    color: white;
+    padding: 24px 20px;
+    text-align: left;
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    box-sizing: border-box;
+    animation: slideLeftToRight 1.2s forwards;
+  }
+  
+  @keyframes slideLeftToRight {
+    to {
+      left: 0;
+    }
+  }
+  
+  .blue-banner h2 {
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .highlight {
+    color: #ffd700;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* 회색 정보 영역 (영수증 느낌) */
+  .gray-box {
+    background-color: #ffffff;
+    padding: 24px 20px 32px 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    position: absolute;
+    bottom: -100%;
+    width: 100%;
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    transition: bottom 0.8s ease-in-out;
+  }
+  
+  .gray-box.slide-up {
+    bottom: 0;
+  }
+  
+  .reason-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 12px 0;
+  }
+  
+  .symptom {
+    font-size: 14px;
+    margin: 12px 0 20px;
+    color: #444;
+    line-height: 1.5;
+  }
+  
+  .price-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+  }
+  
+  .price-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #222;
+    border-bottom: 1px dotted #ccc;
+  }
+  
+  .price-list li small {
+    font-size: 12px;
+    color: #555;
+  }
+  
+  .warning {
+    font-size: 12.5px;
+    color: #777;
+    background-color: #f8f8f8;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+  
+  /* 버튼 그룹 */
+  .btn-group {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn-outline {
+    width: 100%;
+    background: white;
+    border: 1.8px solid #0038a8;
+    color: #0038a8;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    width: 100%;
+    background: #0038a8;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  

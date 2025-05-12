@@ -1,0 +1,38 @@
+.loading-container {
+    position: relative;
+    height: 100vh;
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .loading-text {
+    z-index: 10;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .water {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(to top, #0066cc, #66ccff);
+    animation: fillWater 5s ease-in-out forwards;
+    z-index: 1;
+    border-top: 8px solid #0055aa;
+  }
+  
+  @keyframes fillWater {
+    from {
+      height: 0%;
+    }
+    to {
+      height: 100%;
+    }
+  }
+  
