@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from './api';
 import './MobileLayout.css';
 
-function StartLogin() {
+const StartLogin = () => {
   const navigate = useNavigate();
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
@@ -14,6 +14,7 @@ function StartLogin() {
   };
 
   const handleLogin = async () => {
+    console.log('로그인 시도:', loginId, password);
     try {
       const response = await api.post('/users/login', { loginId, password });
 

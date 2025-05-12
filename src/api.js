@@ -5,14 +5,19 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-    console.log('토큰:', token);
+  if (
+    !config.url.includes(
+      '/users/login' && !config.url.includes('/users/signup')
+    )
+  ) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+      console.log('토큰:', token);
+    }
   }
   return config;
 });
