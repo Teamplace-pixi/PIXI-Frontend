@@ -4,6 +4,7 @@ import DictionaryScreen from '../components/DictionaryScreen';
 function Page4() {
   return (
     <DictionaryScreen
+      step={4}
       title="FIX Finder"
       mainTitle={
         <>
@@ -14,6 +15,7 @@ function Page4() {
       }
       description="#근처의 수리업체를 추천받을 수 있고, 희귀 모델까지 수리할 수 있는 수리 고수와 매칭을 할 수 있어요"
       path="/startlogin"
+      titleColor="#FDC500"
     />
   );
 }

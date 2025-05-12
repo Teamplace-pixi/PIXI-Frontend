@@ -1,10 +1,13 @@
 .mobile-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    height: 100vh;
-  }
+  display: flex;
+  flex-direction: column; /* 상단부터 아래로 배치 */
+  align-items: center;
+  justify-content: flex-start; /* 중앙 정렬 ➝ 상단 정렬 */
+  height: 100vh;
+  padding-top: 16px;
+}
+
+
   
   .mobile-container {
     width: 375px;
@@ -14,7 +17,6 @@
     flex-direction: column;
     padding: 20px;
     color: #FDC500;
-    border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
   }
   

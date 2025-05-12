@@ -4,6 +4,7 @@ import DictionaryScreen from '../components/DictionaryScreen';
 function Page2() {
   return (
     <DictionaryScreen
+      step={2}
       title="AI 챗봇"
       mainTitle={
         <>

@@ -1,0 +1,19 @@
+/* ✅ 하나로 통일된 ProgressBar.css */
+
+.progress-bar-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #0546BE;
+  width: 392px;
+  margin: 0 auto;
+}
+
+.progress-segment {
+  flex: 1;
+  height: 10px;
+  margin: 0 4px;
+  border-radius: 4px;
+  background-color: #D9D9D9;
+  transition: background-color 0.3s;
+}
