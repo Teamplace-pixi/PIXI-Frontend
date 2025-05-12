@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SettingHeader from './components/SettingHeader';
 import BottomNav from './components/BottomNav';
+import api from './api';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
 
+  const [name, setNickname] = useState('');
+
+  useEffect(() => {
+    const fetchMyPage = async () => {
+      try {
+        const response = await api.get('/myPage/setup');
+        setNickname(response.data.nickname);
+      } catch (error) {
+        console.error('마이페이지 불러오기 실패:', error);
+      }
+    };
+    fetchMyPage();
+  });
+
   const menuItems = [
-    { label: '이민서 회원님', sub: '회원정보 변경', onClick: () => navigate('/edit-profile') },
+    {
+      label: `${name} 회원님`,
+      sub: '회원정보 변경',
+      onClick: () => navigate('/edit-profile'),
+    },
     { label: '알림', onClick: () => {} },
     { label: '결제', onClick: () => {} },
     { label: '앱 버전', onClick: () => {} },
@@ -30,16 +49,20 @@ export default function SettingsPage() {
               onClick={item.onClick}
               style={{
                 ...styles.menuItem,
-                borderBottom: index === 0 ? '1px solid #f2f2f2' : 'none' // ✅ index가 0일 때만 borderBottom 적용!
+                borderBottom: index === 0 ? '1px solid #f2f2f2' : 'none', // ✅ index가 0일 때만 borderBottom 적용!
               }}
             >
               <div>
-                <div style={item.sub ? styles.menuItemLabelBold : styles.menuItemLabelNormal}>
+                <div
+                  style={
+                    item.sub
+                      ? styles.menuItemLabelBold
+                      : styles.menuItemLabelNormal
+                  }
+                >
                   {item.label}
                 </div>
-                {item.sub && (
-                  <div style={styles.menuItemSub}>{item.sub}</div>
-                )}
+                {item.sub && <div style={styles.menuItemSub}>{item.sub}</div>}
               </div>
               <button style={styles.arrowButton}>
                 <img src="/Into.png" alt="바로가기" style={styles.arrowIcon} />

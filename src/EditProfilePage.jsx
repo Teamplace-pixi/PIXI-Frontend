@@ -1,7 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SettingHeader from './components/SettingHeader';
+import api from './api';
 
 export default function EditProfilePage() {
+  const [datas, setDatas] = useState([]);
+
+  useEffect(() => {
+    const fetchMyPageEdit = async () => {
+      try {
+        const response = await api.get('/myPage/edit');
+        setDatas(response.data);
+      } catch (error) {
+        console.error('정보 수정 조회 실패:', error);
+      }
+    };
+    fetchMyPageEdit();
+  }, []);
+
   const [form, setForm] = useState({
     name: '배별하',
     address: '상암동',
@@ -28,7 +43,9 @@ export default function EditProfilePage() {
     <div style={{ padding: '16px', paddingTop: '80px', paddingBottom: '80px' }}>
       <SettingHeader title="My Page" />
 
-      <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '16px' }}>회원정보 변경</h2>
+      <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '16px' }}>
+        회원정보 변경
+      </h2>
 
       {/*프로필이미지*/}
       <div style={{ textAlign: 'center', margin: '20px 0' }}>
@@ -55,7 +72,11 @@ export default function EditProfilePage() {
               cursor: 'pointer',
             }}
           >
-            <img src="/profilecamera.png" alt="변경" style={{ width: '20px', height: '20px' }} />
+            <img
+              src="/profilecamera.png"
+              alt="변경"
+              style={{ width: '20px', height: '20px' }}
+            />
           </div>
         </div>
       </div>
@@ -68,7 +89,7 @@ export default function EditProfilePage() {
         <input
           type="text"
           name="name"
-          value={form.name}
+          value={datas.nickname}
           onChange={handleChange}
           style={inputStyle}
         />
@@ -81,7 +102,7 @@ export default function EditProfilePage() {
         <input
           type="text"
           name="address"
-          value={form.address}
+          value={datas.address}
           onChange={handleChange}
           style={inputStyle}
         />
@@ -94,7 +115,7 @@ export default function EditProfilePage() {
         <input
           type="email"
           name="email"
-          value={form.email}
+          value={datas.loginId}
           onChange={handleChange}
           style={inputStyle}
         />
@@ -108,7 +129,7 @@ export default function EditProfilePage() {
           <input
             type={form.showPassword ? 'text' : 'password'}
             name="password"
-            value={form.password}
+            value={datas.password}
             onChange={handleChange}
             style={{ ...inputStyle, paddingRight: '40px' }}
           />
