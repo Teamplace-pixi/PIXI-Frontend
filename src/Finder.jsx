@@ -165,14 +165,15 @@ export default function Finder({ posts }) {
     },
     tabsContainer: {
       display: 'flex',
-      justifyContent: 'space-around',
+      justifyContent: 'center',
+      gap: '20px',
       marginTop: '24px',
     },
     tabButton: (isSelected) => ({
-      padding: '8px 16px',
+      padding: '8px 25px',
       borderRadius: '20px',
       border: isSelected ? 'none' : '1px solid #ccc',
-      backgroundColor: isSelected ? '#2563eb' : '#fff',
+      backgroundColor: isSelected ? '#0047B1' : '#fff',
       color: isSelected ? '#fff' : '#333',
       fontWeight: 'bold',
       cursor: 'pointer',
@@ -298,6 +299,69 @@ export default function Finder({ posts }) {
       fontSize: '16px',
       color: '#d32f2f',
     },
+    reviewSection: {
+  marginTop: '32px',
+},
+
+reviewTitle: {
+  fontSize: '16px',
+  fontWeight: 'bold',
+  marginBottom: '16px',
+},
+
+reviewGrid: {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '16px',
+},
+
+reviewCard: {
+  backgroundColor: '#fff',
+  padding: '16px',
+  borderRadius: '16px',
+  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.05)',
+},
+
+reviewTitleText: {
+  fontSize: '15px',
+  fontWeight: 'bold',
+  marginBottom: '4px',
+},
+
+reviewCost: {
+  fontSize: '14px',
+  color: '#666',
+  marginBottom: '8px',
+},
+
+reviewText: {
+  fontSize: '14px',
+  color: '#333',
+  marginBottom: '8px',
+},
+
+starRow: {
+  fontSize: '20px',
+  color: '#2563eb',
+  marginBottom: '8px',
+},
+
+reviewTags: {
+  display: 'flex',
+  gap: '6px',
+},
+
+reviewTag: {
+  padding: '4px 8px',
+  backgroundColor: '#e0e7ff',
+  color: '#1e40af',
+  borderRadius: '12px',
+  fontSize: '12px',
+},
+separator: { // ✨ separator 스타일 추가! ✨
+  borderTop: '10px solid #F4F4F6', // 1px 두께의 실선 회색
+  margin: '30px 0', // 위아래 간격 조절 (원하는 만큼!)
+},
   };
 
   return (
@@ -336,7 +400,8 @@ export default function Finder({ posts }) {
           </div>
         )}
 
-        {/* 탭 버튼들은 deviceId가 있을 때만 보여주는 것이 일반적입니다. */}
+        <div style={styles.separator}></div>
+        
         {deviceId && deviceName && (
           <div style={styles.tabsContainer}>
             {['부품 가격', '수리센터', '구해요'].map((tab, index) => (
@@ -396,34 +461,53 @@ export default function Finder({ posts }) {
 
         {/* 탭 내용 - '수리센터' (deviceId와 deviceName이 있고 선택된 탭일 때만 표시) */}
         {deviceId && deviceName && selectedTab === '수리센터' && (
-          <div style={styles.repairCentersSection}>
-            <h2 style={styles.sectionTitle}>내 주변 수리 센터</h2>
-            {shopList.length > 0 ? (
-              shopList.map((shop, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => handleCenterClick(shop.shopId)}
-                  style={styles.repairCenterItem}
-                >
-                  <img
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '12px',
-                      marginRigh: '12px',
-                    }}
-                    src={shop.thumb || 'FIXIBlackIcon.png'} 
-                    alt="camera"
-                  />
-                  <div style={styles.repairCenterName}>{shop.shopName}</div>
-                  <div style={styles.repairCenterAddress}>{shop.shopLoc}</div>
-                </div>
-              ))
-            ) : (
-              <div style={styles.message}>수리센터 정보를 불러오는 중...</div>
-            )}
+  <div style={styles.repairCentersSection}>
+    <h2 style={styles.sectionTitle}>내 주변 수리 센터</h2>
+    {shopList.length > 0 ? (
+      shopList.map((shop, idx) => (
+        <div
+          key={idx}
+          onClick={() => handleCenterClick(shop.shopId)}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: '#fff',
+            padding: '16px',
+            borderRadius: '12px',
+            boxShadow: '0 1px 4px rgba(0, 0, 0, 0.05)',
+            marginBottom: '12px',
+            cursor: 'pointer',
+          }}
+        >
+          <img
+            src={shop.thumb || 'FIXIBlackIcon.png'}
+            alt="센터 로고"
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '10px',
+              marginRight: '16px',
+              objectFit: 'contain',
+              backgroundColor: '#f4f4f4',
+            }}
+          />
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ fontSize: '15px', fontWeight: '600', color: '#333' }}>
+              {shop.shopName}
+            </div>
+            <div style={{ fontSize: '13px', color: '#777', marginTop: '4px' }}>
+              {shop.shopLoc}
+            </div>
           </div>
-        )}
+        </div>
+      ))
+    ) : (
+      <div style={styles.message}>수리센터 정보를 불러오는 중...</div>
+    )}
+  </div>
+)}
+
 
         
         {deviceId && deviceName && selectedTab === '구해요' && (

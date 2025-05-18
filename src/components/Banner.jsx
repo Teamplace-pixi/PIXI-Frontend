@@ -43,7 +43,8 @@ const styles = {
     width: '100%',
     height: '150px',
     borderRadius: '20px',
-    backgroundColor: '#001f3f',
+    backgroundImage: 'url("/bannerbackground.png")',
+    backgroundSize: 'cover',
     display: 'flex',
     alignItems: 'center',
     padding: '20px',
@@ -58,7 +59,7 @@ const styles = {
     alignItems: 'center',
   },
   bannerImage: {
-    height: '100%',
+    height: '120%',
     width: 'auto',
     objectFit: 'contain',
   },
@@ -69,6 +70,7 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'center',
     color: '#ffffff',
+    textAlign: 'right',
   },
   text: {
     fontSize: '18px',

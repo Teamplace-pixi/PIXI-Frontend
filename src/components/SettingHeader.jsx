@@ -17,8 +17,8 @@ const styles = {
     height: '60px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start', 
-    padding: '0 16px',
+    justifyContent: 'center', 
+    padding: '0 0px', 
     backgroundColor: '#fff',
     borderBottom: '1px solid #eee',
     boxSizing: 'border-box',
@@ -30,18 +30,23 @@ const styles = {
     background: 'transparent',
     border: 'none',
     cursor: 'pointer',
-    marginRight: '16px', 
+    position: 'absolute',
+    left: '3px', 
+    top: '50%', 
+    transform: 'translateY(-50%)', 
+    zIndex: 1, 
+   
   },
   backIcon: {
-    width: '24px', 
+    width: '24px',
     height: '24px',
   },
   title: {
     fontSize: '20px',
     fontWeight: 'bold',
-    color: '#000', 
-    flex: 1, 
-    textAlign: 'center', 
+    color: '#000',
+    textAlign: 'center',
+    
   },
 };
 
