@@ -10,14 +10,13 @@ export default function AIchatmain() {
   const handleSubmit = () => {
     if (!question.trim()) return;
     console.log('AI에게 보낸 질문:', question);
-   
-    navigate('/aichat');
+
+    navigate('/aichat', { state: { initialQuestion: question } });
   };
 
   return (
-    
     <>
-      <div style={styles.container}> 
+      <div style={styles.container}>
         {/* 캐릭터 이미지 */}
         <div style={styles.imageContainer}>
           <img
@@ -39,29 +38,33 @@ export default function AIchatmain() {
             style={styles.textarea}
           />
           <button onClick={handleSubmit} style={styles.sendButton}>
-            <img src="/AIchatgo.png" alt="보내기" style={{ width: '20px', height: '20px' }} />
+            <img
+              src="/AIchatgo.png"
+              alt="보내기"
+              style={{ width: '20px', height: '20px' }}
+            />
           </button>
         </div>
 
         {/* 안내 문구 */}
         <div style={styles.notice}>
           <span style={{ color: '#F59E0B', marginRight: '6px' }}>⚠️</span>
-          FIXI가 정확한 수리가이드를 제시할 수 있도록 전자기기에 대한 명확하고 자세한 설명을 바탕으로 질문해주세요!
+          FIXI가 정확한 수리가이드를 제시할 수 있도록 전자기기에 대한 명확하고
+          자세한 설명을 바탕으로 질문해주세요!
         </div>
-       
       </div>
       <BottomNav />
-    </> 
+    </>
   );
 }
 
 const styles = {
   container: {
-    padding: '24px', 
+    padding: '24px',
     fontFamily: 'sans-serif',
     textAlign: 'center',
-    
-    paddingBottom: 'calc(24px + [BottomNav 높이])', 
+
+    paddingBottom: 'calc(24px + [BottomNav 높이])',
   },
   imageContainer: {
     display: 'flex',

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   MainContainer,
   ChatContainer,
@@ -11,36 +12,36 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import apiAI from '../apiAI'; // AI API 연동
 import api from '../api'; // 마이페이지에서 프로필 id 받아오기 위함
 import './ChatUI.css';
+
 const AVATAR_IMAGE = 'FIXIicon.png';
 
 const ChatUI = () => {
-  const [messages, setMessages] = useState([
-    {
-      direction: 'incoming',
-      content: '안녕하세요! 무엇을 도와드릴까요?',
-    },
-  ]);
+  const location = useLocation();
+  const initialQuestion = location.state?.initialQuestion || '';
+
+  const [messages, setMessages] = useState([]);
   const [datas, setDatas] = useState([]);
   const [loginId, setLoginId] = useState('');
+  const hasSentInitial = useRef(false);
 
   const handleSend = async (userMessage) => {
     if (!userMessage.trim()) return;
 
-    // 사용자 메시지 추가
     setMessages((prev) => [
       ...prev,
       { direction: 'outgoing', content: userMessage },
-      { direction: 'incoming', content: '입력 중...' },
+      { direction: 'incoming', content: '입력 중...' }, // 로딩 메시지
     ]);
 
     try {
-      console.log('📌 loginId:', loginId);
       const response = await apiAI.post('/ai/chat', {
-        user_id: loginId, // 필요에 따라 변경
+        user_id: loginId,
         message: userMessage,
       });
 
       const aiMessage = response.data?.reply || 'AI 응답이 없습니다.';
+
+      // 마지막 "입력 중..." 메시지 제거하고 새 메시지 추가
       setMessages((prev) => [
         ...prev.slice(0, -1),
         { direction: 'incoming', content: aiMessage },
@@ -71,6 +72,42 @@ const ChatUI = () => {
     fetchMyPage();
   }, []);
 
+  useEffect(() => {
+    if (initialQuestion && loginId && !hasSentInitial.current) {
+      hasSentInitial.current = true; // 다시 실행되지 않도록 설정
+
+      // 메시지 추가 및 전송
+      setMessages((prev) => [
+        ...prev,
+        { direction: 'outgoing', content: initialQuestion },
+        { direction: 'incoming', content: '입력 중...' },
+      ]);
+
+      apiAI
+        .post('/ai/chat', {
+          user_id: loginId,
+          message: initialQuestion,
+        })
+        .then((response) => {
+          const aiMessage = response.data?.reply || 'AI 응답이 없습니다.';
+          setMessages((prev) => [
+            ...prev.slice(0, -1),
+            { direction: 'incoming', content: aiMessage },
+          ]);
+        })
+        .catch((error) => {
+          console.error('초기 질문 전송 오류:', error);
+          setMessages((prev) => [
+            ...prev.slice(0, -1),
+            {
+              direction: 'incoming',
+              content: '오류가 발생했습니다. 다시 시도해주세요.',
+            },
+          ]);
+        });
+    }
+  }, [initialQuestion, loginId]);
+
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <MainContainer
@@ -80,7 +117,6 @@ const ChatUI = () => {
           style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
         >
           <MessageList style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
-            {/* 챗봇 메시지 */}
             {messages.map((msg, idx) => (
               <Message
                 key={idx}
@@ -89,54 +125,25 @@ const ChatUI = () => {
                   type: 'custom',
                 }}
               >
+                {msg.direction === 'incoming' && (
+                  <Avatar src={AVATAR_IMAGE} name="FIXI" />
+                )}
                 <Message.CustomContent>
                   <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                    }}
+                    style={
+                      msg.direction === 'incoming'
+                        ? styles.botBubble
+                        : styles.userBubble
+                    }
                   >
                     {msg.direction === 'incoming' && (
-                      <Avatar
-                        src={AVATAR_IMAGE}
-                        name="FIXI"
-                        style={{ marginBottom: '4px' }}
-                      />
+                      <div style={styles.botName}>FIXI</div>
                     )}
-
-                    <div
-                      style={
-                        msg.direction === 'incoming'
-                          ? styles.botBubble
-                          : styles.userBubble
-                      }
-                    >
-                      {msg.direction === 'incoming' && (
-                        <div style={styles.botName}>FIXI</div>
-                      )}
-                      <div>{msg.content}</div>
-                    </div>
+                    <div>{msg.content}</div>
                   </div>
                 </Message.CustomContent>
               </Message>
             ))}
-
-            {/* 사용자 메시지 */}
-            <Message
-              model={{
-                message: '아이폰 배터리 교체하는 법 알려줘',
-                sentTime: 'just now',
-                direction: 'outgoing',
-                position: 'first',
-              }}
-            >
-              <Message.CustomContent>
-                <div style={styles.userBubble}>
-                  아이폰 배터리 교체하는 법 알려줘
-                </div>
-              </Message.CustomContent>
-            </Message>
           </MessageList>
 
           <MessageInput
@@ -153,14 +160,13 @@ const ChatUI = () => {
 
 const styles = {
   botBubble: {
-    backgroundColor: '#F8F8F8',
-    borderRadius: '20px',
+    backgroundColor: '#F1F2F6',
+    borderRadius: '16px',
     padding: '12px 16px',
     maxWidth: '80%',
-    color: '#000000',
+    color: '#000',
     fontSize: '15px',
     marginLeft: '8px',
-    border: '1px solid #E3E3E3',
   },
   botName: {
     fontWeight: 'bold',
@@ -168,15 +174,14 @@ const styles = {
     marginBottom: '6px',
   },
   userBubble: {
-    backgroundColor: '#FFFFFF',
-    color: '#000000',
-    borderRadius: '20px',
+    backgroundColor: '#3478F6',
+    color: '#fff',
+    borderRadius: '16px',
     padding: '12px 16px',
     maxWidth: '80%',
     alignSelf: 'flex-end',
     marginRight: '8px',
     fontSize: '15px',
-    border: '1px solid #E3E3E3',
   },
   input: {
     borderTop: '1px solid #ccc',
