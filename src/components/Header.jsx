@@ -1,14 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Header({ title = 'FIXI' }) {
+  const navigate = useNavigate();
+
   return (
     <div style={styles.header}>
       <span style={styles.logoText}>{title}</span>
       <div style={styles.buttonContainer}>
-        <button style={styles.iconButton}>
+        <button style={styles.iconButton} onClick={() => navigate('/settings')}>
           <img src="setting.png" alt="icon 1" style={styles.icon1} />
         </button>
-        <button style={styles.iconButton}>
+        <button style={styles.iconButton} onClick={() => navigate('/mypage')}>
           <img src="mypage.png" alt="icon 2" style={styles.icon2} />
         </button>
       </div>

@@ -49,7 +49,7 @@ const AIHowMuchResult = () => {
 
         <div className="btn-group">
           <button className="btn-outline">견적서 저장하기</button>
-          <button className="btn-primary">구매요로 이동</button>
+          <button className="btn-primary">구해요로 이동</button>
         </div>
       </div>
     </div>

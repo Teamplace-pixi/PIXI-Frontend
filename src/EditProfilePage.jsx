@@ -40,7 +40,7 @@ export default function EditProfilePage() {
   };
 
   return (
-    <div style={{ padding: '16px', paddingTop: '80px', paddingBottom: '80px' }}>
+    <div style={{ paddingTop: '60px' }}>
       <SettingHeader title="My Page" />
 
       <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '16px' }}>
