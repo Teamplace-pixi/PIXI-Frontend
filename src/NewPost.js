@@ -1,36 +1,66 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import api from './api';
 
 export default function NewPost({ onAddPost }) {
   const [title, setTitle] = useState('');
   const [model, setModel] = useState('');
   const [price, setPrice] = useState('');
+  const [content, setContent] = useState('');
   const [date, setDate] = useState('');
   const [address, setAddress] = useState('');
+  const [files, setFiles] = useState([]);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const deviceId = location.state?.deviceId;
-  const deviceName = location.state?.deviceName;
+  const deviceId = location.state?.id;
+  const passedDeviceName = location.state?.name;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!title || !model) {
       alert('제목과 기종은 필수 입력입니다.');
       return;
     }
 
-    const newPost = {
-      id: Date.now().toString(),
-      title,
-      model,
-      price: price || '협의 가능',
-      date: date || '협의 가능',
-      location,
-      tags: ['사용자 등록'],
-    };
+    try {
+      const formData = new FormData();
 
-    onAddPost(newPost);
-    navigate('/finder', { state: { id: deviceId, name: deviceName } });
+      const boardData = {
+        boardTitle: title,
+        boardContent: content,
+        boardLoc: address,
+        boardCost: parseInt(price) || 0,
+        boardDate: date,
+        deviceName: model || '',
+        imageIds: [],
+      };
+
+      formData.append(
+        'board',
+        new Blob([JSON.stringify(boardData)], { type: 'application/json' })
+      );
+
+      files.forEach((file) => {
+        formData.append('multipartFiles', file);
+      });
+
+      const response = await api.post('/board', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('업로드 성공:', response.data);
+      navigate('/finder', {
+        state: {
+          id: deviceId || '',
+          name: passedDeviceName || '',
+        },
+      });
+    } catch (err) {
+      console.error('업로드 실패:', err);
+      alert('글 등록에 실패했습니다.');
+    }
   };
 
   return (
@@ -41,6 +71,7 @@ export default function NewPost({ onAddPost }) {
         새 글 작성
       </h2>
 
+      {/* 입력 필드들 */}
       <label>제목</label>
       <input
         value={title}
@@ -55,6 +86,14 @@ export default function NewPost({ onAddPost }) {
         onChange={(e) => setModel(e.target.value)}
         placeholder="예: 아이폰 16 pro"
         style={inputStyle}
+      />
+
+      <label>세부 내용</label>
+      <input
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="상세 설명을 입력해주세요"
+        style={{ ...inputStyle, height: '100px' }}
       />
 
       <label>가능 금액</label>
@@ -79,6 +118,14 @@ export default function NewPost({ onAddPost }) {
         onChange={(e) => setAddress(e.target.value)}
         placeholder="예: 경기도 광명시"
         style={inputStyle}
+      />
+
+      <label>이미지 업로드</label>
+      <input
+        type="file"
+        multiple
+        onChange={(e) => setFiles(Array.from(e.target.files))}
+        style={{ marginBottom: '16px' }}
       />
 
       <button onClick={handleSubmit} style={submitButtonStyle}>

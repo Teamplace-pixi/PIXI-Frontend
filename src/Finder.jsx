@@ -119,9 +119,9 @@ export default function Finder({ posts }) {
     }
   };
 
-  const handleNavigateToNewPost = (boardId) => {
+  const handleNavigateToNewPost = () => {
     navigate('/new-post/', {
-      state: { id: boardId },
+      state: { id: deviceId, name: passedDeviceName },
     });
   };
 
@@ -412,7 +412,7 @@ export default function Finder({ posts }) {
                       borderRadius: '12px',
                       marginRigh: '12px',
                     }}
-                    src={shop.thumb || 'FIXIBlackIcon.png'} 
+                    src={shop.thumb || 'FIXIBlackIcon.png'}
                     alt="camera"
                   />
                   <div style={styles.repairCenterName}>{shop.shopName}</div>
@@ -425,7 +425,6 @@ export default function Finder({ posts }) {
           </div>
         )}
 
-        
         {deviceId && deviceName && selectedTab === '구해요' && (
           <div style={styles.requestsSection}>
             <h2 style={styles.sectionTitle}>수리 부품/서비스 '구해요' 목록</h2>
@@ -469,8 +468,6 @@ export default function Finder({ posts }) {
             </button>
           </div>
         )}
-
-        
       </div>
       <BottomNav />
     </>
