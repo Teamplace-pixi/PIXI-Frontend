@@ -24,6 +24,8 @@ import FixerBusinessSetting from './FixerBusinessSetting';
 import AIchatmain from './AIchatmain';
 import AIHowMuchLoading from './AIHowMuchLoading';
 import AIHowMuchResult from './AIHowMuchResult';
+import BusinessForm from './BusinessForm';
+import BusinessFormCheck from './BusinessFormCheck';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -58,12 +60,13 @@ function App() {
         <Route path="/post/" element={<PostDetail />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
-        <Route path="/fixer" element={<FixerPage />} /> 
+        <Route path="/fixer" element={<FixerPage />} />
         <Route path="/aichat" element={<AIChat />} />
         <Route path="/fixer-business" element={<FixerBusinessSetting />} />
         <Route path="/loading" element={<AIHowMuchLoading />} />
         <Route path="/result" element={<AIHowMuchResult />} />
-
+        <Route path="/business" element={<BusinessForm />} />
+        <Route path="/businesscheck" element={<BusinessFormCheck />} />
       </Routes>
     </Router>
   );

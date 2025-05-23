@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import SettingHeader from './components/SettingHeader';
 import api from './api';
+import { useNavigate } from 'react-router-dom';
 
 export default function EditProfilePage() {
-  const [datas, setDatas] = useState([]);
+  const navigator = useNavigate();
+  const [datas, setDatas] = useState({});
+  const [form, setForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    showPassword: false,
+  });
 
   useEffect(() => {
     const fetchMyPageEdit = async () => {
@@ -17,26 +24,37 @@ export default function EditProfilePage() {
     fetchMyPageEdit();
   }, []);
 
-  const [form, setForm] = useState({
-    name: '배별하',
-    address: '상암동',
-    email: 'id@kau.kr',
-    password: '',
-    showPassword: false,
-  });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    if (name === 'currentPassword' || name === 'newPassword') {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    } else {
+      setDatas((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const togglePasswordVisibility = () => {
     setForm((prev) => ({ ...prev, showPassword: !prev.showPassword }));
   };
 
-  const handleSubmit = () => {
-    console.log('수정된 회원정보:', form);
-    alert('회원정보가 저장되었습니다.');
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        loginId: datas.loginId,
+        currentPassword: form.currentPassword,
+        newPassword: form.newPassword,
+        nickname: datas.nickname,
+        address: datas.address,
+        profileId: datas.profileId,
+      };
+
+      await api.put('/myPage/edit', payload);
+      alert('회원정보가 저장되었습니다.');
+      navigator('/mypage');
+    } catch (error) {
+      console.error('회원정보 수정 실패:', error);
+      alert('회원정보 수정에 실패했습니다.');
+    }
   };
 
   return (
@@ -88,8 +106,8 @@ export default function EditProfilePage() {
         </label>
         <input
           type="text"
-          name="name"
-          value={datas.nickname}
+          name="nickname"
+          value={datas.nickname || ''}
           onChange={handleChange}
           style={inputStyle}
         />
@@ -102,7 +120,7 @@ export default function EditProfilePage() {
         <input
           type="text"
           name="address"
-          value={datas.address}
+          value={datas.address || ''}
           onChange={handleChange}
           style={inputStyle}
         />
@@ -114,8 +132,8 @@ export default function EditProfilePage() {
         </label>
         <input
           type="email"
-          name="email"
-          value={datas.loginId}
+          name="loginId"
+          value={datas.loginId || ''}
           onChange={handleChange}
           style={inputStyle}
         />
@@ -123,13 +141,26 @@ export default function EditProfilePage() {
 
       <div style={{ marginBottom: '16px' }}>
         <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          비밀번호 <span style={{ color: 'red' }}>*</span>
+          현재 비밀번호
+        </label>
+        <input
+          type={form.showPassword ? 'text' : 'password'}
+          name="currentPassword"
+          value={form.currentPassword}
+          onChange={handleChange}
+          style={inputStyle}
+        />
+      </div>
+
+      <div style={{ marginBottom: '16px' }}>
+        <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
+          새 비밀번호
         </label>
         <div style={{ position: 'relative' }}>
           <input
             type={form.showPassword ? 'text' : 'password'}
-            name="password"
-            value={datas.password}
+            name="newPassword"
+            value={form.newPassword}
             onChange={handleChange}
             style={{ ...inputStyle, paddingRight: '40px' }}
           />

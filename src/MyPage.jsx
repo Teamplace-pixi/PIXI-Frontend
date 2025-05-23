@@ -33,7 +33,7 @@ export default function MyPage() {
 
     const fetchBoardList = async () => {
       try {
-        const response = await api.get(`/myPage/boardList/`);
+        const response = await api.get('/myPage/boardList');
         if (Array.isArray(response.data)) {
           setBoardList(response.data);
         } else {
@@ -48,7 +48,7 @@ export default function MyPage() {
     fetchBoardList();
   }, []);
 
-  if (showForm) return <BusinessForm />;
+  if (showForm) return navigate('/business');
 
   const styles = {
     container: {
@@ -101,7 +101,14 @@ export default function MyPage() {
       <div style={styles.container}>
         <div style={styles.inner}>
           {/* 프로필 */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '24px' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginTop: '24px',
+            }}
+          >
             <img
               src="/profile.png"
               alt="사용자 프로필 이미지"
@@ -118,10 +125,17 @@ export default function MyPage() {
               style={{
                 marginTop: '10px',
                 fontSize: '14px',
-                color: '#666',
                 padding: '5px 5px',
                 borderRadius: '20px',
                 border: '1px solid #ccc',
+                backgroundColor:
+                  getRollTypeText(datas.rollId) !== '일반 유저'
+                    ? '#2563eb'
+                    : 'transparent',
+                color:
+                  getRollTypeText(datas.rollId) !== '일반 유저'
+                    ? '#fff'
+                    : '#666',
               }}
             >
               {getRollTypeText(datas.rollId)}
@@ -131,7 +145,11 @@ export default function MyPage() {
           {/* 이름과 주소 */}
           <div style={{ marginTop: '24px' }}>
             <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>이름</div>
+              <div
+                style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}
+              >
+                이름
+              </div>
               <input
                 type="text"
                 value={datas.nickname}
@@ -146,7 +164,11 @@ export default function MyPage() {
               />
             </div>
             <div>
-              <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>주소</div>
+              <div
+                style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}
+              >
+                주소
+              </div>
               <input
                 type="text"
                 value={datas.address}
@@ -164,11 +186,25 @@ export default function MyPage() {
 
           {/* 수리 요청 목록 */}
           <div style={{ marginTop: '32px' }}>
-            <h2 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '20px' }}>
-              My 수리 요청
+            <h2
+              style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginBottom: '20px',
+              }}
+            >
+              {getRollTypeText(datas.rollId) === '일반 유저'
+                ? 'My 수리 요청'
+                : '수락한 수리 요청'}
             </h2>
-            {boardList.length > 0 ? (
-              boardList.map((post, idx) => (
+            {(getRollTypeText(datas.rollId) === '일반 유저'
+              ? boardList
+              : boardList.filter((item) => item.status === 'ACCEPTED')
+            ).length > 0 ? (
+              (getRollTypeText(datas.rollId) === '일반 유저'
+                ? boardList
+                : boardList.filter((item) => item.status === 'ACCEPTED')
+              ).map((post, idx) => (
                 <div
                   key={idx}
                   onClick={() =>
@@ -189,13 +225,23 @@ export default function MyPage() {
                 </div>
               ))
             ) : (
-              <div style={{ color: '#888', fontSize: '14px' }}>등록된 구해요 게시글이 없습니다.</div>
+              <div style={{ color: '#888', fontSize: '14px' }}>
+                {getRollTypeText(datas.rollId) === '일반 유저'
+                  ? '등록된 구해요 게시글이 없습니다.'
+                  : '수락한 수리 요청이 없습니다.'}
+              </div>
             )}
           </div>
 
           {/* 사업자 등록 버튼 */}
           <button
-            onClick={() => setShowForm(true)}
+            onClick={() =>
+              navigate(
+                getRollTypeText(datas.rollId) === '일반 유저'
+                  ? '/business'
+                  : '/businesscheck'
+              )
+            }
             style={{
               width: '100%',
               backgroundColor: '#2563eb',
@@ -208,7 +254,9 @@ export default function MyPage() {
               border: 'none',
             }}
           >
-            사업자 등록
+            {getRollTypeText(datas.rollId) === '일반 유저'
+              ? '사업자 등록'
+              : '사업체 관리'}
           </button>
         </div>
       </div>

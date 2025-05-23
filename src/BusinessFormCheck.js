@@ -4,7 +4,7 @@ import BottomNav from './components/BottomNav';
 import SettingHeader from './components/SettingHeader';
 import api from './api';
 
-export default function BusinessForm() {
+export default function BusinessFormCheck() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -78,7 +78,7 @@ export default function BusinessForm() {
 
   return (
     <div style={{ display: 'flex', paddingBottom: '80px' }}>
-      <SettingHeader title="사업자 정보 기입" />
+      <SettingHeader title="등록 사업체 관리" />
 
       <div
         style={{
