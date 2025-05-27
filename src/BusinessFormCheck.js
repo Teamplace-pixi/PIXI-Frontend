@@ -11,17 +11,10 @@ export default function BusinessFormCheck() {
     shopName: '',
     shopCall: '',
     shopLoc: '',
-    shopOpenTime: '',
-    shopDetail: '',
-    shopDevice: '',
-    shopCertification: null,
     thumb: null,
   });
 
-  const [selectedDevice, setSelectedDevice] = useState('');
-
   const [preview, setPreview] = useState({
-    shopCertification: null,
     thumb: null,
   });
 
@@ -37,11 +30,6 @@ export default function BusinessFormCheck() {
     setPreview((prev) => ({ ...prev, [name]: URL.createObjectURL(file) }));
   };
 
-  const handleDeviceChange = (device) => {
-    setSelectedDevice(device);
-    setForm((prev) => ({ ...prev, shopDevice: device === '핸드폰' ? 0 : 1 }));
-  };
-
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
@@ -49,10 +37,6 @@ export default function BusinessFormCheck() {
         shopName: form.shopName,
         shopCall: form.shopCall,
         shopLoc: form.shopLoc,
-        shopOpenTime: form.shopOpenTime,
-        shopDetail: form.shopDetail,
-        shopDevice: form.shopDevice,
-        shopCertification: '',
         thumb: '',
       };
 
@@ -60,18 +44,18 @@ export default function BusinessFormCheck() {
         'shop',
         new Blob([JSON.stringify(shopInfo)], { type: 'application/json' })
       );
-      formData.append('shopCertification', form.shopCertification);
       formData.append('thumb', form.thumb);
 
-      await api.post('/myPage/shop', formData, {
+      await api.put('/myPage/shop', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert('사업자 정보가 등록되었습니다.');
+
+      alert('사업자 정보가 수정되었습니다.');
       navigate('/mypage');
     } catch (error) {
-      console.error('사업자 정보 등록 실패:', error);
+      console.error('사업자 정보 수정 실패:', error);
       alert('사업자 정보 등록에 실패했습니다.');
     }
   };
@@ -103,16 +87,6 @@ export default function BusinessFormCheck() {
             name: 'shopLoc',
             placeholder: '영업시간을 입력해주세요',
           },
-          {
-            label: '사업장 영업시간',
-            name: 'shopOpenTime',
-            placeholder: '전화번호를 입력해주세요',
-          },
-          {
-            label: '사업장 정보',
-            name: 'shopDetail',
-            placeholder: '상세 정보를 입력해주세요',
-          },
         ].map(({ label, name, placeholder }, i) => (
           <div key={i} style={{ marginTop: '16px' }}>
             <div style={{ fontSize: '14px', marginBottom: '4px' }}>
@@ -137,38 +111,6 @@ export default function BusinessFormCheck() {
           </div>
         ))}
 
-        <div style={{ marginTop: '16px', marginBottom: '24px' }}>
-          <div style={{ fonstSize: '14px', marginBottom: '4px' }}>
-            수리 가능한 기기 <span style={{ color: '#0047B1' }}>*</span>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              gap: '12px',
-            }}
-          >
-            {['핸드폰', '태블릿'].map((device) => (
-              <button
-                key={device}
-                onClick={() => handleDeviceChange(device)}
-                style={{
-                  borderRadius: '20px',
-                  backgroundColor:
-                    selectedDevice === device ? '#2563eb' : '#fff',
-                  color: selectedDevice === device ? '#fff' : '#000',
-                  padding: '8px 16px',
-                  borderRadius: '10px',
-                  border: `1px solid ${
-                    selectedDevice === device ? '#2563eb' : '#ccc'
-                  }`,
-                  cursor: 'pointer',
-                }}
-              >
-                {device}
-              </button>
-            ))}
-          </div>
-        </div>
         {[
           { label: '사업자등록증 인증', name: 'shopCertification' },
           { label: '사업장 대표 이미지 등록', name: 'thumb' },

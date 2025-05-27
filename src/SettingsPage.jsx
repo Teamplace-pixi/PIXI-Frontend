@@ -48,6 +48,11 @@ export default function SettingsPage() {
     }
   };
 
+  const handleLogout = async () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   const menuItems = [
     {
       label: `${name} 회원님`,
@@ -57,8 +62,13 @@ export default function SettingsPage() {
     { label: '결제', onClick: () => {} },
     { label: '구독 관리', onClick: () => navigate('/subscription') },
     { divider: true },
-    { label: '로그아웃', onClick: () => setShowLogoutModal(true) }, // 로그아웃 모달 열기
-    { label: '회원탈퇴', onClick: () => setShowWithdrawModal(true) }, // 회원탈퇴 모달 열기
+
+    {
+      label: '로그아웃',
+      onClick: handleLogout,
+    },
+    { label: '회원탈퇴', onClick: () => {} },
+
   ];
 
   return (
