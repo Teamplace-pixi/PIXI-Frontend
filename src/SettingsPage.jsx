@@ -21,6 +21,11 @@ export default function SettingsPage() {
     fetchMyPage();
   });
 
+  const handleLogout = async () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   const menuItems = [
     {
       label: `${name} 회원님`,
@@ -31,7 +36,10 @@ export default function SettingsPage() {
     { label: '결제', onClick: () => {} },
     { label: '앱 버전', onClick: () => {} },
     { divider: true },
-    { label: '로그아웃', onClick: () => {} },
+    {
+      label: '로그아웃',
+      onClick: handleLogout,
+    },
     { label: '회원탈퇴', onClick: () => {} },
   ];
 

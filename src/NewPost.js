@@ -2,22 +2,33 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from './api';
 
-export default function NewPost({ onAddPost }) {
-  const [title, setTitle] = useState('');
-  const [model, setModel] = useState('');
-  const [price, setPrice] = useState('');
-  const [content, setContent] = useState('');
-  const [date, setDate] = useState('');
-  const [address, setAddress] = useState('');
-  const [files, setFiles] = useState([]);
+export default function NewPost() {
+  const [form, setForm] = useState({
+    title: '',
+    model: '',
+    price: '',
+    content: '',
+    date: '',
+    address: '',
+    files: [], // 다중 파일을 위한 배열
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
   const deviceId = location.state?.id;
   const passedDeviceName = location.state?.name;
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    setForm((prev) => ({ ...prev, files: Array.from(e.target.files) }));
+  };
+
   const handleSubmit = async () => {
-    if (!title || !model) {
+    if (!form.title || !form.model) {
       alert('제목과 기종은 필수 입력입니다.');
       return;
     }
@@ -26,13 +37,14 @@ export default function NewPost({ onAddPost }) {
       const formData = new FormData();
 
       const boardData = {
-        boardTitle: title,
-        boardContent: content,
-        boardLoc: address,
-        boardCost: parseInt(price) || 0,
-        boardDate: date,
-        deviceName: model || '',
-        imageIds: [],
+        boardTitle: form.title,
+        boardContent: form.content,
+        boardLoc: form.address,
+        boardCost: form.price || '협의 가능',
+        boardDate: form.date || '협의 가능',
+        deviceName: form.model,
+        imageIds: [0], // 이미지 ID가 없다면 빈 배열로
+        multipartFiles: [''],
       };
 
       formData.append(
@@ -40,7 +52,7 @@ export default function NewPost({ onAddPost }) {
         new Blob([JSON.stringify(boardData)], { type: 'application/json' })
       );
 
-      files.forEach((file) => {
+      form.files.forEach((file) => {
         formData.append('multipartFiles', file);
       });
 
@@ -51,6 +63,7 @@ export default function NewPost({ onAddPost }) {
       });
 
       console.log('업로드 성공:', response.data);
+      alert('글이 등록되었습니다.');
       navigate('/finder', {
         state: {
           id: deviceId || '',
@@ -71,51 +84,57 @@ export default function NewPost({ onAddPost }) {
         새 글 작성
       </h2>
 
-      {/* 입력 필드들 */}
       <label>제목</label>
       <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        name="title"
+        value={form.title}
+        onChange={handleChange}
         placeholder="예: 아이폰 후면 수리 가능하신 분?"
         style={inputStyle}
       />
 
       <label>기종</label>
       <input
-        value={model}
-        onChange={(e) => setModel(e.target.value)}
+        name="model"
+        value={form.model}
+        onChange={handleChange}
         placeholder="예: 아이폰 16 pro"
         style={inputStyle}
       />
 
       <label>세부 내용</label>
       <input
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
+        name="content"
+        value={form.content}
+        onChange={handleChange}
         placeholder="상세 설명을 입력해주세요"
         style={{ ...inputStyle, height: '100px' }}
       />
 
       <label>가능 금액</label>
       <input
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        name="price"
+        type="number"
+        value={form.price}
+        onChange={handleChange}
         placeholder="예: 협의 가능"
         style={inputStyle}
       />
 
       <label>필요 날짜</label>
       <input
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
+        name="date"
+        value={form.date}
+        onChange={handleChange}
         placeholder="예: 협의 가능"
         style={inputStyle}
       />
 
       <label>위치</label>
       <input
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
+        name="address"
+        value={form.address}
+        onChange={handleChange}
         placeholder="예: 경기도 광명시"
         style={inputStyle}
       />
@@ -124,7 +143,8 @@ export default function NewPost({ onAddPost }) {
       <input
         type="file"
         multiple
-        onChange={(e) => setFiles(Array.from(e.target.files))}
+        accept="image/*"
+        onChange={handleFileChange}
         style={{ marginBottom: '16px' }}
       />
 
