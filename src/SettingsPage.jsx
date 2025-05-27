@@ -23,7 +23,7 @@ export default function SettingsPage() {
 
   const handleLogout = async () => {
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/startlogin');
   };
 
   const menuItems = [
