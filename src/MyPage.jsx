@@ -21,6 +21,19 @@ export default function MyPage() {
     }
   };
 
+  const getDevice = (type) => {
+    switch (type) {
+      case 0:
+        return '핸드폰';
+      case 1:
+        return '노트북';
+      case 2:
+        return '태블릿';
+      default:
+        return '악세서리';
+    }
+  };
+
   useEffect(() => {
     const fetchMyPage = async () => {
       try {
@@ -221,6 +234,9 @@ export default function MyPage() {
                   </div>
                   <div style={styles.requestTagsContainer}>
                     <div style={styles.requestTag}>{post.deviceBrand}</div>
+                    <div style={styles.requestTag}>
+                      {getDevice(post.deviceType)}
+                    </div>
                   </div>
                 </div>
               ))

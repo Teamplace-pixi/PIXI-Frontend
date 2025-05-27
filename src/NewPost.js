@@ -117,7 +117,7 @@ export default function NewPost() {
         type="number"
         value={form.price}
         onChange={handleChange}
-        placeholder="예: 협의 가능"
+        placeholder="협의 가능시 0원, 아니면 금액을 입력해주세요"
         style={inputStyle}
       />
 
@@ -126,7 +126,7 @@ export default function NewPost() {
         name="date"
         value={form.date}
         onChange={handleChange}
-        placeholder="예: 협의 가능"
+        placeholder="2000-00-00 형식으로 입력해주세요"
         style={inputStyle}
       />
 
