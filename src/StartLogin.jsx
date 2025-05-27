@@ -56,6 +56,8 @@ const StartLogin = () => {
             borderRadius: '10px',
             border: 'none',
             outline: 'none',
+            boxSizing: 'border-box',
+            height: '40px',
           }}
         />
         <input
@@ -70,6 +72,8 @@ const StartLogin = () => {
             borderRadius: '10px',
             border: 'none',
             outline: 'none',
+            boxSizing: 'border-box',
+            height: '40px',
           }}
         />
         {errorMsg && (

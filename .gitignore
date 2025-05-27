@@ -26,3 +26,5 @@ Procfile
 .gitignore
 .ebextensions/00-makeFiles.config
 .github/workflows/deploy.yml
+
+.env

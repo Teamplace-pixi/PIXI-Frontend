@@ -2,26 +2,45 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   height: 100vh;
+  /* 여기에 배경색 추가! */
+  background-color: #0546BE; /* start-container에 있던 배경색을 wrapper로 옮겨왔어 */
+  /* 아니면 배경 이미지를 넣을 수도 있어! */
+  /* background-image: url('your-background-image.jpg'); */
+  /* background-size: cover; */
+  /* background-position: center; */
 }
 
 .start-container {
-  width: 393px;
-  height: 852px;
-  background-color: #0546BE;
+  max-width: 393px;
+  max-height: 852px;
+
+  width: 90%;
+  min-height: 60vh;
+  height: auto;
+
+  /* 컨테이너 자체의 배경색은 빼거나 다른 색으로 바꿔주면 돼 */
+  /* background-color: transparent; */ /* 투명하게 하거나 */
+  background-color: rgba(255, 255, 255, 0.1); /* 아니면 살짝 투명한 흰색 같은 걸로? 이건 자유! */
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
-  border-radius: 20px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 
 .fixi-logo {
-  width: 218px;
-  margin-bottom: 80px;
+  width: 60%;
+  max-width: 218px;
+  /* margin-bottom: 80px; */ /* 이 마진도 반응형으로 바꾸는 걸 고려해봐 */
+  margin-bottom: 10vh; /* 예시: 뷰포트 높이의 10% */
   filter: drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.3));
 }
 
@@ -31,4 +50,5 @@
   font-size: 15px;
   font-weight: bold;
   line-height: 1.4;
+  word-break: keep-all;
 }

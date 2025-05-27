@@ -9,14 +9,35 @@
 
 
   
-  .mobile-container {
-    width: 375px;
-    height: 812px;
-    background-color: #0546BE; 
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    color: #FDC500;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+.mobile-container {
+  width: 375px;
+  min-height: 100vh; /* 고정 높이 대신 최소 화면 높이로 */
+  background-color: #0546BE; 
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: #FDC500;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+}
+
+.floating-image {
+  width: 100%;
+  margin-top: 40px;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: floatUp 1s ease-out forwards;
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px); /* 아래에서 시작 */
   }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* 원래 위치로 */
+  }
+}
+
+
   

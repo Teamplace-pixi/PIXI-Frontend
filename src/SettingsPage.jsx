@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SettingHeader from './components/SettingHeader';
 import BottomNav from './components/BottomNav';
+import GenericModal from './components/GenericModal';
 import api from './api';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
 
   const [name, setNickname] = useState('');
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // 로그아웃 모달 상태
 
   useEffect(() => {
     const fetchMyPage = async () => {
@@ -19,7 +22,31 @@ export default function SettingsPage() {
       }
     };
     fetchMyPage();
-  });
+  }, []);
+
+  // 회원탈퇴 처리
+  const handleWithdraw = async () => {
+    try {
+      await api.delete('/user/delete');
+      alert('회원탈퇴가 완료되었습니다.');
+      navigate('/');
+    } catch (error) {
+      console.error('회원탈퇴 실패:', error);
+      alert('회원탈퇴 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 로그아웃 처리
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout'); // 실제 API 주소로 교체
+      alert('로그아웃 되었습니다.');
+      navigate('/login'); // 로그인 화면으로 이동
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+      alert('로그아웃 중 오류가 발생했습니다.');
+    }
+  };
 
   const menuItems = [
     {
@@ -27,12 +54,11 @@ export default function SettingsPage() {
       sub: '회원정보 변경',
       onClick: () => navigate('/edit-profile'),
     },
-    { label: '알림', onClick: () => {} },
     { label: '결제', onClick: () => {} },
-    { label: '앱 버전', onClick: () => {} },
+    { label: '구독 관리', onClick: () => navigate('/subscription') },
     { divider: true },
-    { label: '로그아웃', onClick: () => {} },
-    { label: '회원탈퇴', onClick: () => {} },
+    { label: '로그아웃', onClick: () => setShowLogoutModal(true) }, // 로그아웃 모달 열기
+    { label: '회원탈퇴', onClick: () => setShowWithdrawModal(true) }, // 회원탈퇴 모달 열기
   ];
 
   return (
@@ -49,7 +75,7 @@ export default function SettingsPage() {
               onClick={item.onClick}
               style={{
                 ...styles.menuItem,
-                borderBottom: index === 0 ? '1px solid #f2f2f2' : 'none', // ✅ index가 0일 때만 borderBottom 적용!
+                borderBottom: index === 0 ? '1px solid #f2f2f2' : 'none',
               }}
             >
               <div>
@@ -71,6 +97,59 @@ export default function SettingsPage() {
           )
         )}
       </div>
+
+      {/* 회원탈퇴 모달 */}
+      {showWithdrawModal && (
+        <GenericModal
+          title="정말 회원탈퇴 하시겠어요?"
+          onClose={() => setShowWithdrawModal(false)}
+        >
+          <p style={{ margin: '12px 0' }}>탈퇴 후 모든 정보가 삭제됩니다.</p>
+          <button
+            onClick={handleWithdraw}
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginTop: '8px',
+              borderRadius: '999px',
+              backgroundColor: '#e53935',
+              color: '#fff',
+              fontWeight: 'bold',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            탈퇴하기
+          </button>
+        </GenericModal>
+      )}
+
+      {/* 로그아웃 모달 */}
+      {showLogoutModal && (
+        <GenericModal
+          title="로그아웃 하시겠어요?"
+          onClose={() => setShowLogoutModal(false)}
+        >
+          <p style={{ margin: '12px 0' }}>다시 로그인하셔야 이용 가능합니다.</p>
+          <button
+            onClick={handleLogout}
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginTop: '8px',
+              borderRadius: '999px',
+              backgroundColor: '#333',
+              color: '#fff',
+              fontWeight: 'bold',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            로그아웃
+          </button>
+        </GenericModal>
+      )}
+
       <BottomNav />
     </div>
   );

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import api from './api';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
+import RepairapplyModal from './components/RepairapplyModal'; // ✅ 수정된 모달 import
 
 export default function PostDetail() {
   const location = useLocation();
@@ -11,6 +12,7 @@ export default function PostDetail() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // ✅ 모달 상태
 
   useEffect(() => {
     if (!boardId) {
@@ -41,6 +43,8 @@ export default function PostDetail() {
   return (
     <>
       <Header />
+
+      {/* 본문 내용 */}
       <div style={{ padding: '80px 16px 120px', fontFamily: 'sans-serif' }}>
         {/* 모집 상태 및 날짜 */}
         <div style={{ marginBottom: '8px', color: '#2563eb', fontWeight: 'bold', fontSize: '14px' }}>
@@ -76,7 +80,6 @@ export default function PostDetail() {
             <span>📍 위치</span>
             <span>{post.boardLoc}</span>
           </div>
-          
         </div>
 
         {/* 구분선 */}
@@ -105,20 +108,25 @@ export default function PostDetail() {
             backgroundColor: '#2563eb',
             color: '#fff',
             padding: '14px',
-            width: 'calc(100% - 32px)',
+            width: '95%',
             border: 'none',
             borderRadius: '20px',
             fontSize: '16px',
             fontWeight: 'bold',
             boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
           }}
-          onClick={() => alert('수리 지원이 접수되었습니다!')}
+          onClick={() => setIsModalOpen(true)}
         >
           수리 지원하기
         </button>
       </div>
 
       <BottomNav />
+
+      {/* 모달 렌더링 */}
+      {isModalOpen && (
+        <RepairapplyModal onClose={() => setIsModalOpen(false)} />
+      )}
     </>
   );
 }

@@ -8,12 +8,16 @@ function Header({ title = 'FIXI' }) {
     <div style={styles.header}>
       <span style={styles.logoText}>{title}</span>
       <div style={styles.buttonContainer}>
+        <button style={styles.iconButton} onClick={() => navigate('/chatlist')}>
+          <img src="/userchat1.png" alt="icon 1" style={styles.icon1} />
+        </button>
         <button style={styles.iconButton} onClick={() => navigate('/settings')}>
-          <img src="setting.png" alt="icon 1" style={styles.icon1} />
+          <img src="/settings.png" alt="icon 2" style={styles.icon2} />
         </button>
         <button style={styles.iconButton} onClick={() => navigate('/mypage')}>
-          <img src="mypage.png" alt="icon 2" style={styles.icon2} />
+          <img src="/mypage.png" alt="icon 3" style={styles.icon3} />
         </button>
+        
       </div>
     </div>
   );
