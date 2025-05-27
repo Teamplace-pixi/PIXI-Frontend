@@ -5,15 +5,14 @@ import RepairSupportModal from './components/RepairSupportModal';
 
 export default function ChatRoom() {
   const [showModal, setShowModal] = useState(false);
+  const [showRepairStartBox, setShowRepairStartBox] = useState(true); // ← 추가
 
   return (
     <div style={styles.page}>
       <Header title="FIX Finder" />
 
-      {/* 팝업 오버레이 배경 */}
       {showModal && <div style={styles.overlay} />}
 
-      {/* 채팅 내용 */}
       <div style={{ ...styles.container, filter: showModal ? 'blur(2px)' : 'none' }}>
         <div style={styles.chatBoxLeft}>
           <p style={styles.label}>[ 수리 지원 ]</p>
@@ -27,10 +26,13 @@ export default function ChatRoom() {
           <p>당장 수리합시다!</p>
         </div>
 
-        <div style={styles.chatBoxLeft}>
-          <p style={styles.label}>[ 수리 시작 ]</p>
-          <p>아이폰 후면 수리 가능하신 분?</p>
-        </div>
+        {/* [수리 시작] 박스는 조건부로 렌더링 */}
+        {showRepairStartBox && (
+          <div style={styles.chatBoxLeft}>
+            <p style={styles.label}>[ 수리 시작 ]</p>
+            <p>아이폰 후면 수리 가능하신 분?</p>
+          </div>
+        )}
 
         <div style={styles.chatBoxLeft}>
           <p style={styles.label}>[ 수리 완료 ]</p>
@@ -40,8 +42,16 @@ export default function ChatRoom() {
 
       <BottomNav />
 
-      {/* 수리 지원 모달 */}
-      {showModal && <RepairSupportModal onClose={() => setShowModal(false)} />}
+      {/* 모달에 onStartRepair 전달 */}
+      {showModal && (
+        <RepairSupportModal
+          onClose={() => setShowModal(false)}
+          onStartRepair={() => {
+            setShowRepairStartBox(false); // ← [수리 시작] 박스 제거
+            setShowModal(false);         // 모달 닫기
+          }}
+        />
+      )}
     </div>
   );
 }

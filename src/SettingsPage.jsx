@@ -37,20 +37,11 @@ export default function SettingsPage() {
   };
 
   // 로그아웃 처리
-  const handleLogout = async () => {
-    try {
-      await api.post('/auth/logout'); // 실제 API 주소로 교체
-      alert('로그아웃 되었습니다.');
-      navigate('/login'); // 로그인 화면으로 이동
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-      alert('로그아웃 중 오류가 발생했습니다.');
-    }
-  };
+  
 
   const handleLogout = async () => {
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/startlogin');
   };
 
   const menuItems = [
@@ -62,14 +53,16 @@ export default function SettingsPage() {
     { label: '결제', onClick: () => {} },
     { label: '구독 관리', onClick: () => navigate('/subscription') },
     { divider: true },
-
     {
       label: '로그아웃',
-      onClick: handleLogout,
+      onClick: () => setShowLogoutModal(true), // ✅ 모달 띄우기만
     },
-    { label: '회원탈퇴', onClick: () => {} },
-
+    {
+      label: '회원탈퇴',
+      onClick: () => setShowWithdrawModal(true), // ✅ 기존처럼 모달 띄우기
+    },
   ];
+  
 
   return (
     <div style={{ paddingTop: '60px' }}>

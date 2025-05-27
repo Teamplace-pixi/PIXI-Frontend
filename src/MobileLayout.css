@@ -1,28 +1,46 @@
+/* ✅ 화면 전체 꽉 채우기 및 세로 정렬 중심으로 */
 .mobile-wrapper {
   display: flex;
-  flex-direction: column; /* 상단부터 아래로 배치 */
+  justify-content: center;
   align-items: center;
-  justify-content: flex-start; /* 중앙 정렬 ➝ 상단 정렬 */
-  height: 100vh;
-  padding-top: 16px;
+
+  min-height: 100vh;
+  width: 100vw;
+
+  padding: 0;
+  margin: 0;
+
+  background-color: #0546BE;
+  box-sizing: border-box;
 }
 
-
-  
+/* ✅ 컨테이너가 화면에 맞게 적절히 축소되면서 중앙 배치되도록 */
 .mobile-container {
-  width: 375px;
-  min-height: 100vh; /* 고정 높이 대신 최소 화면 높이로 */
-  background-color: #0546BE; 
+  width: 100%;
+  max-width: 393px;
+  min-height: 100vh;
+  padding: 20px;
+
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  background-color: #0546BE;
   color: #FDC500;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+
+  box-sizing: border-box;
+  box-shadow: none; /* 모바일 전체가 같은 배경이라면 그림자 불필요 */
 }
 
+/* ✅ 이미지 애니메이션 유지 + 반응형 */
 .floating-image {
   width: 100%;
+  max-width: 100%;
+  height: auto;
+
   margin-top: 40px;
+
   opacity: 0;
   transform: translateY(50px);
   animation: floatUp 1s ease-out forwards;
@@ -31,13 +49,21 @@
 @keyframes floatUp {
   from {
     opacity: 0;
-    transform: translateY(50px); /* 아래에서 시작 */
+    transform: translateY(50px);
   }
   to {
     opacity: 1;
-    transform: translateY(0); /* 원래 위치로 */
+    transform: translateY(0);
   }
 }
 
+/* ✅ 작은 화면에서도 잘 보이도록 텍스트 반응형 설정 (선택 사항) */
+@media (max-width: 480px) {
+  .mobile-container {
+    padding: 16px;
+  }
 
-  
+  .floating-image {
+    margin-top: 24px;
+  }
+}
