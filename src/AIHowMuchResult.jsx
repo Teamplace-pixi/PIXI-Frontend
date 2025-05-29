@@ -27,6 +27,7 @@ const AIHowMuchResult = () => {
       </div>
 
       <div className={`gray-box ${showDetails ? 'slide-up' : ''}`}>
+        
         <p className="reason-title">다음과 같은 이유로 가격이 측정되었어요</p>
         <hr />
         <p className="symptom">소리가 안들리고 블루투스 연결이 안되는 문제</p>

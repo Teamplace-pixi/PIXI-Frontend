@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import api from './api';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
+import RepairapplyModal from './components/RepairapplyModal'; // ✅ 수정된 모달 import
 
 let options = [
   { value: '모집중', label: '모집중' },
@@ -22,6 +23,7 @@ export default function PostDetail() {
   const [myBoardId, setMyBoardId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // ✅ 모달 상태
 
   const [selectValue, setSelectValue] = useState('');
   const selectInputRef = useRef(null);
@@ -84,6 +86,8 @@ export default function PostDetail() {
   return (
     <>
       <Header />
+
+      {/* 본문 내용 */}
       <div style={{ padding: '80px 16px 120px', fontFamily: 'sans-serif' }}>
         {/* 모집 상태 및 날짜 */}
         <div
@@ -232,13 +236,19 @@ export default function PostDetail() {
       {user?.rollId === 1 && (
         <div
           style={{
-            position: 'fixed',
-            bottom: '60px',
-            left: 0,
-            width: '100%',
-            padding: '0 16px',
-            backgroundColor: '#fff',
+
+            backgroundColor: '#2563eb',
+            color: '#fff',
+            padding: '14px',
+            width: '95%',
+            border: 'none',
+            borderRadius: '20px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
           }}
+          onClick={() => setIsModalOpen(true)}
+
         >
           <button
             style={{
@@ -260,6 +270,11 @@ export default function PostDetail() {
       )}
 
       <BottomNav />
+
+      {/* 모달 렌더링 */}
+      {isModalOpen && (
+        <RepairapplyModal onClose={() => setIsModalOpen(false)} />
+      )}
     </>
   );
 }

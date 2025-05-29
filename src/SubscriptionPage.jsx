@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BottomNav from './components/BottomNav'; // BottomNav 컴포넌트 가져오기
 import api from './api';
 
-export default function SubscriptionPage() {
+export default function Subscribe() {
   const [url, setUrl] = useState('');
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function SubscriptionPage() {
       </div>
 
       <div style={styles.card}>
-        <h4 style={styles.title}>FIXI 프라임으로 전환하기</h4>
+        <h4 style={styles.title}>FIXI 프라임 이용중</h4>
         <hr style={styles.divider} />
 
         {/* 기능 항목들 */}
@@ -78,11 +78,12 @@ export default function SubscriptionPage() {
 
         {/* 가격 및 버튼 */}
         <div style={styles.price}>월 2,900원</div>
+        <div>구독중</div>
         <button
           style={styles.subscribeButton}
           onClick={() => window.open(url, '_blank')}
         >
-          구독하기
+          해지하기
         </button>
       </div>
       {/* BottomNav 컴포넌트가 container 내부에 있지만, 보통 Fixed 포지션으로 사용될 때 아래 공간을 확보해줘야 함 */}
@@ -178,7 +179,7 @@ const styles = {
     display: 'block',
     width: '100%',
     padding: '12px',
-    backgroundColor: '#006FFF',
+    backgroundColor: 'red',
     color: '#fff',
     fontWeight: 'bold',
     fontSize: '16px',

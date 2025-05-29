@@ -1,34 +1,54 @@
+/* 1. html과 body 기본 여백 제거 + 높이 100% 설정 */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* 2. 바탕화면 전체를 꽉 채우는 wrapper */
 .start-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
+  width: 100vw;
   height: 100vh;
+
+  background-color: #0546BE;
+  overflow: hidden; /* 혹시 모를 넘침 방지 */
 }
 
+/* 3. 가운데에 로고와 텍스트를 정렬하는 container */
 .start-container {
-  width: 393px;
-  height: 852px;
-  background-color: #0546BE;
+  width: 100%;
+  max-width: 393px;
+  padding: 20px;
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
-  border-radius: 20px; 
+
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-
+/* 4. 로고 크기 및 여백 */
 .fixi-logo {
-  width: 218px;
-  margin-bottom: 80px;
+  width: 60%;
+  max-width: 218px;
+  margin-bottom: 10vh;
   filter: drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.3));
 }
 
+/* 5. 텍스트 스타일 */
 .start-text {
   color: #FFC800;
   text-align: center;
   font-size: 15px;
   font-weight: bold;
   line-height: 1.4;
+  word-break: keep-all;
 }

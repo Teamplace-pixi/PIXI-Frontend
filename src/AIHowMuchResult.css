@@ -42,7 +42,7 @@
   /* 회색 정보 영역 (영수증 느낌) */
   .gray-box {
     background-color: #ffffff;
-    padding: 24px 20px 32px 20px;
+    padding: 60px 20px 32px 20px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     position: absolute;
@@ -139,4 +139,6 @@
     font-size: 14px;
     cursor: pointer;
   }
+
+ 
   

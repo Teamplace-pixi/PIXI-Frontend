@@ -36,6 +36,12 @@ function DictionaryScreen({
         </h1>
 
         <p style={{ fontSize: '12px', color: '#D1D5DB', lineHeight: '1.6' }}>{description}</p>
+        
+        <img
+        src="FIXIicon.png" // 실제 경로로 바꿔줘야 함
+        alt="제품 이미지"
+        className="floating-image"
+      />
       </div>
     </div>
   );

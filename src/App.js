@@ -26,6 +26,10 @@ import AIHowMuchLoading from './AIHowMuchLoading';
 import AIHowMuchResult from './AIHowMuchResult';
 import BusinessForm from './BusinessForm';
 import BusinessFormCheck from './BusinessFormCheck';
+import SubscriptionPage from './SubscriptionPage';
+import ChatListPage from './ChatListPage';
+import ChatRoomPage from './ChatRoomPage';
+import Subscribe from './Subscribe';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -67,6 +71,10 @@ function App() {
         <Route path="/result" element={<AIHowMuchResult />} />
         <Route path="/business" element={<BusinessForm />} />
         <Route path="/businesscheck" element={<BusinessFormCheck />} />
+        <Route path="/subscribe" element={<Subscribe />} />
+        <Route path="/subscription" element={<SubscriptionPage />} />
+        <Route path="/chatlist" element={<ChatListPage />} />
+        <Route path="/chat/:id" element={<ChatRoomPage />} />
       </Routes>
     </Router>
   );
