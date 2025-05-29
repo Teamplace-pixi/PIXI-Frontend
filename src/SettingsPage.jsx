@@ -12,6 +12,9 @@ export default function SettingsPage() {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false); // 로그아웃 모달 상태
 
+  const [subName, setName] = useState('');
+  const [sub, setSub] = useState(false); // 기본 false로 수정
+
   useEffect(() => {
     const fetchMyPage = async () => {
       try {
@@ -21,6 +24,20 @@ export default function SettingsPage() {
         console.error('마이페이지 불러오기 실패:', error);
       }
     };
+
+    const fetchData = async () => {
+      try {
+        // 구독 정보 가져오기
+        const infoResponse = await api.get('/myPage/paypal');
+        setName(infoResponse.data.name);
+        setSub(infoResponse.data.sub);
+        console.log('구독 정보:', infoResponse.data);
+      } catch (error) {
+        console.error('데이터 요청 실패:', error);
+      }
+    };
+
+    fetchData();
     fetchMyPage();
   }, []);
 
@@ -37,39 +54,51 @@ export default function SettingsPage() {
   };
 
   // 로그아웃 처리
-  
 
   const handleLogout = async () => {
     localStorage.removeItem('token');
     navigate('/startlogin');
   };
 
-  const menuItems = [
-    {
-      label: `${name} 회원님`,
-      sub: '회원정보 변경',
-      onClick: () => navigate('/edit-profile'),
-    },
-    { label: '결제', onClick: () => {} },
-    { label: '구독 관리', onClick: () => navigate('/subscription') },
-    { divider: true },
-    {
-      label: '로그아웃',
-      onClick: () => setShowLogoutModal(true), // ✅ 모달 띄우기만
-    },
-    {
-      label: '회원탈퇴',
-      onClick: () => setShowWithdrawModal(true), // ✅ 기존처럼 모달 띄우기
-    },
-  ];
-  
+  const menuItems = () => {
+    const items = [
+      {
+        label: `${name} 회원님`,
+        sub: '회원정보 변경',
+        onClick: () => navigate('/edit-profile'),
+      },
+    ];
+
+    if (sub === true) {
+      items.push({
+        label: '구독 관리',
+        onClick: () => navigate('/subscription'),
+      });
+    } else if (sub === false) {
+      items.push({ label: '결제', onClick: () => navigate('/subscribe') });
+    }
+
+    items.push(
+      { divider: true },
+      {
+        label: '로그아웃',
+        onClick: () => setShowLogoutModal(true),
+      },
+      {
+        label: '회원탈퇴',
+        onClick: () => setShowWithdrawModal(true),
+      }
+    );
+
+    return items;
+  };
 
   return (
     <div style={{ paddingTop: '60px' }}>
       <SettingHeader title="설정" />
 
       <div style={{ padding: '16px' }}>
-        {menuItems.map((item, index) =>
+        {menuItems().map((item, index) =>
           item.divider ? (
             <hr key={index} style={styles.divider} />
           ) : (
@@ -109,7 +138,7 @@ export default function SettingsPage() {
         >
           <p style={{ margin: '12px 0' }}>탈퇴 후 모든 정보가 삭제됩니다.</p>
           <button
-            onClick={handleWithdraw}
+            // onClick={handleWithdraw}
             style={{
               width: '100%',
               padding: '12px',
