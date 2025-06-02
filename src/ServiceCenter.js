@@ -53,10 +53,9 @@ const ServiceCenter = () => {
           {reviews.length}개
         </span>
       </div>
-      {
-        (reviews.length === 0,
-        (<div style={reviewGridStyle}>리뷰가 없습니다.</div>))
-      }
+      {reviews.length === 0 && (
+        <div style={reviewGridStyle}>리뷰가 없습니다.</div>
+      )}
       {reviews.length > 0 && (
         <div style={reviewGridStyle}>
           {reviews.map((review) => (
