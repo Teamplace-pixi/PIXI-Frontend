@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from './api';
 import './MobileLayout.css';
 
+
 const StartLogin = () => {
   const navigate = useNavigate();
   const [loginId, setLoginId] = useState('');
@@ -41,7 +42,7 @@ const StartLogin = () => {
         <img
           src="/FIXIlogo.png"
           alt="FIXI Logo"
-          style={{ width: '120px', marginBottom: '20px' }}
+          style={{ width: '170px', marginBottom: '50px' }}
         />
 
         <input
@@ -53,12 +54,13 @@ const StartLogin = () => {
             width: '80%',
             padding: '12px',
             margin: '8px 0',
-            borderRadius: '10px',
+            borderRadius: '15px',
             border: 'none',
             outline: 'none',
             boxSizing: 'border-box',
             height: '40px',
           }}
+          
         />
         <input
           type="password"
@@ -69,15 +71,16 @@ const StartLogin = () => {
             width: '80%',
             padding: '12px',
             margin: '8px 0',
-            borderRadius: '10px',
+            borderRadius: '15px',
             border: 'none',
             outline: 'none',
             boxSizing: 'border-box',
             height: '40px',
           }}
+          
         />
         {errorMsg && (
-          <div style={{ color: 'red', fontSize: '12px', marginTop: '8px' }}>
+          <div style={{ color: 'FFA500', fontSize: '12px', marginTop: '8px' }}>
             {errorMsg}
           </div>
         )}
@@ -87,12 +90,13 @@ const StartLogin = () => {
             width: '80%',
             padding: '12px',
             marginTop: '16px',
-            backgroundColor: '#FFD700',
-            color: '#0047BB',
+            backgroundColor: '#FFC800',
+            color: '#0047B1',
             fontWeight: 'bold',
-            borderRadius: '10px',
+            borderRadius: '15px',
             border: 'none',
             cursor: 'pointer',
+            fontSize: '18px',
           }}
         >
           Sign in
@@ -101,11 +105,11 @@ const StartLogin = () => {
         <p
           onClick={goToSignUp}
           style={{
-            fontSize: '12px',
-            color: '#eee',
-            marginTop: '10px',
+            fontSize: '13px',
+            color: '#FFFFFF',
+            marginTop: '15px',
             cursor: 'pointer',
-            textDecoration: 'underline',
+            
           }}
         >
           회원가입 / 비밀번호찾기

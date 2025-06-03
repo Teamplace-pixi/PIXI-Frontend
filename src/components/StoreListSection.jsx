@@ -102,8 +102,9 @@ const styles = {
   },
   title: {
     fontSize: '18px',
-    fontWeight: 'bold',
+    fontWeight: 500,
     marginBottom: '16px',
+    marginTop: '20px',
   },
   horizontalScroll: {
     display: 'flex',
@@ -117,7 +118,7 @@ const styles = {
     width: '160px',
     backgroundColor: '#f9f9f9',
     borderRadius: '12px',
-    padding: '12px',
+    padding: '2px',
     boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
     textAlign: 'center',
     cursor: 'pointer',

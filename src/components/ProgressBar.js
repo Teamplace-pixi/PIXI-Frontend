@@ -26,7 +26,7 @@ function ProgressBar({ step }) {
             height: '8px',
             margin: '0 4px',
             borderRadius: '4px',
-            backgroundColor: s <= step ? '#FFD700' : '#D9D9D9',
+            backgroundColor: s <= step ? '#FFC800' : '#D9D9D9',
           }}
         />
       ))}

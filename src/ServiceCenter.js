@@ -58,16 +58,45 @@ const CenterInfo = ({ center }) => (
 
 const CenterDetails = ({ center }) => (
   <div style={detailsStyle}>
-    <p>📍 {center.shopLoc}</p>
-    <p>🕒 {center.shopOpenTime}</p>
-    <p>📞 {center.shopCall}</p>
-    <p>🧾 {center.shopCertification}</p>
+    <p>
+      {/* ✨ 요기! 텍스트 이모지 대신 SVG 이미지 넣기! ✨ */}
+      <img
+        src="/Location.svg" // SVG 파일 경로 (public 폴더 기준)
+        alt="Location"    // 대체 텍스트 (스크린 리더용)
+        style={{ width: '16px', height: '16px', marginRight: '4px' }} // 스타일 (크기, 간격 등)
+      />
+      {center.shopLoc}
+    </p>
+    <p>
+      <img
+        src="/Clock.svg"
+        alt="Open Time"
+        style={{ width: '16px', height: '16px', marginRight: '4px' }}
+      />
+      {center.shopOpenTime}
+    </p>
+    <p>
+      <img
+        src="/Call.svg"
+        alt="Call"
+        style={{ width: '16px', height: '16px', marginRight: '4px' }}
+      />
+      {center.shopCall}
+    </p>
+    <p>
+      <img
+        src="/Department Shop.svg"
+        alt="Certification"
+        style={{ width: '16px', height: '16px', marginRight: '4px' }}
+      />
+      {center.shopCertification}
+    </p>
   </div>
 );
 
 const CenterInfoText = ({ center }) => (
   <>
-    <h3 style={infoTitleStyle}>상세 설명</h3>
+    <h3 style={infoTitleStyle}>정보</h3>
     <p style={infoTextStyle}>{center.shopDetail}</p>
   </>
 );
@@ -97,14 +126,17 @@ const ReviewSection = () => (
 const containerStyle = {
   paddingTop: '80px',
   fontFamily: 'sans-serif',
-  maxWidth: '600px',
-  margin: '0 auto',
+  width: '100%',
+  maxWidth: '100%', // 더 이상 너비 제한 없음
+  margin: '0 auto', // 가운데 정렬
+  backgroundColor: '#F8F8F8',
 };
+
 
 const centerInfoStyle = {
   borderRadius: '8px',
   padding: '20px',
-  backgroundColor: '#FFFFFF',
+  backgroundColor: '#F8F8F8',
 };
 
 const logoStyle = {
@@ -117,7 +149,7 @@ const logoStyle = {
 const centerNameStyle = {
   textAlign: 'center',
   fontSize: '20px',
-  fontWeight: 'bold',
+  fontWeight: 500,
   margin: '10px 0',
 };
 
@@ -126,8 +158,8 @@ const contactButtonStyle = {
   margin: '10px auto',
   padding: '5px 180px',
   backgroundColor: '#FFFFFF',
-  color: '#2563eb',
-  border: '1px solid #2563eb',
+  color: '#0047B1',
+  border: '1px solid #0047B1',
   borderRadius: '30px',
   cursor: 'pointer',
   whiteSpace: 'nowrap',
@@ -142,7 +174,7 @@ const detailsStyle = {
 
 const infoTitleStyle = {
   fontSize: '18px',
-  fontWeight: 'bold',
+  fontWeight: 500,
   marginTop: '20px',
 };
 
@@ -151,6 +183,7 @@ const infoTextStyle = {
   border: '1px solid #D9D9D9',
   padding: '40px',
   borderRadius: '30px',
+  backgroundColor: '#FFFFFF',
 };
 
 const reviewSectionStyle = {

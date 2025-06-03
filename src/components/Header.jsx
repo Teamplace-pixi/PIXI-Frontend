@@ -33,9 +33,8 @@ const styles = {
     justifyContent: 'space-between', 
     position: 'fixed',
     top: 0,
-    backgroundColor: '#fff',
+    backgroundColor: '#F8F8F8',
     zIndex: 1000,
-    borderBottom: '1px solid #eee',
     boxSizing: 'border-box',
   },
   logoText: {
@@ -45,6 +44,7 @@ const styles = {
     fontFamily: '"Shrikhand", serif',
     marginRight: '20px', 
     flex: 1, 
+    marginLeft: '10px',
   },
   buttonContainer: {
     display: 'flex',

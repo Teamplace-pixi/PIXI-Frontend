@@ -26,7 +26,7 @@ function DictionaryScreen({
 
       {/* ✅ 메인 컨텐츠 */}
       <div className="mobile-container" style={{ padding: '0 16px', color: '#FFFFFF' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', marginTop: '60px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', marginTop: '20px' }}>
           <div style={{ width: '20px', height: '20px', backgroundColor: '#FDC500', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>✔</div>
           <p style={{ color: titleColor, fontWeight: 'bold', fontSize: '14px' }}>{title}</p>
         </div>
@@ -35,7 +35,7 @@ function DictionaryScreen({
           {mainTitle}
         </h1>
 
-        <p style={{ fontSize: '12px', color: '#D1D5DB', lineHeight: '1.6' }}>{description}</p>
+        <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', lineHeight: '1.6' }}>{description}</p>
         
         <img
         src="FIXIicon.png" // 실제 경로로 바꿔줘야 함

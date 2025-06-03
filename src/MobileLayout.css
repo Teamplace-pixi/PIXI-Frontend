@@ -1,4 +1,4 @@
-/* ✅ 화면 전체 꽉 채우기 및 세로 정렬 중심으로 */
+
 .mobile-wrapper {
   display: flex;
   justify-content: center;
@@ -14,7 +14,6 @@
   box-sizing: border-box;
 }
 
-/* ✅ 컨테이너가 화면에 맞게 적절히 축소되면서 중앙 배치되도록 */
 .mobile-container {
   width: 100%;
   max-width: 393px;
@@ -30,10 +29,10 @@
   color: #FDC500;
 
   box-sizing: border-box;
-  box-shadow: none; /* 모바일 전체가 같은 배경이라면 그림자 불필요 */
+  box-shadow: none; 
 }
 
-/* ✅ 이미지 애니메이션 유지 + 반응형 */
+
 .floating-image {
   width: 100%;
   max-width: 100%;
@@ -57,7 +56,7 @@
   }
 }
 
-/* ✅ 작은 화면에서도 잘 보이도록 텍스트 반응형 설정 (선택 사항) */
+
 @media (max-width: 480px) {
   .mobile-container {
     padding: 16px;

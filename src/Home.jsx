@@ -33,7 +33,7 @@ const styles = {
     minHeight: '100vh',
     paddingTop: '60px',
     paddingBottom: '16px',
-    backgroundColor: '#fff',
+    backgroundColor: '#F8F8F8',
   },
   mainContent: {
     paddingBottom: '16px',

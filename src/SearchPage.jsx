@@ -20,6 +20,7 @@ const styles = {
     position: 'relative',
     height: '100vh',
     overflow: 'hidden',
+    backgroundColor: '#F8F8F8',
   },
   headerWrapper: {
     position: 'fixed',
@@ -30,7 +31,7 @@ const styles = {
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
   body: {
-    marginTop: '40px',
+    marginTop: '60px',
     padding: '10px',
   },
 };

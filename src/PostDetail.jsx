@@ -88,7 +88,7 @@ export default function PostDetail() {
       <Header />
 
       {/* 본문 내용 */}
-      <div style={{ padding: '80px 16px 120px', fontFamily: 'sans-serif' }}>
+      <div style={{ padding: '80px 16px 120px', fontFamily: 'sans-serif',backgroundColor: '#F8F8F8' }}>
         {/* 모집 상태 및 날짜 */}
         <div
           style={{

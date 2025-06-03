@@ -145,7 +145,7 @@ export default function SearchBar({ isSearchPage }) {
       marginTop: '0px',
       display: 'flex',
       alignItems: 'center',
-      backgroundColor: '#f5f5f5',
+      backgroundColor: '#FFFFFF',
       borderRadius: '20px',
       padding: '8px 16px',
       margin: '16px',
