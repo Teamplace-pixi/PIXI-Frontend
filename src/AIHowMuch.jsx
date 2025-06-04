@@ -144,6 +144,7 @@ const AIHowMuch = () => {
                     <>
                       <input
                         type="text"
+                        className="autocomplete-input"
                         list={`${stepItem.key}-options`}
                         placeholder="입력하세요"
                         defaultValue={answers[stepItem.key] || ''}

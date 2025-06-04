@@ -1,4 +1,3 @@
-
 .mobile-wrapper {
   display: flex;
   justify-content: center;
@@ -32,10 +31,9 @@
   box-shadow: none; 
 }
 
-
 .floating-image {
   width: 100%;
-  max-width: 100%;
+  max-width: 300px;  /* ✅ 기본 최대 크기 설정 */
   height: auto;
 
   margin-top: 40px;
@@ -56,7 +54,6 @@
   }
 }
 
-
 @media (max-width: 480px) {
   .mobile-container {
     padding: 16px;
@@ -64,5 +61,6 @@
 
   .floating-image {
     margin-top: 24px;
+    /* max-width 유지, width는 100%로 반응형 유지 */
   }
 }

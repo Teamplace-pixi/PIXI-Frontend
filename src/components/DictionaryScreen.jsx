@@ -9,8 +9,8 @@ function DictionaryScreen({
   description = '#실시간으로 변동되는 제품 가격을 바탕으로 예상 수리 비용 정보를 제공해드려요',
   path = '/',
   step = 1,
-  
   titleColor = '#FFD700',
+  imageSrc = 'FIXIicon.png', // ✅ 이미지 경로를 prop으로 받기
 }) {
   const navigate = useNavigate();
 
@@ -36,12 +36,13 @@ function DictionaryScreen({
         </h1>
 
         <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', lineHeight: '1.6' }}>{description}</p>
-        
+
+        {/* ✅ 이미지 경로를 prop으로 받아 사용 */}
         <img
-        src="FIXIicon.png" // 실제 경로로 바꿔줘야 함
-        alt="제품 이미지"
-        className="floating-image"
-      />
+          src={imageSrc}
+          alt="제품 이미지"
+          className="floating-image"
+        />
       </div>
     </div>
   );

@@ -47,14 +47,14 @@
 
 .select-btn,
 .multi-check-option {
-  width: 100%;
-  padding: 14px 20px;
+  width: 70%;
+  padding: 8px 12px;
   
   margin: 4px 0; 
   background-color: transparent;
   border: none;
-  border-radius: 25px;
-  font-size: 16px;
+  border-radius: 20px;
+  font-size: 14px;
   font-weight: 500;
   color: #333;
   text-align: left;
@@ -63,6 +63,7 @@
   display: flex;
   align-items: center;
   gap: 12px; 
+  height: 36px;  
 }
 
 .select-btn::after,
@@ -171,4 +172,14 @@ textarea {
   
   gap: 8px; 
   margin-bottom: 20px; 
+}
+
+.autocomplete-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1.5px solid #ccc;  /* 연한 회색 테두리 */
+  border-radius: 20px;       /* 둥글게 */
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
 }
