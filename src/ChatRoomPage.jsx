@@ -31,7 +31,12 @@ export default function ChatRoom() {
 
       {showModal && <div style={styles.overlay} />}
 
-      <div style={{ ...styles.container, filter: showModal ? 'blur(2px)' : 'none' }}>
+      <div
+        style={{
+          ...styles.container,
+          filter: showModal ? 'blur(2px)' : 'none',
+        }}
+      >
         {/* 최초 메시지 */}
         <div style={styles.chatBoxLeft}>
           <span style={styles.chatBoxLeftAfter} />
@@ -106,7 +111,10 @@ const styles = {
   },
   overlay: {
     position: 'fixed',
-    top: 0, left: 0, right: 0, bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     zIndex: 9,
   },
