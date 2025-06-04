@@ -17,8 +17,7 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target:
-        'http://fixi-env.eba-kpimqmzt.ap-northeast-2.elasticbeanstalk.com',
+      target: 'http://172.17.213.7:8080',
       changeOrigin: true,
       pathRewrite: {
         '^/api': '',

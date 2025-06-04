@@ -1,34 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import RepairSupportModal from './components/RepairSupportModal';
+import { useParams } from 'react-router-dom';
+import api from './api';
+
+// currentUserId는 실제 로그인된 사용자 ID로 바꿔야 합니다.
+const currentUserId = 1;
 
 export default function ChatRoom() {
+  const { roomId } = useParams();
+  const [chatHistory, setChatHistory] = useState([]);
+  const [receiverId, setReceiverId] = useState(null);
+  const [inputText, setInputText] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [repairStarted, setRepairStarted] = useState(false);
   const [repairCompleted, setRepairCompleted] = useState(false);
-  const [inputText, setInputText] = useState('');
 
-  const handleStartRepair = () => {
-    setRepairStarted(true);
-    setShowModal(false);
+  const fetchChatHistory = async () => {
+    try {
+      const response = await fetch(
+        `/matchChat/room/${roomId}?userId=${currentUserId}`
+      );
+      const data = await response.json();
+      setChatHistory(data.chathistory);
+      setReceiverId(data.rcvId);
+    } catch (err) {
+      console.error('채팅 불러오기 실패:', err);
+    }
   };
 
-  const handleCompleteRepair = () => {
-    setRepairCompleted(true);
-    setShowModal(false);
-  };
+  useEffect(() => {
+    fetchChatHistory();
+  }, [roomId]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (inputText.trim() === '') return;
-    console.log('보낼 메시지:', inputText);
-    setInputText('');
+    try {
+      const response = await fetch('/matchChat/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          roomId: Number(roomId),
+          message: inputText,
+          senderId: currentUserId,
+          receiverId: receiverId,
+        }),
+      });
+      if (response.ok) {
+        setInputText('');
+        fetchChatHistory();
+      } else {
+        console.error('메시지 전송 실패');
+      }
+    } catch (error) {
+      console.error('전송 중 오류:', error);
+    }
+  };
+
+  const renderMessage = (msg, index) => {
+    const isMine = msg.senderId === currentUserId;
+    return (
+      <div
+        key={index}
+        style={isMine ? styles.chatBoxRight : styles.chatBoxLeft}
+      >
+        <span
+          style={isMine ? styles.chatBoxRightAfter : styles.chatBoxLeftAfter}
+        />
+        {msg.msgType?.includes('시작') && (
+          <p style={styles.label}>[ 수리 시작 ]</p>
+        )}
+        {msg.msgType?.includes('완료') && (
+          <p style={styles.label}>[ 수리 완료 ]</p>
+        )}
+        <p>{msg.content}</p>
+      </div>
+    );
   };
 
   return (
     <div style={styles.page}>
       <Header title="FIX Finder" />
-
       {showModal && <div style={styles.overlay} />}
 
       <div
@@ -37,39 +90,7 @@ export default function ChatRoom() {
           filter: showModal ? 'blur(2px)' : 'none',
         }}
       >
-        {/* 최초 메시지 */}
-        <div style={styles.chatBoxLeft}>
-          <span style={styles.chatBoxLeftAfter} />
-          <p style={styles.label}>[ 수리 지원 ]</p>
-          <p>아이폰 후면 수리 가능하신 분?</p>
-          <button style={styles.button} onClick={() => setShowModal(true)}>
-            내용 확인하기
-          </button>
-        </div>
-
-        {/* 사용자 응답 */}
-        <div style={styles.chatBoxRight}>
-          <span style={styles.chatBoxRightAfter} />
-          <p>당장 수리합시다!</p>
-        </div>
-
-        {/* 수리 시작 메시지 */}
-        {repairStarted && (
-          <div style={styles.chatBoxRight}>
-            <span style={styles.chatBoxRightAfter} />
-            <p style={styles.label}>[ 수리 시작 ]</p>
-            <p>아이폰 후면 수리 가능합니다!</p>
-          </div>
-        )}
-
-        {/* 수리 완료 메시지 */}
-        {repairCompleted && (
-          <div style={styles.chatBoxLeft}>
-            <span style={styles.chatBoxLeftAfter} />
-            <p style={styles.label}>[ 수리 완료 ]</p>
-            <p>수리 완료했습니다!</p>
-          </div>
-        )}
+        {chatHistory.map((msg, idx) => renderMessage(msg, idx))}
       </div>
 
       {/* 입력창 */}
@@ -80,9 +101,7 @@ export default function ChatRoom() {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           style={styles.input}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleSend();
-          }}
+          onKeyDown={(e) => e.key === 'Enter' && handleSend()}
         />
         <button onClick={handleSend} style={styles.sendButton}>
           전송
@@ -94,8 +113,14 @@ export default function ChatRoom() {
       {showModal && (
         <RepairSupportModal
           onClose={() => setShowModal(false)}
-          onStartRepair={handleStartRepair}
-          onCompleteRepair={handleCompleteRepair}
+          onStartRepair={() => {
+            setRepairStarted(true);
+            setShowModal(false);
+          }}
+          onCompleteRepair={() => {
+            setRepairCompleted(true);
+            setShowModal(false);
+          }}
         />
       )}
     </div>
@@ -149,24 +174,6 @@ const styles = {
     maxWidth: '70%',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
-  label: {
-    fontWeight: 'bold',
-    fontSize: '13px',
-    marginBottom: '4px',
-    color: '#007bff',
-  },
-  button: {
-    marginTop: '8px',
-    padding: '10px 16px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-  },
-
-  // 말풍선 꼬리 (왼쪽)
   chatBoxLeftAfter: {
     position: 'absolute',
     left: '-8px',
@@ -177,8 +184,6 @@ const styles = {
     borderRight: '8px solid #f0f0f0',
     borderBottom: '8px solid transparent',
   },
-
-  // 말풍선 꼬리 (오른쪽)
   chatBoxRightAfter: {
     position: 'absolute',
     right: '-8px',
@@ -189,8 +194,12 @@ const styles = {
     borderLeft: '8px solid #fff',
     borderBottom: '8px solid transparent',
   },
-
-  // 입력창 스타일
+  label: {
+    fontWeight: 'bold',
+    fontSize: '13px',
+    marginBottom: '4px',
+    color: '#007bff',
+  },
   inputContainer: {
     display: 'flex',
     padding: '10px 16px',
