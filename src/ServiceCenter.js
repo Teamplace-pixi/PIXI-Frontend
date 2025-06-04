@@ -4,6 +4,18 @@ import api from './api';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 
+const FIXI_CENTER_ID = 'fixi-001'; // 고정 센터의 ID
+const FIXI_CENTER_DATA = {
+  shopId: FIXI_CENTER_ID,
+  shopName: '아이수리 용산점',
+  shopLoc: '서울시 용산구',
+  shopOpenTime: '10:00 ~ 20:00',
+  shopCall: '010-8020-8882',
+  shopCertification: 'FIXI 공식 인증업체',
+  shopDetail: '기존 전자상가 지점에서 용산역 앞 레미안 더 센터 지하 1층으로 이전하였습니다^^ 방문시 주차권 2~4시간 주차권이 제공됩니다! 편하게 방문해주세요!',
+  thumb: '/goodfixer.png',
+};
+
 const ServiceCenter = () => {
   const [center, setCenter] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,6 +24,13 @@ const ServiceCenter = () => {
 
   useEffect(() => {
     const fetchCenterData = async () => {
+      // 고정된 센터일 경우, API 호출하지 않고 직접 데이터 설정
+      if (shopId === FIXI_CENTER_ID) {
+        setCenter(FIXI_CENTER_DATA);
+        setLoading(false);
+        return;
+      }
+  
       try {
         const response = await api.get(`/shop/shop_id=${shopId}`);
         console.log('센터 데이터:', response.data);
@@ -22,9 +41,10 @@ const ServiceCenter = () => {
         setLoading(false);
       }
     };
-
+  
     fetchCenterData();
   }, [shopId]);
+  
 
   if (loading) return <div>수리센터 정보를 불러오는 중...</div>;
   if (!center) return <div>센터 정보를 찾을 수 없습니다.</div>;

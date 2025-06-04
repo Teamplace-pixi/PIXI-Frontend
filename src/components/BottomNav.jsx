@@ -6,11 +6,12 @@ const BottomNav = () => {
   const location = useLocation();
 
   const tabs = [
-    { label: '홈', path: '/home', icon: '/navhome.svg' },
-    { label: 'AI챗봇', path: '/aichatmain', icon: '/navai1.svg' },
-    { label: 'AI견적', path: '/ai', icon: '/navai2.svg' },
-    { label: '마이페이지', path: '/mypage', icon: '/navmy.svg' },
+    { label: '홈', path: '/home', iconActive: '/navhome-active.svg', iconInactive: '/navhome.svg' },
+    { label: 'AI챗봇', path: '/aichatmain', iconActive: '/navai1-active.svg', iconInactive: '/navai1.svg' },
+    { label: 'AI견적', path: '/ai', iconActive: '/navai2-active.svg', iconInactive: '/navai2.svg' },
+    { label: '마이페이지', path: '/mypage', iconActive: '/navmy-active.svg', iconInactive: '/navmy.svg' },
   ];
+  
 
   return (
     <div
@@ -22,7 +23,7 @@ const BottomNav = () => {
         borderTop: '1px solid #ccc',
         display: 'flex',
         justifyContent: 'space-around',
-        padding: '6px 0', // 👈 더 얇은 패딩
+        padding: '6px 0',
         zIndex: 100,
       }}
     >
@@ -36,7 +37,7 @@ const BottomNav = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              fontSize: '10px', // 👈 글자 크기 줄임
+              fontSize: '10px', 
               color: isActive ? '#1A4EC0' : '#666',
               fontWeight: isActive ? '600' : '400',
               background: 'none',
@@ -46,15 +47,14 @@ const BottomNav = () => {
             }}
           >
             <img
-              src={tab.icon}
+              src={isActive ? tab.iconActive : tab.iconInactive}
               alt={tab.label}
               style={{
-                width: 20, // 👈 아이콘 크기 줄임
-                height: 20,
-                marginBottom: 2,
-                filter: isActive ? 'none' : 'grayscale(100%) opacity(0.6)',
+              width: 20,
+              height: 20,
+              marginBottom: 2,
               }}
-            />
+              />
             {tab.label}
           </button>
         );

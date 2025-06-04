@@ -13,18 +13,25 @@ function StoreListSection() {
   const startX = useRef(0);
   const scrollLeft = useRef(0);
 
+  const fixedShop = {
+    shopId: 'fixi-001', 
+    shopName: '아이수리 용산점',
+    shopLoc: '서울시 용산구',
+    thumb: '/goodfixer.png',
+  };
+  
   const fetchRepairShops = async () => {
     try {
       const response = await api.get('/home/shop');
       if (Array.isArray(response.data)) {
-        setShopList(response.data);
-        setShopId(response.data?.shopId); // 첫 번째 수리센터 ID 설정
+        setShopList([fixedShop, ...response.data]);
+        setShopId(fixedShop.shopId);
       } else {
-        setShopList([]);
+        setShopList([fixedShop]);
       }
     } catch (error) {
       console.error('수리센터 API 호출 실패:', error);
-      setShopList([]);
+      setShopList([fixedShop]);
     }
   };
 
@@ -63,7 +70,7 @@ function StoreListSection() {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>숨은 맛집 리스트</h2>
+      <h2 style={styles.title}>숨은 수리 맛집 리스트</h2>
       <div
         ref={scrollRef}
         style={styles.horizontalScroll}
@@ -73,24 +80,29 @@ function StoreListSection() {
         onMouseMove={handleMouseMove}
       >
         {shopList.length > 0 ? (
-          shopList.map((shop, idx) => (
-            <div
-              key={idx}
-              onClick={() => handleCenterClick(shop.shopId)}
-              style={styles.repairCenterItem}
-            >
-              <img
-                src={shop.thumb || 'FIXIBlackIcon.png'}
-                alt="logo"
-                style={styles.logo}
-              />
-              <div style={styles.name}>{shop.shopName}</div>
-              <div style={styles.address}>{shop.shopLoc}</div>
-            </div>
-          ))
-        ) : (
-          <div style={styles.message}>수리센터 정보를 불러오는 중...</div>
-        )}
+  shopList.map((shop, idx) => (
+    <div
+      key={idx}
+      onClick={() => handleCenterClick(shop.shopId)}
+      style={styles.repairCenterItem}
+    >
+      <img
+        src={shop.thumb || 'FIXIBlackIcon.png'}
+        alt="logo"
+        style={styles.logo}
+      />
+      <div style={styles.name}>{shop.shopName}</div>
+      <div style={styles.address}>{shop.shopLoc}</div>
+      {/* 고정 데이터에만 "fixi 인증업체" 표시 */}
+      {shop.shopId === 'fixi-001'  && (
+        <div style={styles.certifiedBadge}>FIXI 인증업체</div>
+      )}
+    </div>
+  ))
+) : (
+  <div style={styles.message}>수리센터 정보를 불러오는 중...</div>
+)}
+
       </div>
     </div>
   );
@@ -102,7 +114,7 @@ const styles = {
   },
   title: {
     fontSize: '18px',
-    fontWeight: 500,
+    fontWeight: 'bold',
     marginBottom: '16px',
     marginTop: '20px',
   },
@@ -142,6 +154,18 @@ const styles = {
   message: {
     color: '#999',
   },
+  certifiedBadge: {
+    marginTop: 6,
+    display: 'inline-block',
+    padding: '2px 8px',
+    fontSize: '12px',
+    color: '#FFC800',
+    borderRadius: '12px',
+    backgroundColor: '#0047B1',
+    border: '1px solid #ccc',
+    userSelect: 'none',
+  }
+  
 };
 
 export default StoreListSection;
