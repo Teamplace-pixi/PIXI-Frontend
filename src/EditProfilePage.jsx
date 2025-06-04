@@ -100,7 +100,7 @@ export default function EditProfilePage() {
       </div>
 
       {/* 입력 필드들 */}
-      <div style={{ padding: '0 20px' }}>
+      <div style={{ padding: '0 16px' }}>
         <div style={{ marginBottom: '16px' }}>
           <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
             이름 <span style={{ color: 'red' }}>*</span>
@@ -215,4 +215,5 @@ const inputStyle = {
   borderRadius: '12px',
   border: '1px solid #ccc',
   marginTop: '8px',
+  boxSizing: 'border-box',
 };

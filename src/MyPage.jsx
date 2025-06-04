@@ -173,6 +173,7 @@ export default function MyPage() {
                   borderRadius: '20px',
                   border: '1px solid #ccc',
                   fontSize: '16px',
+                  boxSizing: 'border-box',
                 }}
               />
             </div>
@@ -192,6 +193,7 @@ export default function MyPage() {
                   borderRadius: '20px',
                   border: '1px solid #ccc',
                   fontSize: '16px',
+                  boxSizing: 'border-box',
                 }}
               />
             </div>
@@ -260,7 +262,7 @@ export default function MyPage() {
             }
             style={{
               width: '100%',
-              backgroundColor: '#2563eb',
+              backgroundColor: '#006FFF',
               color: '#fff',
               padding: '14px',
               borderRadius: '20px',

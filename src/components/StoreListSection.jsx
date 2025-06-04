@@ -162,7 +162,7 @@ const styles = {
     color: '#FFC800',
     borderRadius: '12px',
     backgroundColor: '#0047B1',
-    border: '1px solid #ccc',
+    border: '1px solid #0047B1',
     userSelect: 'none',
   }
   
