@@ -42,6 +42,7 @@ function DictionaryScreen({
           src={imageSrc}
           alt="제품 이미지"
           className="floating-image"
+          style={{ display: 'block', margin: '20px auto 0 auto' }}
         />
       </div>
     </div>
