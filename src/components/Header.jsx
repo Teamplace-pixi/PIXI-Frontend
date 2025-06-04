@@ -9,13 +9,13 @@ function Header({ title = 'FIXI' }) {
       <span style={styles.logoText}>{title}</span>
       <div style={styles.buttonContainer}>
         <button style={styles.iconButton} onClick={() => navigate('/chatlist')}>
-          <img src="/userchat1.png" alt="icon 1" style={styles.icon1} />
+          <img src="/chat3.svg" alt="icon 1" style={styles.icon1} />
         </button>
         <button style={styles.iconButton} onClick={() => navigate('/settings')}>
           <img src="/settings.png" alt="icon 2" style={styles.icon2} />
         </button>
         <button style={styles.iconButton} onClick={() => navigate('/mypage')}>
-          <img src="/mypage.png" alt="icon 3" style={styles.icon3} />
+          <img src="/person.svg" alt="icon 3" style={styles.icon3} />
         </button>
         
       </div>
@@ -62,6 +62,10 @@ const styles = {
     height: '30px', 
   },
   icon2: {
+    width: '40px', 
+    height: '40px', 
+  },
+  icon3: {
     width: '40px', 
     height: '40px', 
   },

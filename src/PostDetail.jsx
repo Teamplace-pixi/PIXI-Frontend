@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import api from './api';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
-import RepairapplyModal from './components/RepairapplyModal'; // ✅ 수정된 모달 import
+import RepairapplyModal from './components/RepairapplyModal';
 
 let options = [
   { value: '모집중', label: '모집중' },
@@ -23,7 +23,7 @@ export default function PostDetail() {
   const [myBoardId, setMyBoardId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // ✅ 모달 상태
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [selectValue, setSelectValue] = useState('');
   const selectInputRef = useRef(null);
@@ -84,11 +84,11 @@ export default function PostDetail() {
   const isMyPost = myBoardId.includes(boardId);
 
   return (
-    <>
+    <div style={{ backgroundColor: '#F8F8F8', minHeight: '100vh' }}>
       <Header />
 
       {/* 본문 내용 */}
-      <div style={{ padding: '80px 16px 120px', fontFamily: 'sans-serif',backgroundColor: '#F8F8F8' }}>
+      <div style={{ padding: '80px 16px 160px', fontFamily: 'sans-serif' }}>
         {/* 모집 상태 및 날짜 */}
         <div
           style={{
@@ -182,23 +182,39 @@ export default function PostDetail() {
 
         {/* 상세정보 */}
         <div style={{ fontSize: '14px', color: '#333', lineHeight: '1.8' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>📱 기종</span>
-            <span>{post.deviceName}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>💰 가능 금액</span>
-            <span>{post.boardCost}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>🕒 필요 날짜</span>
-            <span>{post.boardDate}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>📍 위치</span>
-            <span>{post.boardLoc}</span>
-          </div>
-        </div>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+    <span style={{ display: 'flex', alignItems: 'center' }}>
+      <img src="Vector.svg" alt="기종" style={{ width: 20, height: 20, marginRight: 8 }} />
+      기종
+    </span>
+    <span>{post.deviceName}</span>
+  </div>
+
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+    <span style={{ display: 'flex', alignItems: 'center' }}>
+      <img src="Vector.svg" alt="금액" style={{ width: 20, height: 20, marginRight: 8 }} />
+      가능 금액
+    </span>
+    <span>{post.boardCost}</span>
+  </div>
+
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+    <span style={{ display: 'flex', alignItems: 'center' }}>
+      <img src="shape.svg" alt="필요 날짜" style={{ width: 20, height: 20, marginRight: 8 }} />
+      필요 날짜
+    </span>
+    <span>{post.boardDate}</span>
+  </div>
+
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <span style={{ display: 'flex', alignItems: 'center' }}>
+      <img src="shape2.svg" alt="위치" style={{ width: 20, height: 20, marginRight: 8 }} />
+      위치
+    </span>
+    <span>{post.boardLoc}</span>
+  </div>
+</div>
+
 
         {/* 구분선 */}
         <div style={{ borderTop: '1px solid #eee', margin: '24px 0' }} />
@@ -235,33 +251,30 @@ export default function PostDetail() {
       {user?.rollId === 1 && (
         <div
           style={{
-
-            backgroundColor: '#2563eb',
-            color: '#fff',
-            padding: '14px',
-            width: '95%',
-            border: 'none',
-            borderRadius: '20px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+            backgroundColor: '#F8F8F8',
+            padding: '16px',
+            position: 'fixed',
+            bottom: '60px',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            zIndex: 10,
           }}
-          onClick={() => setIsModalOpen(true)}
-
         >
           <button
             style={{
               backgroundColor: '#2563eb',
               color: '#fff',
               padding: '14px',
-              width: 'calc(100% - 32px)',
+              width: '100%',
+              maxWidth: '600px',
               border: 'none',
               borderRadius: '20px',
               fontSize: '16px',
               fontWeight: 'bold',
               boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
             }}
-            onClick={() => alert('수리 지원이 접수되었습니다!')}
+            onClick={() => setIsModalOpen(true)}
           >
             수리 지원하기
           </button>
@@ -274,6 +287,6 @@ export default function PostDetail() {
       {isModalOpen && (
         <RepairapplyModal onClose={() => setIsModalOpen(false)} />
       )}
-    </>
+    </div>
   );
 }

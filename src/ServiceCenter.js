@@ -59,9 +59,9 @@ const CenterInfo = ({ center }) => (
 const CenterDetails = ({ center }) => (
   <div style={detailsStyle}>
     <p>
-      {/* ✨ 요기! 텍스트 이모지 대신 SVG 이미지 넣기! ✨ */}
+      
       <img
-        src="/Location.svg" // SVG 파일 경로 (public 폴더 기준)
+        src="/Location.svg" 
         alt="Location"    // 대체 텍스트 (스크린 리더용)
         style={{ width: '16px', height: '16px', marginRight: '4px' }} // 스타일 (크기, 간격 등)
       />

@@ -76,15 +76,22 @@ export default function NewPost() {
     }
   };
 
+  const labelStyle = {
+    marginLeft: '10px', // 입력 박스와 동일한 왼쪽 간격
+    marginRight: '10px', // 입력 박스와 동일한 오른쪽 간격
+    display: 'block', // label이 block 요소처럼 동작하도록 설정
+    marginBottom: '4px', // label 아래 간격 추가 (선택 사항)
+  };
+
   return (
     <div style={{ padding: '24px', fontFamily: 'sans-serif' }}>
       <h2
         style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}
       >
-        새 글 작성
+        구해요 글 작성
       </h2>
 
-      <label>제목</label>
+      <label style={labelStyle}>제목</label>
       <input
         name="title"
         value={form.title}
@@ -93,7 +100,7 @@ export default function NewPost() {
         style={inputStyle}
       />
 
-      <label>기종</label>
+      <label style={labelStyle}>기종</label>
       <input
         name="model"
         value={form.model}
@@ -102,7 +109,7 @@ export default function NewPost() {
         style={inputStyle}
       />
 
-      <label>세부 내용</label>
+      <label style={labelStyle}>세부 내용</label>
       <input
         name="content"
         value={form.content}
@@ -111,7 +118,7 @@ export default function NewPost() {
         style={{ ...inputStyle, height: '100px' }}
       />
 
-      <label>가능 금액</label>
+      <label style={labelStyle}>가능 금액</label>
       <input
         name="price"
         type="number"
@@ -121,7 +128,7 @@ export default function NewPost() {
         style={inputStyle}
       />
 
-      <label>필요 날짜</label>
+      <label style={labelStyle}>필요 날짜</label>
       <input
         name="date"
         value={form.date}
@@ -130,7 +137,7 @@ export default function NewPost() {
         style={inputStyle}
       />
 
-      <label>위치</label>
+      <label style={labelStyle}>위치</label>
       <input
         name="address"
         value={form.address}
@@ -139,13 +146,13 @@ export default function NewPost() {
         style={inputStyle}
       />
 
-      <label>이미지 업로드</label>
+      <label style={labelStyle}>이미지 업로드</label>
       <input
         type="file"
         multiple
         accept="image/*"
         onChange={handleFileChange}
-        style={{ marginBottom: '16px' }}
+        style={{ marginBottom: '16px', marginLeft: '10px', marginRight: '10px' }} // 파일 입력도 동일 간격 적용
       />
 
       <button onClick={handleSubmit} style={submitButtonStyle}>
@@ -156,22 +163,26 @@ export default function NewPost() {
 }
 
 const inputStyle = {
-  width: '100%',
+  width: 'calc(100% - 20px)', // 좌우 간격 10px씩 추가
   padding: '10px',
   marginTop: '4px',
   marginBottom: '16px',
   border: '1px solid #ccc',
   borderRadius: '8px',
   fontSize: '14px',
+  marginRight: '10px', // 오른쪽 간격 추가
+  marginLeft: '10px', // 왼쪽 간격 추가
 };
 
 const submitButtonStyle = {
-  backgroundColor: '#2563eb',
+  backgroundColor: '#006FFF',
   color: '#fff',
   padding: '12px',
-  width: '100%',
+  width: 'calc(100% - 20px)', // 좌우 간격 10px씩 추가
   border: 'none',
-  borderRadius: '8px',
+  borderRadius: '15px',
   fontSize: '16px',
   fontWeight: 'bold',
+  marginRight: '10px', // 오른쪽 간격 추가
+  marginLeft: '10px', // 왼쪽 간격 추가
 };
