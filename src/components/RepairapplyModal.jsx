@@ -1,8 +1,52 @@
 // RepairapplyModal.jsx
 
-import React from 'react';
+import React, { useState } from 'react';
+import api from '../api';
+import { useLocation } from 'react-router-dom';
 
 export default function RepairapplyModal({ onClose }) {
+  const [applyCost, setApplyCost] = useState('');
+  const [applyDate, setApplyDate] = useState('');
+  const [applyContent, setApplyContent] = useState('');
+
+  const location = useLocation();
+  console.log('Location state:', location.state);
+  const boardId = location.state?.id;
+
+  const handleSubmit = async () => {
+    if (!applyCost || !applyDate || !applyContent) {
+      alert('모든 항목을 작성해 주세요.');
+      return;
+    }
+
+    try {
+      const payload = {
+        boardId: boardId, // 부모에서 prop으로 전달
+        applyContent: applyContent,
+        applyCost: parseInt(applyCost),
+        applyDate: applyDate + 'T00:00:00.0000', // 날짜 형식에 맞게 변환
+      };
+      console.log('지원 요청:', payload);
+
+      const response = await api.post('/apply', payload);
+      console.log('지원 완료:', response.data);
+      alert('지원이 완료되었습니다!');
+
+      try {
+        await api.put(`/board/board_id=${boardId}`, {
+          status: '예약중', // 상태를 '예약중'으로 변경
+        });
+      } catch (err) {
+        console.error(err);
+      }
+
+      onClose(); // 모달 닫기
+    } catch (error) {
+      console.error('지원 실패:', error);
+      alert('지원 요청 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
@@ -10,7 +54,9 @@ export default function RepairapplyModal({ onClose }) {
         <div style={styles.header}>
           <h2 style={styles.title}>수리 지원하기</h2>
           <p style={styles.subTitle}>지원을 위해 아래 폼을 작성해 주세요!</p>
-          <button style={styles.closeBtn} onClick={onClose}>✕</button>
+          <button style={styles.closeBtn} onClick={onClose}>
+            ✕
+          </button>
         </div>
 
         {/* 입력 영역 */}
@@ -22,6 +68,8 @@ export default function RepairapplyModal({ onClose }) {
               type="text"
               placeholder="수리 가능한 금액을 알려주세요"
               style={styles.input}
+              value={applyCost}
+              onChange={(e) => setApplyCost(e.target.value)}
             />
           </div>
         </div>
@@ -31,9 +79,10 @@ export default function RepairapplyModal({ onClose }) {
           <div style={styles.inputBox}>
             <span style={styles.icon}>🕒</span>
             <input
-              type="text"
-              placeholder="수리에 필요한 작업 날짜를 알려주세요"
+              type="date"
               style={styles.input}
+              value={applyDate}
+              onChange={(e) => setApplyDate(e.target.value)}
             />
           </div>
         </div>
@@ -43,11 +92,15 @@ export default function RepairapplyModal({ onClose }) {
           <textarea
             placeholder="모집자에게 전달할 간단한 지원 문구를 작성해 주세요"
             style={styles.textarea}
+            value={applyContent}
+            onChange={(e) => setApplyContent(e.target.value)}
           />
         </div>
 
         {/* 지원하기 버튼 */}
-        <button style={styles.submitBtn}>지원하기</button>
+        <button style={styles.submitBtn} onClick={() => handleSubmit()}>
+          지원하기
+        </button>
       </div>
     </div>
   );
@@ -56,7 +109,10 @@ export default function RepairapplyModal({ onClose }) {
 const styles = {
   overlay: {
     position: 'fixed',
-    top: 0, left: 0, right: 0, bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     zIndex: 1000,
     display: 'flex',

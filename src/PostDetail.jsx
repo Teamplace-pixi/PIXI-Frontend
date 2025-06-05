@@ -236,7 +236,6 @@ export default function PostDetail() {
       {user?.rollId === 1 && (
         <div
           style={{
-
             backgroundColor: '#2563eb',
             color: '#fff',
             padding: '14px',
@@ -248,7 +247,6 @@ export default function PostDetail() {
             boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
           }}
           onClick={() => setIsModalOpen(true)}
-
         >
           <button
             style={{
@@ -273,7 +271,10 @@ export default function PostDetail() {
 
       {/* 모달 렌더링 */}
       {isModalOpen && (
-        <RepairapplyModal onClose={() => setIsModalOpen(false)} />
+        <RepairapplyModal
+          boradId={boardId}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
     </>
   );

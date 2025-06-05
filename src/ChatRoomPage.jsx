@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import RepairSupportModal from './components/RepairSupportModal';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import api from './api';
-
-// currentUserId는 실제 로그인된 사용자 ID로 바꿔야 합니다.
-const currentUserId = 1;
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
 export default function ChatRoom() {
-  const { roomId } = useParams();
+  const location = useLocation();
+
+  const roomId = location.state?.roomId;
+
   const [chatHistory, setChatHistory] = useState([]);
   const [receiverId, setReceiverId] = useState(null);
   const [inputText, setInputText] = useState('');
@@ -17,14 +19,28 @@ export default function ChatRoom() {
   const [repairStarted, setRepairStarted] = useState(false);
   const [repairCompleted, setRepairCompleted] = useState(false);
 
+  const containerRef = useRef(null);
+  const token = localStorage.getItem('token');
+  const tokenWs = localStorage.getItem('tokenWs');
+
   const fetchChatHistory = async () => {
     try {
-      const response = await fetch(
-        `/matchChat/room/${roomId}?userId=${currentUserId}`
-      );
-      const data = await response.json();
-      setChatHistory(data.chathistory);
-      setReceiverId(data.rcvId);
+      const response = await api.get(`/matchChat/room/${roomId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const history = response.data.chathistory;
+
+      // 예시: 최신 메시지가 맨 앞이면 뒤집어서 오래된 메시지가 앞에 오도록
+      const orderedHistory =
+        history[0]?.timestamp > history[history.length - 1]?.timestamp
+          ? [...history].reverse()
+          : history;
+
+      setChatHistory(orderedHistory);
+      setReceiverId(response.data.rcvId);
     } catch (err) {
       console.error('채팅 불러오기 실패:', err);
     }
@@ -32,34 +48,45 @@ export default function ChatRoom() {
 
   useEffect(() => {
     fetchChatHistory();
+    if (tokenWs) {
+      connectStomp(tokenWs, (body) => {
+        const newMessage = JSON.parse(body);
+        setChatHistory((prev) => [...prev, newMessage]);
+      });
+    }
   }, [roomId]);
 
   const handleSend = async () => {
-    if (inputText.trim() === '') return;
+    if (inputText.trim() === '' || !receiverId) return;
+
+    const messageData = {
+      roomId: roomId,
+      message: inputText,
+      receiverId: receiverId,
+    };
+
     try {
-      const response = await fetch('/matchChat/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          roomId: Number(roomId),
-          message: inputText,
-          senderId: currentUserId,
-          receiverId: receiverId,
-        }),
-      });
-      if (response.ok) {
-        setInputText('');
-        fetchChatHistory();
-      } else {
-        console.error('메시지 전송 실패');
-      }
+      const response = await api.post('/matchChat/send', messageData);
+      console.log('메시지 전송 응답:', response.data);
+      setInputText('');
+
+      const now = new Date().toISOString();
+
+      const sentMessage = {
+        ...response.data,
+        content: inputText, // 직접 content 추가
+        timestamp: now,
+        msgType: '', // 메시지 타입이 없다면 빈 문자열
+      };
+
+      setChatHistory((prev) => [...prev, sentMessage]);
     } catch (error) {
       console.error('전송 중 오류:', error);
     }
   };
 
   const renderMessage = (msg, index) => {
-    const isMine = msg.senderId === currentUserId;
+    const isMine = msg.senderId !== receiverId;
     return (
       <div
         key={index}
@@ -79,12 +106,45 @@ export default function ChatRoom() {
     );
   };
 
+  const connectStomp = (tokenWs, onMessage) => {
+    const socket = new SockJS(
+      `http://fixi-env.eba-kpimqmzt.ap-northeast-2.elasticbeanstalk.com/ws?token=${tokenWs}`
+    ); // 백엔드에서 지정한 WebSocket endpoint
+    const client = new Client({
+      webSocketFactory: () => socket,
+      connectHeaders: {
+        Authorization: tokenWs,
+      },
+      debug: (str) => console.log('STOMP:', str),
+      onConnect: () => {
+        console.log('🟢 연결됨');
+        client.subscribe(`/user/queue/messages.${roomId}`, (message) => {
+          console.log('📩 메시지 수신:', message.body);
+          onMessage(message.body);
+        });
+      },
+      onStompError: (frame) => {
+        console.error('❌ STOMP 오류', frame.headers['message']);
+      },
+    });
+
+    client.activate();
+    return client;
+  };
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
+
   return (
     <div style={styles.page}>
       <Header title="FIX Finder" />
       {showModal && <div style={styles.overlay} />}
 
       <div
+        ref={containerRef}
         style={{
           ...styles.container,
           filter: showModal ? 'blur(2px)' : 'none',

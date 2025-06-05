@@ -8,27 +8,13 @@ export default function ChatListPage() {
   const navigate = useNavigate();
   const [chatList, setChatList] = useState([]);
   const [hasAlert, setHasAlert] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState(null);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const response = await api.get('/myPage/setup');
-        setCurrentUserId(response.data.profileId);
-      } catch (error) {
-        console.error('마이페이지 불러오기 실패:', error);
-      }
-    };
-
-    fetchUserId();
-  });
 
   useEffect(() => {
     const fetchChatList = async () => {
       try {
-        const response = await fetch(`/matchChat/rooms/${currentUserId}`);
-        const data = await response.json();
-        setChatList(data);
+        const response = await api.get(`/matchChat/rooms`);
+        console.log('채팅 목록 응답:', response.data);
+        setChatList(response.data);
       } catch (error) {
         console.error('채팅 목록 불러오기 실패:', error);
       }
@@ -40,7 +26,7 @@ export default function ChatListPage() {
   useEffect(() => {
     const checkAlert = async () => {
       try {
-        const res = await fetch(`/matchChat/Alert/${currentUserId}`);
+        const res = await fetch(`/matchChat/Alert/`);
         const hasAlert = await res.json();
         setHasAlert(hasAlert);
       } catch (error) {
@@ -59,19 +45,28 @@ export default function ChatListPage() {
         <h2 style={styles.title}>채팅 목록</h2>
 
         <div style={styles.chatList}>
-          {chatList.map((chat) => (
+          {chatList.map((chatList) => (
             <div
-              key={chat.id}
+              key={chatList.roomId}
               style={styles.chatItem}
-              onClick={() => navigate(`/chat/${chat.roomid}`)}
+              onClick={() =>
+                navigate(`/chat/${chatList.roomId}`, {
+                  state: {
+                    roomId: chatList.roomId,
+                    userId: chatList.userId,
+                  },
+                })
+              }
             >
-              <img src={chat.avatar} alt="avatar" style={styles.avatar} />
+              <img src={chatList.userImg} alt="avatar" style={styles.avatar} />
               <div style={styles.chatInfo}>
                 <div style={styles.nameRow}>
-                  <span style={styles.name}>{chat.name}</span>
-                  <span style={styles.time}>{chat.time}</span>
+                  <span style={styles.name}>{chatList.userName}</span>
+                  <span style={styles.time}>
+                    {chatList.lastMsgTime.replace('T', ' ')}
+                  </span>
                 </div>
-                <div style={styles.message}>{chat.message}</div>
+                <div style={styles.message}>{chatList.lastMsg}</div>
               </div>
             </div>
           ))}
