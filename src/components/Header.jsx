@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
+const baseURL = process.env.REACT_APP_API_BASE_URL;
+
 function Header({ title = 'FIXI' }) {
   const navigate = useNavigate();
   const tokenWs = localStorage.getItem('tokenWs');
@@ -12,7 +14,8 @@ function Header({ title = 'FIXI' }) {
   }, [7]);
 
   const connectStomp = (tokenWs, onMessage) => {
-    const socket = new SockJS(`https://api.hifixi.com/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
+    
+    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
