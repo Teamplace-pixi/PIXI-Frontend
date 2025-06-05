@@ -12,7 +12,7 @@ function Header({ title = 'FIXI' }) {
   }, [7]);
 
   const connectStomp = (tokenWs, onMessage) => {
-    const socket = new SockJS(`http://localhost:8080/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
+    const socket = new SockJS(`https://api.hifixi.com/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
