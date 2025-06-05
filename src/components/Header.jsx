@@ -97,15 +97,13 @@ const styles = {
     width: '40px',
     height: '40px',
   },
-<<<<<<< HEAD
+
   icon3: {
     width: '40px', 
     height: '40px', 
   },
   
-=======
 
->>>>>>> origin/develop
   '@media (max-width: 768px)': {
     logoText: {
       fontSize: '24px',
