@@ -1,27 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
-
-const chatList = [
-  {
-    id: 1,
-    name: '삼성전자서비스 강서센터',
-    message: '안녕하세요 물었다 가세요 싸게 해드릴게',
-    time: '4일 전',
-    avatar: '/samsung.png',
-  },
-  {
-    id: 2,
-    name: '삼성전자서비스 강서센터',
-    message: '안녕하세요 물었다 가세요 싸게 해드릴게',
-    time: '4일 전',
-    avatar: '/samsung.png',
-  },
-];
+import api from './api';
 
 export default function ChatListPage() {
   const navigate = useNavigate();
+  const [chatList, setChatList] = useState([]);
+  const [hasAlert, setHasAlert] = useState(false);
+
+  useEffect(() => {
+    const fetchChatList = async () => {
+      try {
+        const response = await api.get(`/matchChat/rooms`);
+        console.log('채팅 목록 응답:', response.data);
+        setChatList(response.data);
+      } catch (error) {
+        console.error('채팅 목록 불러오기 실패:', error);
+      }
+    };
+
+    fetchChatList();
+  }, []);
+
+  useEffect(() => {
+    const checkAlert = async () => {
+      try {
+        const res = await fetch(`/matchChat/Alert/`);
+        const hasAlert = await res.json();
+        setHasAlert(hasAlert);
+      } catch (error) {
+        console.error('알림 확인 실패:', error);
+      }
+    };
+
+    checkAlert();
+  }, []);
 
   return (
     <div style={styles.page}>
@@ -31,22 +45,36 @@ export default function ChatListPage() {
         <h2 style={styles.title}>채팅 목록</h2>
 
         <div style={styles.chatList}>
-          {chatList.map((chat) => (
+          {chatList.map((chatList) => (
             <div
-              key={chat.id}
+              key={chatList.roomId}
               style={styles.chatItem}
-              onClick={() => navigate(`/chat/${chat.id}`)}
+              onClick={() =>
+                navigate(`/chat/${chatList.roomId}`, {
+                  state: {
+                    roomId: chatList.roomId,
+                    userId: chatList.userId,
+                  },
+                })
+              }
             >
-              <img src={chat.avatar} alt="avatar" style={styles.avatar} />
+              <img src={chatList.userImg} alt="avatar" style={styles.avatar} />
               <div style={styles.chatInfo}>
                 <div style={styles.nameRow}>
-                  <span style={styles.name}>{chat.name}</span>
-                  <span style={styles.time}>{chat.time}</span>
+                  <span style={styles.name}>{chatList.userName}</span>
+                  <span style={styles.time}>
+                    {chatList.lastMsgTime.replace('T', ' ')}
+                  </span>
                 </div>
-                <div style={styles.message}>{chat.message}</div>
+                <div style={styles.message}>{chatList.lastMsg}</div>
               </div>
             </div>
           ))}
+          {chatList.length === 0 && (
+            <div style={{ textAlign: 'center', color: '#999' }}>
+              채팅방이 없습니다.
+            </div>
+          )}
         </div>
       </div>
 

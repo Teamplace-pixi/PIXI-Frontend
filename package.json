@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^2.0.3",
+    "@stomp/stompjs": "^7.1.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -15,6 +16,7 @@
     "react-router-dom": "^7.5.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.10.1",
+    "sockjs-client": "^1.6.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

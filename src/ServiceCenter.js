@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import api from './api';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
@@ -19,9 +19,13 @@ const FIXI_CENTER_DATA = {
 const ServiceCenter = () => {
   const [center, setCenter] = useState(null);
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
-  const shopId = location.state?.id; // URL 파라미터에서 id 가져오기
 
+  const [reviews, setReviews] = useState([]);
+
+  const location = useLocation();
+  const shopId = location.state?.id;
+
+  // 센터 정보 불러오기
   useEffect(() => {
     const fetchCenterData = async () => {
       // 고정된 센터일 경우, API 호출하지 않고 직접 데이터 설정
@@ -36,15 +40,69 @@ const ServiceCenter = () => {
         console.log('센터 데이터:', response.data);
         setCenter(response.data);
       } catch (error) {
-        console.error('센터 API 호출 실패:', error);
+        console.error('센터 정보 API 호출 실패:', error);
       } finally {
         setLoading(false);
       }
     };
-  
-    fetchCenterData();
+
+
+    if (shopId) fetchCenterData();
+
   }, [shopId]);
   
+
+  // 리뷰 정보 불러오기
+  useEffect(() => {
+    const fetchReviewData = async () => {
+      try {
+        const revRef = await api.get(`/shop/review/shop_id=${shopId}`);
+        console.log('리뷰 데이터:', revRef.data);
+        setReviews(revRef.data);
+      } catch (error) {
+        console.error('리뷰 API 호출 실패:', error);
+      }
+    };
+
+    if (shopId) fetchReviewData();
+  }, [shopId]);
+
+  const ReviewSection = () => (
+    <div style={reviewSectionStyle}>
+      <div style={reviewHeaderStyle}>
+        후기{' '}
+        <span style={{ color: '#999', fontWeight: 'normal' }}>
+          {reviews.length}개
+        </span>
+      </div>
+      {reviews.length === 0 && (
+        <div style={reviewGridStyle}>리뷰가 없습니다.</div>
+      )}
+      {reviews.length > 0 && (
+        <div style={reviewGridStyle}>
+          {reviews.map((review) => (
+            <div key={review.reviewId} style={reviewCardStyle}>
+              <div style={reviewTitleStyle}>{review.reviewTitle}</div>
+              <div style={reviewCostStyle}>
+                💰 수리비 {review.reviewMoney.toLocaleString()}원
+              </div>
+              <div style={reviewTextStyle}>{review.reviewContent}</div>
+              <div style={reviewStarsStyle}>
+                {'⭐️'.repeat(review.reviewStar)}
+              </div>
+              <div style={reviewTagsStyle}>
+                {(review.category || []).map((cat, idx) => (
+                  <div key={idx} style={reviewTagStyle}>
+                    {cat}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 
   if (loading) return <div>수리센터 정보를 불러오는 중...</div>;
   if (!center) return <div>센터 정보를 찾을 수 없습니다.</div>;
@@ -52,12 +110,11 @@ const ServiceCenter = () => {
   return (
     <div style={containerStyle}>
       <Header title="FIX Finder" />
-      <div style={{ padding: '20px' , paddingBottom: '80px'}}>
+      <div style={{ padding: '20px', paddingBottom: '80px' }}>
         <CenterInfo center={center} />
         <CenterDetails center={center} />
         <CenterInfoText center={center} />
         <ReviewSection />
-        {/* 후기 데이터는 별도 API 연동 필요 */}
       </div>
       <BottomNav />
     </div>
@@ -121,27 +178,6 @@ const CenterInfoText = ({ center }) => (
   </>
 );
 
-const ReviewSection = () => (
-  <div style={reviewSectionStyle}>
-    <div style={reviewHeaderStyle}>후기 <span style={{ color: '#999', fontWeight: 'normal' }}>100개</span></div>
-    <div style={reviewGridStyle}>
-      {[...Array(2)].map((_, idx) => (
-        <div key={idx} style={reviewCardStyle}>
-          <div style={reviewTitleStyle}>아이폰 후면 수리</div>
-          <div style={reviewCostStyle}>💰 수리비 200,000</div>
-          <div style={reviewTextStyle}>친절하세요 재방문 의사 있습니다</div>
-          <div style={reviewStarsStyle}>⭐️⭐️⭐️⭐️⭐️</div>
-          <div style={reviewTagsStyle}>
-            <div style={reviewTagStyle}>애플</div>
-            <div style={reviewTagStyle}>핸드폰</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-
 // 스타일 정의는 동일
 const containerStyle = {
   paddingTop: '80px',
@@ -183,9 +219,6 @@ const contactButtonStyle = {
   borderRadius: '30px',
   cursor: 'pointer',
   whiteSpace: 'nowrap',
-  
-  
-  
 };
 
 const detailsStyle = {
@@ -223,16 +256,14 @@ const reviewGridStyle = {
   paddingBottom: '8px',
 };
 
-
 const reviewCardStyle = {
-  flex: '0 0 auto',      
+  flex: '0 0 auto',
   minWidth: '150px',
   backgroundColor: '#fff',
   padding: '16px',
   borderRadius: '16px',
   boxShadow: '0 2px 6px rgba(0, 0, 0, 0.05)',
 };
-
 
 const reviewTitleStyle = {
   fontSize: '15px',
@@ -270,6 +301,5 @@ const reviewTagStyle = {
   borderRadius: '12px',
   fontSize: '12px',
 };
-
 
 export default ServiceCenter;

@@ -48,31 +48,31 @@ export default function PostDetail() {
     }
   };
 
+  const fetchPost = async () => {
+    try {
+      const [response, userRes, boardListRes] = await Promise.all([
+        api.get(`/board/board_id=${boardId}`),
+        api.get('/myPage'),
+        api.get('/myPage/boardList'),
+      ]);
+
+      setPost(response.data);
+      setUser(userRes.data);
+      setMyBoardId(boardListRes.data.map((board) => board.boardId));
+    } catch (err) {
+      setError('게시글 정보를 불러오는 데 실패했습니다.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!boardId) {
       setError('게시글 ID가 전달되지 않았습니다.');
       setLoading(false);
       return;
     }
-
-    const fetchPost = async () => {
-      try {
-        const [response, userRes, boardListRes] = await Promise.all([
-          api.get(`/board/board_id=${boardId}`),
-          api.get('/myPage'),
-          api.get('/myPage/boardList'),
-        ]);
-
-        setPost(response.data);
-        setUser(userRes.data);
-        setMyBoardId(boardListRes.data.map((board) => board.boardId));
-      } catch (err) {
-        setError('게시글 정보를 불러오는 데 실패했습니다.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchPost();
   }, [boardId]);
@@ -101,7 +101,7 @@ export default function PostDetail() {
           }}
         >
           <span style={{ marginTop: '7px', fontSize: '20px' }}>
-            {selectValue || '모집중'}
+            {post.boardStatus || '모집중'}
           </span>
 
           {isMyPost && (
@@ -124,6 +124,7 @@ export default function PostDetail() {
                   });
                   setSelectValue(e.value);
                   alert(`게시글 상태가 '${e.value}'(으)로 변경되었습니다.`);
+                  await fetchPost();
                 } catch (err) {
                   alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
                   console.error(err);
@@ -251,6 +252,7 @@ export default function PostDetail() {
       {user?.rollId === 1 && (
         <div
           style={{
+
             backgroundColor: '#F8F8F8',
             padding: '16px',
             position: 'fixed',
@@ -260,6 +262,9 @@ export default function PostDetail() {
             justifyContent: 'center',
             zIndex: 10,
           }}
+
+          onClick={() => setIsModalOpen(true)}
+
         >
           <button
             style={{
@@ -285,7 +290,10 @@ export default function PostDetail() {
 
       {/* 모달 렌더링 */}
       {isModalOpen && (
-        <RepairapplyModal onClose={() => setIsModalOpen(false)} />
+        <RepairapplyModal
+          boradId={boardId}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
     </div>
   );

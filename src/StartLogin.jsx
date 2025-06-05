@@ -19,6 +19,14 @@ const StartLogin = () => {
     try {
       const response = await api.post('/users/login', { loginId, password });
 
+      const tokenWs = response.data?.tokenWs;
+      if (tokenWs) {
+        localStorage.setItem('tokenWs', tokenWs);
+        console.log('웹소켓 토큰:', tokenWs);
+      } else {
+        setErrorMsg('웹소켓 토큰이 없습니다.');
+      }
+
       const token = response.data?.token;
       if (token) {
         localStorage.setItem('token', token);
@@ -117,6 +125,6 @@ const StartLogin = () => {
       </div>
     </div>
   );
-}
+};
 
 export default StartLogin;

@@ -1,70 +1,156 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import RepairSupportModal from './components/RepairSupportModal';
+import { useLocation } from 'react-router-dom';
+import api from './api';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
 export default function ChatRoom() {
+  const location = useLocation();
+
+  const roomId = location.state?.roomId;
+
+  const [chatHistory, setChatHistory] = useState([]);
+  const [receiverId, setReceiverId] = useState(null);
+  const [inputText, setInputText] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [repairStarted, setRepairStarted] = useState(false);
   const [repairCompleted, setRepairCompleted] = useState(false);
-  const [inputText, setInputText] = useState('');
 
-  const handleStartRepair = () => {
-    setRepairStarted(true);
-    setShowModal(false);
+  const containerRef = useRef(null);
+  const token = localStorage.getItem('token');
+  const tokenWs = localStorage.getItem('tokenWs');
+
+  const fetchChatHistory = async () => {
+    try {
+      const response = await api.get(`/matchChat/room/${roomId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const history = response.data.chathistory;
+
+      // 예시: 최신 메시지가 맨 앞이면 뒤집어서 오래된 메시지가 앞에 오도록
+      const orderedHistory =
+        history[0]?.timestamp > history[history.length - 1]?.timestamp
+          ? [...history].reverse()
+          : history;
+
+      setChatHistory(orderedHistory);
+      setReceiverId(response.data.rcvId);
+    } catch (err) {
+      console.error('채팅 불러오기 실패:', err);
+    }
   };
 
-  const handleCompleteRepair = () => {
-    setRepairCompleted(true);
-    setShowModal(false);
+  useEffect(() => {
+    fetchChatHistory();
+    if (tokenWs) {
+      connectStomp(tokenWs, (body) => {
+        const newMessage = JSON.parse(body);
+        setChatHistory((prev) => [...prev, newMessage]);
+      });
+    }
+  }, [roomId]);
+
+  const handleSend = async () => {
+    if (inputText.trim() === '' || !receiverId) return;
+
+    const messageData = {
+      roomId: roomId,
+      message: inputText,
+      receiverId: receiverId,
+    };
+
+    try {
+      const response = await api.post('/matchChat/send', messageData);
+      console.log('메시지 전송 응답:', response.data);
+      setInputText('');
+
+      const now = new Date().toISOString();
+
+      const sentMessage = {
+        ...response.data,
+        content: inputText, // 직접 content 추가
+        timestamp: now,
+        msgType: '', // 메시지 타입이 없다면 빈 문자열
+      };
+
+      setChatHistory((prev) => [...prev, sentMessage]);
+    } catch (error) {
+      console.error('전송 중 오류:', error);
+    }
   };
 
-  const handleSend = () => {
-    if (inputText.trim() === '') return;
-    console.log('보낼 메시지:', inputText);
-    setInputText('');
+  const renderMessage = (msg, index) => {
+    const isMine = msg.senderId !== receiverId;
+    return (
+      <div
+        key={index}
+        style={isMine ? styles.chatBoxRight : styles.chatBoxLeft}
+      >
+        <span
+          style={isMine ? styles.chatBoxRightAfter : styles.chatBoxLeftAfter}
+        />
+        {msg.msgType?.includes('시작') && (
+          <p style={styles.label}>[ 수리 시작 ]</p>
+        )}
+        {msg.msgType?.includes('완료') && (
+          <p style={styles.label}>[ 수리 완료 ]</p>
+        )}
+        <p>{msg.content}</p>
+      </div>
+    );
   };
+
+  const connectStomp = (tokenWs, onMessage) => {
+    const socket = new SockJS(
+      `http://fixi-env.eba-kpimqmzt.ap-northeast-2.elasticbeanstalk.com/ws?token=${tokenWs}`
+    ); // 백엔드에서 지정한 WebSocket endpoint
+    const client = new Client({
+      webSocketFactory: () => socket,
+      connectHeaders: {
+        Authorization: tokenWs,
+      },
+      debug: (str) => console.log('STOMP:', str),
+      onConnect: () => {
+        console.log('🟢 연결됨');
+        client.subscribe(`/user/queue/messages.${roomId}`, (message) => {
+          console.log('📩 메시지 수신:', message.body);
+          onMessage(message.body);
+        });
+      },
+      onStompError: (frame) => {
+        console.error('❌ STOMP 오류', frame.headers['message']);
+      },
+    });
+
+    client.activate();
+    return client;
+  };
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
 
   return (
     <div style={styles.page}>
       <Header title="FIX Finder" />
-
       {showModal && <div style={styles.overlay} />}
 
-      <div style={{ ...styles.container, filter: showModal ? 'blur(2px)' : 'none' }}>
-        {/* 최초 메시지 */}
-        <div style={styles.chatBoxLeft}>
-          <span style={styles.chatBoxLeftAfter} />
-          <p style={styles.label}>[ 수리 지원 ]</p>
-          <p>아이폰 후면 수리 가능하신 분?</p>
-          <button style={styles.button} onClick={() => setShowModal(true)}>
-            내용 확인하기
-          </button>
-        </div>
-
-        {/* 사용자 응답 */}
-        <div style={styles.chatBoxRight}>
-          <span style={styles.chatBoxRightAfter} />
-          <p>당장 수리합시다!</p>
-        </div>
-
-        {/* 수리 시작 메시지 */}
-        {repairStarted && (
-          <div style={styles.chatBoxRight}>
-            <span style={styles.chatBoxRightAfter} />
-            <p style={styles.label}>[ 수리 시작 ]</p>
-            <p>아이폰 후면 수리 가능합니다!</p>
-          </div>
-        )}
-
-        {/* 수리 완료 메시지 */}
-        {repairCompleted && (
-          <div style={styles.chatBoxLeft}>
-            <span style={styles.chatBoxLeftAfter} />
-            <p style={styles.label}>[ 수리 완료 ]</p>
-            <p>수리 완료했습니다!</p>
-          </div>
-        )}
+      <div
+        ref={containerRef}
+        style={{
+          ...styles.container,
+          filter: showModal ? 'blur(2px)' : 'none',
+        }}
+      >
+        {chatHistory.map((msg, idx) => renderMessage(msg, idx))}
       </div>
 
       {/* 입력창 */}
@@ -75,9 +161,7 @@ export default function ChatRoom() {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           style={styles.input}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleSend();
-          }}
+          onKeyDown={(e) => e.key === 'Enter' && handleSend()}
         />
         <button onClick={handleSend} style={styles.sendButton}>
           전송
@@ -89,8 +173,14 @@ export default function ChatRoom() {
       {showModal && (
         <RepairSupportModal
           onClose={() => setShowModal(false)}
-          onStartRepair={handleStartRepair}
-          onCompleteRepair={handleCompleteRepair}
+          onStartRepair={() => {
+            setRepairStarted(true);
+            setShowModal(false);
+          }}
+          onCompleteRepair={() => {
+            setRepairCompleted(true);
+            setShowModal(false);
+          }}
         />
       )}
     </div>
@@ -106,7 +196,10 @@ const styles = {
   },
   overlay: {
     position: 'fixed',
-    top: 0, left: 0, right: 0, bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     zIndex: 9,
   },
@@ -141,24 +234,6 @@ const styles = {
     maxWidth: '70%',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
-  label: {
-    fontWeight: 'bold',
-    fontSize: '13px',
-    marginBottom: '4px',
-    color: '#007bff',
-  },
-  button: {
-    marginTop: '8px',
-    padding: '10px 16px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-  },
-
-  // 말풍선 꼬리 (왼쪽)
   chatBoxLeftAfter: {
     position: 'absolute',
     left: '-8px',
@@ -169,8 +244,6 @@ const styles = {
     borderRight: '8px solid #f0f0f0',
     borderBottom: '8px solid transparent',
   },
-
-  // 말풍선 꼬리 (오른쪽)
   chatBoxRightAfter: {
     position: 'absolute',
     right: '-8px',
@@ -181,8 +254,12 @@ const styles = {
     borderLeft: '8px solid #fff',
     borderBottom: '8px solid transparent',
   },
-
-  // 입력창 스타일
+  label: {
+    fontWeight: 'bold',
+    fontSize: '13px',
+    marginBottom: '4px',
+    color: '#007bff',
+  },
   inputContainer: {
     display: 'flex',
     padding: '10px 16px',

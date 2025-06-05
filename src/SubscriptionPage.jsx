@@ -1,9 +1,29 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import BottomNav from './components/BottomNav'; // BottomNav 컴포넌트 가져오기
+import api from './api';
 
-export default function SubscriptionPage() {
-  const navigate = useNavigate();
+export default function Subscribe() {
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 결제 URL 받아오기
+        const urlResponse = await api.post('/myPage/paypal/create-payment');
+        // response.data가 객체인 경우를 대비해 string으로 변환
+        const paymentUrl =
+          typeof urlResponse.data === 'string'
+            ? urlResponse.data
+            : urlResponse.data?.url || '';
+        setUrl(paymentUrl);
+        console.log('결제 창 URL:', paymentUrl);
+      } catch (error) {
+        console.error('데이터 요청 실패:', error);
+      }
+    };
+
+    fetchData();
+  }, []); // ✅ 의존성 배열 추가해서 한 번만 실행
 
   return (
     // container를 스크롤 가능한 메인 영역으로 사용
@@ -22,34 +42,49 @@ export default function SubscriptionPage() {
       </div>
 
       <div style={styles.card}>
-        <h4 style={styles.title}>FIXI 프라임으로 전환하기</h4>
+        <h4 style={styles.title}>FIXI 프라임 이용중</h4>
         <hr style={styles.divider} />
 
         {/* 기능 항목들 */}
         <div style={styles.featureItem}>
           <img src="ai-icon.png" alt="AI 견적" style={styles.featureIcon} />
           <div>
-            <div><strong style={{ color: '#998A5D' }}>AI 견적</strong> 월 5회 이용권</div>
+            <div>
+              <strong style={{ color: '#998A5D' }}>AI 견적</strong> 월 5회
+              이용권
+            </div>
           </div>
         </div>
 
         <div style={styles.featureItem}>
           <img src="post-icon.png" alt="구해요" style={styles.featureIcon} />
           <div>
-            <div><strong style={{ color: '#998A5D' }}>'구해요'</strong> 게시글 상단 배치</div>
+            <div>
+              <strong style={{ color: '#998A5D' }}>'구해요'</strong> 게시글 상단
+              배치
+            </div>
           </div>
         </div>
 
         <div style={styles.featureItem}>
           <img src="gift-icon.png" alt="웰컴 키트" style={styles.featureIcon} />
           <div>
-            <div>첫 결제 시 <strong style={{ color: '#998A5D' }}>웰컴 키트</strong> 제공</div>
+            <div>
+              첫 결제 시 <strong style={{ color: '#998A5D' }}>웰컴 키트</strong>{' '}
+              제공
+            </div>
           </div>
         </div>
 
         {/* 가격 및 버튼 */}
         <div style={styles.price}>월 2,900원</div>
-        <button style={styles.subscribeButton}>구독하기</button>
+        <div>구독중</div>
+        <button
+          style={styles.subscribeButton}
+          onClick={() => window.open(url, '_blank')}
+        >
+          해지하기
+        </button>
       </div>
       {/* BottomNav 컴포넌트가 container 내부에 있지만, 보통 Fixed 포지션으로 사용될 때 아래 공간을 확보해줘야 함 */}
       {/* 만약 BottomNav가 Fixed가 아니라 스크롤 따라 움직이면 이대로 둬도 됨. Card의 paddingBottom이 아래 여백을 만들어 줄 것임. */}
@@ -144,7 +179,7 @@ const styles = {
     display: 'block',
     width: '100%',
     padding: '12px',
-    backgroundColor: '#006FFF',
+    backgroundColor: 'red',
     color: '#fff',
     fontWeight: 'bold',
     fontSize: '16px',
@@ -153,5 +188,4 @@ const styles = {
     cursor: 'pointer',
     marginTop: '50px',
   },
-  
 };
