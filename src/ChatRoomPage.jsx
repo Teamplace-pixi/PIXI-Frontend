@@ -106,10 +106,9 @@ export default function ChatRoom() {
     );
   };
 
+  const baseURL = process.env.REACT_APP_API_BASE_URL;
   const connectStomp = (tokenWs, onMessage) => {
-    const socket = new SockJS(
-      `http://fixi-env.eba-kpimqmzt.ap-northeast-2.elasticbeanstalk.com/ws?token=${tokenWs}`
-    ); // 백엔드에서 지정한 WebSocket endpoint
+    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
