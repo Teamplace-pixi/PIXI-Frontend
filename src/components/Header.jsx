@@ -98,12 +98,7 @@ const styles = {
     height: '40px',
   },
 
-  icon3: {
-    width: '40px', 
-    height: '40px', 
-  },
   
-
   '@media (max-width: 768px)': {
     logoText: {
       fontSize: '24px',
