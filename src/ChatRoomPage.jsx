@@ -46,12 +46,28 @@ export default function ChatRoom() {
     }
   };
 
+  const userId = parseInt(localStorage.getItem('userId'));
+
   useEffect(() => {
     fetchChatHistory();
     if (tokenWs) {
       connectStomp(tokenWs, (body) => {
-        const newMessage = JSON.parse(body);
-        setChatHistory((prev) => [...prev, newMessage]);
+        const parsed = JSON.parse(body);
+
+        // 본인이 보낸 메시지인 경우 무시 (중복 방지)
+        if (parseInt(parsed.senderId) === userId) return;
+
+        const now = new Date().toISOString();
+        const fixedMessage = {
+          content: parsed.message,
+          senderId: parsed.senderId,
+          receiverId: parsed.receiverId,
+          roomId: parsed.roomId,
+          timestamp: now,
+          msgType: '',
+        };
+
+        setChatHistory((prev) => [...prev, fixedMessage]);
       });
     }
   }, [roomId]);
@@ -107,9 +123,7 @@ export default function ChatRoom() {
   };
 
   const connectStomp = (tokenWs, onMessage) => {
-    const socket = new SockJS(
-      `http://fixi-env.eba-kpimqmzt.ap-northeast-2.elasticbeanstalk.com/ws?token=${tokenWs}`
-    ); // 백엔드에서 지정한 WebSocket endpoint
+    const socket = new SockJS(`https://hifixi.com/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
