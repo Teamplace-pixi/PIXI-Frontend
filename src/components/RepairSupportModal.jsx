@@ -120,7 +120,10 @@ export default function RepairSupportModal({
               />
             </div>
 
-            <button style={styles.primaryButton} onClick={onStartRepair}>
+            <button
+              style={styles.primaryButton}
+              onClick={onStartRepair(shopId)}
+            >
               수리 시작하기
             </button>
             <button

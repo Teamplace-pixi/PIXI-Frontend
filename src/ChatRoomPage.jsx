@@ -232,7 +232,6 @@ export default function ChatRoom() {
               const repairMsg = chatHistory.find((msg) => {
                 try {
                   const parsed = JSON.parse(msg.content);
-                  console.log('여기서 에러가 뜨나 1')
                   return parsed && parsed.boardId && parsed.boardTitle;
                 } catch {
                   return false;
@@ -246,12 +245,14 @@ export default function ChatRoom() {
 
               const parsed = JSON.parse(repairMsg.content);
 
-              console.log('여기서 에러가 뜨나 2')
+              const applyRes = await api.get(`/apply/apply_id=${id}`);
+              const shopId = applyRes.data.shopId;
+
               // 1️⃣ board 상태 변경 요청
               await api.put(`/board/board_id=${parsed.boardId}`, {
                 status: '예약중',
+                shopId: shopId,
               });
-              console.log('여기서 에러가 뜨나 3')
 
               // 2️⃣ 채팅 메시지 전송
               const repairStartMessage = {
@@ -259,7 +260,6 @@ export default function ChatRoom() {
                 message: `[수리 시작]\n${parsed.boardTitle}`,
                 receiverId: receiverId,
               };
-              console.log('여기서 에러가 뜨나 4')
 
               const response = await api.post(
                 '/matchChat/send',
@@ -268,7 +268,6 @@ export default function ChatRoom() {
 
               const now = new Date().toISOString();
 
-              console.log('여기서 에러가 뜨나 5')
               const sentMessage = {
                 ...response.data,
                 content: repairStartMessage.message,
