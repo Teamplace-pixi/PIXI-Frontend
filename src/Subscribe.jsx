@@ -28,33 +28,6 @@ export default function SubscriptionPage() {
     fetchData();
   }, []); // ✅ 의존성 배열 추가해서 한 번만 실행
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const paymentId = params.get('paymentId');
-    const payerId = params.get('PayerID');
-
-    const executePayment = async () => {
-      try {
-        const res = await api.get('/myPage/paypal/execute-payment', {
-          params: {
-            paymentId,
-            PayerID: payerId,
-          },
-        });
-        console.log('구독 처리 완료:', res.data);
-        // ✅ 여기서 상태 업데이트나 리디렉션 등을 추가해도 좋음
-        navigate('/myPage');
-      } catch (err) {
-        console.error('구독 처리 실패:', err);
-      }
-    };
-
-    if (paymentId && payerId && !executed) {
-      executePayment();
-      setExecuted(true);
-    }
-  }, [executed]);
-
   return (
     // container를 스크롤 가능한 메인 영역으로 사용
     <div style={styles.container}>
