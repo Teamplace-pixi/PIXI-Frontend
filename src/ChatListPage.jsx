@@ -52,7 +52,7 @@ export default function ChatListPage() {
                   </span>
                 </div>
                 <div
-                  style={chatList.read ? styles.messageNotRead : styles.message}
+                  style={chatList.read ? styles.message : styles.messageNotRead}
                 >
                   {chatList.lastMsg}
                 </div>
