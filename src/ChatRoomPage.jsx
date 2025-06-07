@@ -115,8 +115,6 @@ export default function ChatRoom() {
     const isRepairSupport =
       parsed && parsed.applyId && parsed.title && parsed.boardTitle;
 
-    setApplyId(parsed.applyId || null);
-
     return (
       <div
         key={index}
@@ -141,7 +139,10 @@ export default function ChatRoom() {
             <p>{parsed.boardTitle}</p>
             <button
               style={styles.modalButton}
-              onClick={() => setShowModal(true)}
+              onClick={() => {
+                setApplyId(parsed.applyId);
+                setShowModal(true);
+              }}
             >
               내용 확인하기
             </button>
