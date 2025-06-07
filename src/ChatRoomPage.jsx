@@ -19,6 +19,8 @@ export default function ChatRoom() {
   const [repairStarted, setRepairStarted] = useState(false);
   const [repairCompleted, setRepairCompleted] = useState(false);
   const [id, setApplyId] = useState(null);
+  const [board, setBoard] = useState(null);
+  const [title, setTitle] = useState(null);
 
   const containerRef = useRef(null);
   const token = localStorage.getItem('token');
@@ -115,6 +117,9 @@ export default function ChatRoom() {
 
     const isRepairSupport =
       parsed?.applyId && parsed.title && parsed?.boardId && parsed?.boardTitle;
+
+    setBoard(parsed?.boardId);
+    setTitle(parsed?.boardTitle);
 
     return (
       <div
@@ -243,13 +248,11 @@ export default function ChatRoom() {
                 return;
               }
 
-              const parsed = JSON.parse(repairMsg.content);
-
               const applyRes = await api.get(`/apply/apply_id=${id}`);
               const shopId = applyRes.data.shopId;
 
               // 1️⃣ board 상태 변경 요청
-              await api.put(`/board/board_id=${parsed.boardId}`, {
+              await api.put(`/board/board_id=${board}`, {
                 status: '예약중',
                 shopId: shopId,
               });
@@ -257,7 +260,7 @@ export default function ChatRoom() {
               // 2️⃣ 채팅 메시지 전송
               const repairStartMessage = {
                 roomId: roomId,
-                message: `[수리 시작]\n${parsed.boardTitle}`,
+                message: `[수리 시작]\n${title}`,
                 receiverId: receiverId,
               };
 

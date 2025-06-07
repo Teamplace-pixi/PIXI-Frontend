@@ -5,7 +5,7 @@ module.exports = function (app) {
   app.use(
     '/apiAI',
     createProxyMiddleware({
-      target: 'http://43.203.246.125:8000',
+      target: 'http://13.124.227.245:8000',
       changeOrigin: true,
       pathRewrite: {
         '^/apiAI': '',
