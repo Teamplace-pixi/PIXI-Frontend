@@ -168,13 +168,19 @@ export default function RepairSupportModal({
 
             <div style={styles.inputGroup}>
               <label>총 작업 소요일</label>
-              <input
-                type="text"
-                placeholder="작업 소요 일수"
+              <select
                 value={reviewDuration}
                 onChange={(e) => setReviewDuration(e.target.value)}
                 style={styles.input}
-              />
+              >
+                <option value="" disabled>
+                  작업 소요 기간을 선택하세요
+                </option>
+                <option value="3일 이내">3일 이내</option>
+                <option value="5일 이내">5일 이내</option>
+                <option value="7일 이내">7일 이내</option>
+                <option value="7일 이상">7일 이상</option>
+              </select>
             </div>
 
             <div style={styles.inputGroup}>
