@@ -9,7 +9,6 @@ import { Client } from '@stomp/stompjs';
 
 export default function ChatRoom() {
   const location = useLocation();
-
   const roomId = location.state?.roomId;
 
   const [chatHistory, setChatHistory] = useState([]);
@@ -35,8 +34,6 @@ export default function ChatRoom() {
       });
 
       const history = response.data.chathistory;
-
-      // 예시: 최신 메시지가 맨 앞이면 뒤집어서 오래된 메시지가 앞에 오도록
       const orderedHistory =
         history[0]?.timestamp > history[history.length - 1]?.timestamp
           ? [...history].reverse()
@@ -56,8 +53,6 @@ export default function ChatRoom() {
     if (tokenWs) {
       connectStomp(tokenWs, (body) => {
         const parsed = JSON.parse(body);
-
-        // 본인이 보낸 메시지인 경우 무시 (중복 방지)
         if (parseInt(parsed.senderId) === userId) return;
 
         const now = new Date().toISOString();
@@ -86,16 +81,14 @@ export default function ChatRoom() {
 
     try {
       const response = await api.post('/matchChat/send', messageData);
-      console.log('메시지 전송 응답:', response.data);
       setInputText('');
 
       const now = new Date().toISOString();
-
       const sentMessage = {
         ...response.data,
-        content: inputText, // 직접 content 추가
+        content: inputText,
         timestamp: now,
-        msgType: '', // 메시지 타입이 없다면 빈 문자열
+        msgType: '',
       };
 
       setChatHistory((prev) => [...prev, sentMessage]);
@@ -112,14 +105,13 @@ export default function ChatRoom() {
       parsed = JSON.parse(msg.content);
     } catch (e) {
       parsed = null;
-      console.error('메시지 파싱 실패:', e);
     }
 
     const isRepairSupport =
       parsed?.applyId && parsed.title && parsed?.boardId && parsed?.boardTitle;
 
-    setBoard(parsed?.boardId);
-    setTitle(parsed?.boardTitle);
+    if (parsed?.boardId) setBoard(parsed.boardId);
+    if (parsed?.boardTitle) setTitle(parsed.boardTitle);
 
     return (
       <div
@@ -130,7 +122,6 @@ export default function ChatRoom() {
           style={isMine ? styles.chatBoxRightAfter : styles.chatBoxLeftAfter}
         />
 
-        {/* 수리 시작 / 완료 라벨 */}
         {msg.msgType?.includes('시작') && (
           <p style={styles.label}>[ 수리 시작 ]</p>
         )}
@@ -138,7 +129,6 @@ export default function ChatRoom() {
           <p style={styles.label}>[ 수리 완료 ]</p>
         )}
 
-        {/* 📌 수리 지원 특수 메시지 렌더링 */}
         {isRepairSupport ? (
           <div>
             <p style={styles.label}>[ {parsed.title} ]</p>
@@ -162,7 +152,7 @@ export default function ChatRoom() {
 
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const connectStomp = (tokenWs, onMessage) => {
-    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
+    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
@@ -170,9 +160,7 @@ export default function ChatRoom() {
       },
       debug: (str) => console.log('STOMP:', str),
       onConnect: () => {
-        console.log('🟢 연결됨');
         client.subscribe(`/user/queue/messages.${roomId}`, (message) => {
-          console.log('📩 메시지 수신:', message.body);
           onMessage(message.body);
         });
       },
@@ -180,7 +168,6 @@ export default function ChatRoom() {
         console.error('❌ STOMP 오류', frame.headers['message']);
       },
     });
-
     client.activate();
     return client;
   };
@@ -206,7 +193,6 @@ export default function ChatRoom() {
         {chatHistory.map((msg, idx) => renderMessage(msg, idx))}
       </div>
 
-      {/* 입력창 */}
       <div style={styles.inputContainer}>
         <input
           type="text"
@@ -229,11 +215,9 @@ export default function ChatRoom() {
           onClose={() => setShowModal(false)}
           onStartRepair={async () => {
             try {
-              // 모달 닫기
               setShowModal(false);
               setRepairStarted(true);
 
-              // 먼저 해당 수리 지원 메시지를 찾아서 boardId, boardTitle 추출
               const repairMsg = chatHistory.find((msg) => {
                 try {
                   const parsed = JSON.parse(msg.content);
@@ -243,21 +227,15 @@ export default function ChatRoom() {
                 }
               });
 
-              if (!repairMsg) {
-                alert('수리 메시지를 찾을 수 없습니다.');
-                return;
-              }
-
+              if (!repairMsg) return alert('수리 메시지를 찾을 수 없습니다.');
               const applyRes = await api.get(`/apply/apply_id=${id}`);
               const shopId = applyRes.data.shopId;
 
-              // 1️⃣ board 상태 변경 요청
               await api.put(`/board/board_id=${board}`, {
                 status: '예약중',
                 shopId: shopId,
               });
 
-              // 2️⃣ 채팅 메시지 전송
               const repairStartMessage = {
                 roomId: roomId,
                 message: `[수리 시작]\n${title}`,
@@ -270,7 +248,6 @@ export default function ChatRoom() {
               );
 
               const now = new Date().toISOString();
-
               const sentMessage = {
                 ...response.data,
                 content: repairStartMessage.message,
@@ -280,7 +257,6 @@ export default function ChatRoom() {
 
               setChatHistory((prev) => [...prev, sentMessage]);
             } catch (error) {
-              console.error('수리 시작 처리 실패:', error);
               alert('수리 시작 중 오류가 발생했습니다.');
             }
           }}
@@ -289,7 +265,6 @@ export default function ChatRoom() {
               setShowModal(false);
               setRepairCompleted(true);
 
-              // 수리 지원 메시지에서 boardId, boardTitle 파싱
               const repairMsg = chatHistory.find((msg) => {
                 try {
                   const parsed = JSON.parse(msg.content);
@@ -299,20 +274,17 @@ export default function ChatRoom() {
                 }
               });
 
-              if (!repairMsg) {
-                alert('수리 메시지를 찾을 수 없습니다.');
-                return;
-              }
-
+              if (!repairMsg) return alert('수리 메시지를 찾을 수 없습니다.');
               const parsed = JSON.parse(repairMsg.content);
 
-              // 1️⃣ board 상태를 '모집 완료'로 변경
+              const applyRes = await api.get(`/apply/apply_id=${id}`);
+              const shopId = applyRes.data.shopId;
+
               await api.put(`/board/board_id=${parsed.boardId}`, {
                 status: '모집 완료',
-                shopId: 0,
+                shopId: shopId,
               });
 
-              // 2️⃣ 채팅 메시지 전송
               const repairCompleteMessage = {
                 roomId: roomId,
                 message: `[수리 완료]\n${parsed.boardTitle}`,
@@ -325,7 +297,6 @@ export default function ChatRoom() {
               );
 
               const now = new Date().toISOString();
-
               const sentMessage = {
                 ...response.data,
                 content: repairCompleteMessage.message,
@@ -335,7 +306,6 @@ export default function ChatRoom() {
 
               setChatHistory((prev) => [...prev, sentMessage]);
             } catch (error) {
-              console.error('수리 완료 처리 실패:', error);
               alert('수리 완료 중 오류가 발생했습니다.');
             }
           }}
@@ -344,6 +314,7 @@ export default function ChatRoom() {
     </div>
   );
 }
+
 
 const styles = {
   page: {
