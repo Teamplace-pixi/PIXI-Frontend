@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import api from '../api';
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -9,12 +10,31 @@ function Header({ title = 'FIXI' }) {
   const navigate = useNavigate();
   const tokenWs = localStorage.getItem('tokenWs');
 
+  const [hasAlert, setHasAlert] = useState(false);
+
   useEffect(() => {
-    connectStomp(tokenWs, (body) => {});
-  }, [7]);
+    connectStomp(tokenWs, (body) => {
+      const parsed = JSON.parse(body);
+      console.log('📩 실시간 알림 수신:', parsed);
+      setHasAlert(true); // 🔔 실시간 메시지 도착 시 알림 표시
+    });
+  }, [tokenWs]);
+
+  useEffect(() => {
+    // ✅ 최초 알림 상태 확인
+    const fetchAlert = async () => {
+      try {
+        const res = await api.get(`/matchChat/Alert`);
+        setHasAlert(res.data === true);
+      } catch (error) {
+        console.error('🔔 알림 상태 확인 실패:', error);
+      }
+    };
+
+    fetchAlert();
+  });
 
   const connectStomp = (tokenWs, onMessage) => {
-    
     const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
     const client = new Client({
       webSocketFactory: () => socket,
@@ -43,7 +63,11 @@ function Header({ title = 'FIXI' }) {
       <span style={styles.logoText}>{title}</span>
       <div style={styles.buttonContainer}>
         <button style={styles.iconButton} onClick={() => navigate('/chatlist')}>
-          <img src="/chat3.svg" alt="icon 1" style={styles.icon1} />
+          <img
+            src={hasAlert ? '/chat4.svg' : '/chat3.svg'}
+            alt="icon 1"
+            style={styles.icon1}
+          />
         </button>
         <button style={styles.iconButton} onClick={() => navigate('/settings')}>
           <img src="/settings.png" alt="icon 2" style={styles.icon2} />
@@ -76,10 +100,9 @@ const styles = {
     color: '#0047B1',
     fontFamily: '"Shrikhand", serif',
 
-    marginRight: '20px', 
-    flex: 1, 
+    marginRight: '20px',
+    flex: 1,
     marginLeft: '10px',
-
   },
   buttonContainer: {
     display: 'flex',
@@ -101,7 +124,6 @@ const styles = {
     height: '40px',
   },
 
-  
   '@media (max-width: 768px)': {
     logoText: {
       fontSize: '24px',
