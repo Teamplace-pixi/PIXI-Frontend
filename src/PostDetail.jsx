@@ -183,39 +183,81 @@ export default function PostDetail() {
 
         {/* 상세정보 */}
         <div style={{ fontSize: '14px', color: '#333', lineHeight: '1.8' }}>
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-    <span style={{ display: 'flex', alignItems: 'center' }}>
-      <img src="Vector.svg" alt="기종" style={{ width: 20, height: 20, marginRight: 8 }} />
-      기종
-    </span>
-    <span>{post.deviceName}</span>
-  </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '8px',
+            }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                src="Vector.svg"
+                alt="기종"
+                style={{ width: 20, height: 20, marginRight: 8 }}
+              />
+              기종
+            </span>
+            <span>{post.deviceName}</span>
+          </div>
 
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-    <span style={{ display: 'flex', alignItems: 'center' }}>
-      <img src="Vector.svg" alt="금액" style={{ width: 20, height: 20, marginRight: 8 }} />
-      가능 금액
-    </span>
-    <span>{post.boardCost}</span>
-  </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '8px',
+            }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                src="Vector.svg"
+                alt="금액"
+                style={{ width: 20, height: 20, marginRight: 8 }}
+              />
+              가능 금액
+            </span>
+            <span>{post.boardCost}</span>
+          </div>
 
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-    <span style={{ display: 'flex', alignItems: 'center' }}>
-      <img src="shape.svg" alt="필요 날짜" style={{ width: 20, height: 20, marginRight: 8 }} />
-      필요 날짜
-    </span>
-    <span>{post.boardDate}</span>
-  </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '8px',
+            }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                src="shape.svg"
+                alt="필요 날짜"
+                style={{ width: 20, height: 20, marginRight: 8 }}
+              />
+              필요 날짜
+            </span>
+            <span>{post.boardDate}</span>
+          </div>
 
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-    <span style={{ display: 'flex', alignItems: 'center' }}>
-      <img src="shape2.svg" alt="위치" style={{ width: 20, height: 20, marginRight: 8 }} />
-      위치
-    </span>
-    <span>{post.boardLoc}</span>
-  </div>
-</div>
-
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                src="shape2.svg"
+                alt="위치"
+                style={{ width: 20, height: 20, marginRight: 8 }}
+              />
+              위치
+            </span>
+            <span>{post.boardLoc}</span>
+          </div>
+        </div>
 
         {/* 구분선 */}
         <div style={{ borderTop: '1px solid #eee', margin: '24px 0' }} />
@@ -252,7 +294,6 @@ export default function PostDetail() {
       {user?.rollId === 1 && (
         <div
           style={{
-
             backgroundColor: '#F8F8F8',
             padding: '16px',
             position: 'fixed',
@@ -262,9 +303,7 @@ export default function PostDetail() {
             justifyContent: 'center',
             zIndex: 10,
           }}
-
           onClick={() => setIsModalOpen(true)}
-
         >
           <button
             style={{

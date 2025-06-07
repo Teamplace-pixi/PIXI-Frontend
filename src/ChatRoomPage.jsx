@@ -248,7 +248,6 @@ export default function ChatRoom() {
               // 1️⃣ board 상태 변경 요청
               await api.put(`/board/board_id=${parsed.boardId}`, {
                 status: '예약중',
-                shopId: shopId,
               });
 
               // 2️⃣ 채팅 메시지 전송
