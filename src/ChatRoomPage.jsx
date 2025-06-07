@@ -103,6 +103,17 @@ export default function ChatRoom() {
 
   const renderMessage = (msg, index) => {
     const isMine = msg.senderId !== receiverId;
+
+    let parsed;
+    try {
+      parsed = JSON.parse(msg.content);
+    } catch (e) {
+      parsed = null;
+    }
+
+    const isRepairSupport =
+      parsed && parsed.applyId && parsed.title && parsed.boardTitle;
+
     return (
       <div
         key={index}
@@ -111,13 +122,30 @@ export default function ChatRoom() {
         <span
           style={isMine ? styles.chatBoxRightAfter : styles.chatBoxLeftAfter}
         />
+
+        {/* 수리 시작 / 완료 라벨 */}
         {msg.msgType?.includes('시작') && (
           <p style={styles.label}>[ 수리 시작 ]</p>
         )}
         {msg.msgType?.includes('완료') && (
           <p style={styles.label}>[ 수리 완료 ]</p>
         )}
-        <p>{msg.content}</p>
+
+        {/* 📌 수리 지원 특수 메시지 렌더링 */}
+        {isRepairSupport ? (
+          <div>
+            <p style={styles.label}>[ {parsed.title} ]</p>
+            <p>{parsed.boardTitle}</p>
+            <button
+              style={styles.modalButton}
+              onClick={() => setShowModal(true)}
+            >
+              내용 확인하기
+            </button>
+          </div>
+        ) : (
+          <p>{msg.content}</p>
+        )}
       </div>
     );
   };
@@ -303,5 +331,15 @@ const styles = {
     color: '#fff',
     fontWeight: 'bold',
     cursor: 'pointer',
+  },
+  modalButton: {
+    marginTop: '8px',
+    padding: '6px 12px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '14px',
   },
 };
