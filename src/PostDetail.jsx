@@ -121,6 +121,7 @@ export default function PostDetail() {
                 try {
                   await api.put(`/board/board_id=${boardId}`, {
                     status: e.value,
+                    shopId: 470,
                   });
                   setSelectValue(e.value);
                   alert(`게시글 상태가 '${e.value}'(으)로 변경되었습니다.`);
