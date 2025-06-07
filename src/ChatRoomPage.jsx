@@ -116,6 +116,7 @@ export default function ChatRoom() {
       parsed && parsed.applyId && parsed.title && parsed.boardTitle;
 
     setApplyId(parsed?.applyId || null);
+    console.log(applyId);
 
     return (
       <div
