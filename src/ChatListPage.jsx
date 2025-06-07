@@ -133,10 +133,6 @@ const styles = {
   },
   messageNotRead: {
     fontSize: '13px',
-    color: '#FFFFFF',
-    font: 'bold',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
+    fontWeight: 'bold',
   },
 };
