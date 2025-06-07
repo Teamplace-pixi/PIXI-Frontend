@@ -114,7 +114,7 @@ export default function ChatRoom() {
     }
 
     const isRepairSupport =
-      parsed?.applyId && parsed?.boardId && parsed?.boardTitle;
+      parsed?.applyId && parsed.title && parsed?.boardId && parsed?.boardTitle;
 
     return (
       <div
