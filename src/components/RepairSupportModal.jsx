@@ -17,9 +17,8 @@ export default function RepairSupportModal({
     const fetchApplyData = async () => {
       try {
         const res = await api.get(`/apply/apply_id=${applyId}`);
-        const data = await res.json();
-        console.log('수리 지원 정보:', data);
-        setApplyData(data);
+        console.log('수리 지원 정보:', res.data);
+        setApplyData(res.data);
       } catch (error) {
         console.error('수리 지원 정보 불러오기 실패:', error);
       }
