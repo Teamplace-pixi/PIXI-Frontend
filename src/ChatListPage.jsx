@@ -51,11 +51,7 @@ export default function ChatListPage() {
                     {chatList.lastMsgTime.replace('T', ' ')}
                   </span>
                 </div>
-                <div
-                  style={chatList.read ? styles.message : styles.messageNotRead}
-                >
-                  {chatList.lastMsg}
-                </div>
+                <div style={styles.messageNotRead}>{chatList.lastMsg}</div>
               </div>
             </div>
           ))}
