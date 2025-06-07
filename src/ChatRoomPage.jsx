@@ -18,7 +18,7 @@ export default function ChatRoom() {
   const [showModal, setShowModal] = useState(false);
   const [repairStarted, setRepairStarted] = useState(false);
   const [repairCompleted, setRepairCompleted] = useState(false);
-  const [applyId, setApplyId] = useState(null);
+  const [id, setApplyId] = useState(null);
 
   const containerRef = useRef(null);
   const token = localStorage.getItem('token');
@@ -115,8 +115,7 @@ export default function ChatRoom() {
     const isRepairSupport =
       parsed && parsed.applyId && parsed.title && parsed.boardTitle;
 
-    setApplyId(parsed?.applyId || null);
-    console.log(applyId);
+    setApplyId(parsed.applyId || null);
 
     return (
       <div
@@ -219,7 +218,7 @@ export default function ChatRoom() {
 
       {showModal && (
         <RepairSupportModal
-          applyId={applyId}
+          applyId={id}
           onClose={() => setShowModal(false)}
           onStartRepair={() => {
             setRepairStarted(true);
