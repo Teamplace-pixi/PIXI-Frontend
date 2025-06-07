@@ -117,9 +117,11 @@ export default function ChatRoom() {
         }
 
         parsed = JSON.parse(cleaned);
+        console.log('파싱 성공:', parsed);
       }
     } catch (e) {
       parsed = null;
+      console.error('메시지 파싱 실패:', e);
     }
 
     const isRepairSupport =
