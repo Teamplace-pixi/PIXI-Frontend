@@ -221,13 +221,116 @@ export default function ChatRoom() {
         <RepairSupportModal
           applyId={id}
           onClose={() => setShowModal(false)}
-          onStartRepair={() => {
-            setRepairStarted(true);
-            setShowModal(false);
+          onStartRepair={async () => {
+            try {
+              // 모달 닫기
+              setShowModal(false);
+              setRepairStarted(true);
+
+              // 먼저 해당 수리 지원 메시지를 찾아서 boardId, boardTitle 추출
+              const repairMsg = chatHistory.find((msg) => {
+                try {
+                  const parsed = JSON.parse(msg.content);
+                  return parsed && parsed.boardId && parsed.boardTitle;
+                } catch {
+                  return false;
+                }
+              });
+
+              if (!repairMsg) {
+                alert('수리 메시지를 찾을 수 없습니다.');
+                return;
+              }
+
+              const parsed = JSON.parse(repairMsg.content);
+
+              // 1️⃣ board 상태 변경 요청
+              await api.put(`/board/board_id=${parsed.boardId}`, {
+                status: '예약중',
+                shopId: 0,
+              });
+
+              // 2️⃣ 채팅 메시지 전송
+              const repairStartMessage = {
+                roomId: roomId,
+                message: `[수리 시작]\n${parsed.boardTitle}`,
+                receiverId: receiverId,
+              };
+
+              const response = await api.post(
+                '/matchChat/send',
+                repairStartMessage
+              );
+
+              const now = new Date().toISOString();
+
+              const sentMessage = {
+                ...response.data,
+                content: repairStartMessage.message,
+                timestamp: now,
+                msgType: '수리 시작',
+              };
+
+              setChatHistory((prev) => [...prev, sentMessage]);
+            } catch (error) {
+              console.error('수리 시작 처리 실패:', error);
+              alert('수리 시작 중 오류가 발생했습니다.');
+            }
           }}
-          onCompleteRepair={() => {
-            setRepairCompleted(true);
-            setShowModal(false);
+          onCompleteRepair={async () => {
+            try {
+              setShowModal(false);
+              setRepairCompleted(true);
+
+              // 수리 지원 메시지에서 boardId, boardTitle 파싱
+              const repairMsg = chatHistory.find((msg) => {
+                try {
+                  const parsed = JSON.parse(msg.content);
+                  return parsed && parsed.boardId && parsed.boardTitle;
+                } catch {
+                  return false;
+                }
+              });
+
+              if (!repairMsg) {
+                alert('수리 메시지를 찾을 수 없습니다.');
+                return;
+              }
+
+              const parsed = JSON.parse(repairMsg.content);
+
+              // 1️⃣ board 상태를 '모집 완료'로 변경
+              await api.put(`/board/board_id=${parsed.boardId}`, {
+                status: '모집 완료',
+                shopId: 0,
+              });
+
+              // 2️⃣ 채팅 메시지 전송
+              const repairCompleteMessage = {
+                roomId: roomId,
+                message: `[수리 완료]\n${parsed.boardTitle}`,
+                receiverId: receiverId,
+              };
+
+              const response = await api.post(
+                '/matchChat/send',
+                repairCompleteMessage
+              );
+
+              const now = new Date().toISOString();
+
+              const sentMessage = {
+                ...response.data,
+                content: repairCompleteMessage.message,
+                timestamp: now,
+                msgType: '수리 완료',
+              };
+
+              setChatHistory((prev) => [...prev, sentMessage]);
+            } catch (error) {
+              console.error('수리 완료 처리 실패:', error);
+              alert('수리 완료 중 오류가 발생했습니다.');
+            }
           }}
         />
       )}

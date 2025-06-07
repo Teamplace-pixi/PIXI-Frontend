@@ -10,6 +10,23 @@ export default function RepairSupportModal({
   const [review, setReview] = useState('');
   const [stars, setStars] = useState(0);
   const [applyData, setApplyData] = useState(null);
+  const [reviewCost, setReviewCost] = useState('');
+  const [reviewDuration, setReviewDuration] = useState('');
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    // ✅ 사용자 ID 가져오기
+    const fetchUserId = async () => {
+      try {
+        const res = await api.get('/users/userId');
+        setUserId(res.data.user_id);
+      } catch (err) {
+        console.error('유저 정보 로드 실패:', err);
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   useEffect(() => {
     if (!applyId) return;
@@ -25,6 +42,29 @@ export default function RepairSupportModal({
     };
     fetchApplyData();
   }, [applyId]);
+
+  const handleSubmitReview = async () => {
+    if (!applyData || userId == null) return;
+
+    try {
+      const payload = {
+        user_id: userId,
+        shop_id: applyData.shopId,
+        device_id: 0,
+        reviewStar: stars,
+        reviewTitle: '수리 후기', // 필요 시 입력란 추가 가능
+        reviewContent: review,
+        reviewTime: reviewDuration,
+        reviewMoney: parseInt(reviewCost),
+      };
+
+      await api.post('/shop/review', payload);
+      console.log('후기 제출 완료:', payload);
+      onClose(); // 모달 닫기
+    } catch (error) {
+      console.error('후기 제출 실패:', error);
+    }
+  };
 
   return (
     <div style={styles.overlay}>
@@ -120,6 +160,8 @@ export default function RepairSupportModal({
               <input
                 type="text"
                 placeholder="수리비 입력"
+                value={reviewCost}
+                onChange={(e) => setReviewCost(e.target.value)}
                 style={styles.input}
               />
             </div>
@@ -129,6 +171,8 @@ export default function RepairSupportModal({
               <input
                 type="text"
                 placeholder="작업 소요 일수"
+                value={reviewDuration}
+                onChange={(e) => setReviewDuration(e.target.value)}
                 style={styles.input}
               />
             </div>
@@ -143,13 +187,7 @@ export default function RepairSupportModal({
               />
             </div>
 
-            <button
-              style={styles.primaryButton}
-              onClick={() => {
-                console.log('후기 저장됨:', { review, stars });
-                onClose(); // 저장 후 모달 닫기
-              }}
-            >
+            <button style={styles.primaryButton} onClick={handleSubmitReview}>
               후기 제출하기
             </button>
           </>
