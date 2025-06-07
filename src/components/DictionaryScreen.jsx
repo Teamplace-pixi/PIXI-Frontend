@@ -9,8 +9,8 @@ function DictionaryScreen({
   description = '#실시간으로 변동되는 제품 가격을 바탕으로 예상 수리 비용 정보를 제공해드려요',
   path = '/',
   step = 1,
-  
   titleColor = '#FFD700',
+  imageSrc = 'FIXIicon.png', // ✅ 이미지 경로를 prop으로 받기
 }) {
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ function DictionaryScreen({
 
       {/* ✅ 메인 컨텐츠 */}
       <div className="mobile-container" style={{ padding: '0 16px', color: '#FFFFFF' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', marginTop: '60px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', marginTop: '20px' }}>
           <div style={{ width: '20px', height: '20px', backgroundColor: '#FDC500', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>✔</div>
           <p style={{ color: titleColor, fontWeight: 'bold', fontSize: '14px' }}>{title}</p>
         </div>
@@ -35,13 +35,15 @@ function DictionaryScreen({
           {mainTitle}
         </h1>
 
-        <p style={{ fontSize: '12px', color: '#D1D5DB', lineHeight: '1.6' }}>{description}</p>
-        
+        <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', lineHeight: '1.6' }}>{description}</p>
+
+        {/* ✅ 이미지 경로를 prop으로 받아 사용 */}
         <img
-        src="FIXIicon.png" // 실제 경로로 바꿔줘야 함
-        alt="제품 이미지"
-        className="floating-image"
-      />
+          src={imageSrc}
+          alt="제품 이미지"
+          className="floating-image"
+          style={{ display: 'block', margin: '20px auto 0 auto' }}
+        />
       </div>
     </div>
   );

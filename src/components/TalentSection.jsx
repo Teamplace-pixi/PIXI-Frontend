@@ -93,7 +93,7 @@ function TalentSection() {
 const styles = {
   container: {
     margin: '16px',
-    marginBottom: '80px',
+    marginBottom: '30px',
   },
   header: {
     display: 'flex',
@@ -113,20 +113,20 @@ const styles = {
     cursor: 'pointer',
   },
   card: {
-    border: '1px solid #e5e7eb',
+    border: '1px solid #D9D9D9',
     borderRadius: '16px',
-    padding: '16px',
+    padding: '12px',
     backgroundColor: '#fff',
     boxShadow: '0 2px 5px rgba(0,0,0,0.04)',
   },
   cardTitle: {
     fontSize: '16px',
-    fontWeight: 'bold',
+    fontWeight: 500,
     marginBottom: '8px',
   },
   meta: {
     fontSize: '13px',
-    color: '#6b7280',
+    color: '#484C52',
     display: 'flex',
     gap: '16px',
     marginBottom: '12px',

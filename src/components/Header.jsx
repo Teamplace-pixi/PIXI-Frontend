@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
+const baseURL = process.env.REACT_APP_API_BASE_URL;
+
 function Header({ title = 'FIXI' }) {
   const navigate = useNavigate();
   const tokenWs = localStorage.getItem('tokenWs');
@@ -12,7 +14,8 @@ function Header({ title = 'FIXI' }) {
   }, [7]);
 
   const connectStomp = (tokenWs, onMessage) => {
-    const socket = new SockJS(`http://localhost:8080/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
+    
+    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
@@ -40,13 +43,13 @@ function Header({ title = 'FIXI' }) {
       <span style={styles.logoText}>{title}</span>
       <div style={styles.buttonContainer}>
         <button style={styles.iconButton} onClick={() => navigate('/chatlist')}>
-          <img src="/userchat1.png" alt="icon 1" style={styles.icon1} />
+          <img src="/chat3.svg" alt="icon 1" style={styles.icon1} />
         </button>
         <button style={styles.iconButton} onClick={() => navigate('/settings')}>
           <img src="/settings.png" alt="icon 2" style={styles.icon2} />
         </button>
         <button style={styles.iconButton} onClick={() => navigate('/mypage')}>
-          <img src="/mypage.png" alt="icon 3" style={styles.icon3} />
+          <img src="/person.svg" alt="icon 3" style={styles.icon3} />
         </button>
       </div>
     </div>
@@ -63,9 +66,8 @@ const styles = {
     justifyContent: 'space-between',
     position: 'fixed',
     top: 0,
-    backgroundColor: '#fff',
+    backgroundColor: '#F8F8F8',
     zIndex: 1000,
-    borderBottom: '1px solid #eee',
     boxSizing: 'border-box',
   },
   logoText: {
@@ -73,8 +75,11 @@ const styles = {
     fontWeight: 'bold',
     color: '#0047B1',
     fontFamily: '"Shrikhand", serif',
-    marginRight: '20px',
-    flex: 1,
+
+    marginRight: '20px', 
+    flex: 1, 
+    marginLeft: '10px',
+
   },
   buttonContainer: {
     display: 'flex',
@@ -96,6 +101,7 @@ const styles = {
     height: '40px',
   },
 
+  
   '@media (max-width: 768px)': {
     logoText: {
       fontSize: '24px',

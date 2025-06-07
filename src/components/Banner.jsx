@@ -22,11 +22,7 @@ function Banner(props) {
       </div>
 
 
-      <div style={styles.dots}>
-        <div style={{ ...styles.dot, backgroundColor: '#0047BB' }} />
-        <div style={styles.dot} />
-        <div style={styles.dot} />
-      </div>
+      
     </div>
   );
 }

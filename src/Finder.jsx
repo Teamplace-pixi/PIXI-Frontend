@@ -137,6 +137,7 @@ export default function Finder({ posts }) {
       padding: '16px',
       paddingTop: '80px',
       paddingBottom: '80px',
+      backgroundColor: '#F8F8F8',
     },
     breadcrumb: {
       marginTop: '16px',
@@ -154,8 +155,12 @@ export default function Finder({ posts }) {
       marginTop: '12px',
     },
     deviceImage: {
-      width: '180px',
+      width: '170px',
       height: '120px',
+      borderRadius: '50px',
+  
+      
+      border: '1px solid #E3E3E3',
     },
     deviceNameStyle: {
       // deviceName과의 혼동을 피하기 위해 스타일 이름 변경
@@ -275,18 +280,23 @@ export default function Finder({ posts }) {
     },
 
     newPostButton: {
-      width: '100%',
-      backgroundColor: '#2563eb',
-      color: '#fff',
-      padding: '14px',
-      borderRadius: '12px',
+      width: 'auto', 
+      backgroundColor: '#006FFF',
+      color: '#FFFFFF',
+      padding: '14px 20px',
+      borderRadius: '30px',
       fontWeight: 'bold',
       fontSize: '16px',
-      marginTop: '32px',
       border: 'none',
       cursor: 'pointer',
-      marginBottom: '20px',
+      position: 'fixed',
+      bottom: '70px',
+      right: '20px',
+      zIndex: 1000,
+    
+      
     },
+    
     message: {
       textAlign: 'center',
       marginTop: '20px',
@@ -419,7 +429,7 @@ separator: { // ✨ separator 스타일 추가! ✨
         {/* 탭 내용 - '부품 가격' (deviceId와 deviceName이 있고 선택된 탭일 때만 표시) */}
         {deviceId && deviceName && selectedTab === '부품 가격' && (
           <div style={styles.partPricesSection}>
-            <h2 style={styles.sectionTitle}>부품별 예상 가격</h2>
+            <h2 style={styles.sectionTitle}>📌 2025.06.11(수) 기준</h2>
             {isLoading ? (
               <div style={styles.message}>부품 가격 정보를 불러오는 중...</div>
             ) : error ? (
@@ -462,7 +472,7 @@ separator: { // ✨ separator 스타일 추가! ✨
         {/* 탭 내용 - '수리센터' (deviceId와 deviceName이 있고 선택된 탭일 때만 표시) */}
         {deviceId && deviceName && selectedTab === '수리센터' && (
   <div style={styles.repairCentersSection}>
-    <h2 style={styles.sectionTitle}>내 주변 수리 센터</h2>
+    
     {shopList.length > 0 ? (
       shopList.map((shop, idx) => (
         <div
@@ -512,7 +522,7 @@ separator: { // ✨ separator 스타일 추가! ✨
         
         {deviceId && deviceName && selectedTab === '구해요' && (
           <div style={styles.requestsSection}>
-            <h2 style={styles.sectionTitle}>수리 부품/서비스 '구해요' 목록</h2>
+           
             <div style={styles.requestViewOptions}>
               <span style={styles.requestViewOptionBold}>상위보기</span>
               <span style={styles.requestViewOptionHighlight}>세부보기</span>
@@ -535,7 +545,7 @@ separator: { // ✨ separator 스타일 추가! ✨
                   <div style={styles.requestTitle}>{post.boardTitle}</div>
                   <div style={styles.requestDetails}>
                     <div>💰 {post.boardCost.toLocaleString()}원</div>
-                    <div>🕒 {post.boardDate}</div>
+                    <div>🗓 {post.boardDate}</div>
                   </div>
                   <div style={styles.requestTagsContainer}>
                     <div style={styles.requestTag}>{post.deviceBrand}</div>
@@ -549,7 +559,7 @@ separator: { // ✨ separator 스타일 추가! ✨
               onClick={handleNavigateToNewPost}
               style={styles.newPostButton}
             >
-              새 글 작성
+              +글쓰기
             </button>
           </div>
         )}

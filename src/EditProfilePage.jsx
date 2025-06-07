@@ -61,11 +61,11 @@ export default function EditProfilePage() {
     <div style={{ paddingTop: '60px' }}>
       <SettingHeader title="My Page" />
 
-      <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '16px' }}>
+      <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '16px', padding: '0 20px' }}>
         회원정보 변경
       </h2>
 
-      {/*프로필이미지*/}
+      {/* 프로필 이미지 */}
       <div style={{ textAlign: 'center', margin: '20px 0' }}>
         <div style={{ position: 'relative', display: 'inline-block' }}>
           <img
@@ -99,109 +99,111 @@ export default function EditProfilePage() {
         </div>
       </div>
 
-      {/* 입력 필드 */}
-      <div style={{ marginBottom: '16px' }}>
-        <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          이름 <span style={{ color: 'red' }}>*</span>
-        </label>
-        <input
-          type="text"
-          name="nickname"
-          value={datas.nickname || ''}
-          onChange={handleChange}
-          style={inputStyle}
-        />
-      </div>
+      {/* 입력 필드들 */}
+      <div style={{ padding: '0 16px' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
+            이름 <span style={{ color: 'red' }}>*</span>
+          </label>
+          <input
+            type="text"
+            name="nickname"
+            value={datas.nickname || ''}
+            onChange={handleChange}
+            style={inputStyle}
+          />
+        </div>
 
-      <div style={{ marginBottom: '16px' }}>
-        <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          주소 <span style={{ color: 'red' }}>*</span>
-        </label>
-        <input
-          type="text"
-          name="address"
-          value={datas.address || ''}
-          onChange={handleChange}
-          style={inputStyle}
-        />
-      </div>
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
+            주소 <span style={{ color: 'red' }}>*</span>
+          </label>
+          <input
+            type="text"
+            name="address"
+            value={datas.address || ''}
+            onChange={handleChange}
+            style={inputStyle}
+          />
+        </div>
 
-      <div style={{ marginBottom: '16px' }}>
-        <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          아이디 <span style={{ color: 'red' }}>*</span>
-        </label>
-        <input
-          type="email"
-          name="loginId"
-          value={datas.loginId || ''}
-          onChange={handleChange}
-          style={inputStyle}
-        />
-      </div>
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
+            아이디 <span style={{ color: 'red' }}>*</span>
+          </label>
+          <input
+            type="email"
+            name="loginId"
+            value={datas.loginId || ''}
+            onChange={handleChange}
+            style={inputStyle}
+          />
+        </div>
 
-      <div style={{ marginBottom: '16px' }}>
-        <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          현재 비밀번호
-        </label>
-        <input
-          type={form.showPassword ? 'text' : 'password'}
-          name="currentPassword"
-          value={form.currentPassword}
-          onChange={handleChange}
-          style={inputStyle}
-        />
-      </div>
-
-      <div style={{ marginBottom: '16px' }}>
-        <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          새 비밀번호
-        </label>
-        <div style={{ position: 'relative' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
+            현재 비밀번호
+          </label>
           <input
             type={form.showPassword ? 'text' : 'password'}
-            name="newPassword"
-            value={form.newPassword}
+            name="currentPassword"
+            value={form.currentPassword}
             onChange={handleChange}
-            style={{ ...inputStyle, paddingRight: '40px' }}
+            style={inputStyle}
           />
-          <button
-            type="button"
-            onClick={togglePasswordVisibility}
-            style={{
-              position: 'absolute',
-              top: '50%',
-              right: '10px',
-              transform: 'translateY(-50%)',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            <img
-              src={form.showPassword ? '/password-on.png' : '/password-off.png'}
-              alt="비밀번호 보기"
-              style={{ width: '20px', height: '20px' }}
-            />
-          </button>
         </div>
-      </div>
 
-      <button
-        onClick={handleSubmit}
-        style={{
-          width: '100%',
-          padding: '14px',
-          backgroundColor: '#2563eb',
-          color: 'white',
-          border: 'none',
-          borderRadius: '12px',
-          fontWeight: 'bold',
-          fontSize: '16px',
-          marginTop: '24px',
-        }}
-      >
-        저장하기
-      </button>
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ fontWeight: 'bold', fontSize: '14px' }}>
+            새 비밀번호
+          </label>
+          <div style={{ position: 'relative' }}>
+            <input
+              type={form.showPassword ? 'text' : 'password'}
+              name="newPassword"
+              value={form.newPassword}
+              onChange={handleChange}
+              style={{ ...inputStyle, paddingRight: '40px' }}
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '10px',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              <img
+                src={form.showPassword ? '/password-on.png' : '/password-off.png'}
+                alt="비밀번호 보기"
+                style={{ width: '20px', height: '20px' }}
+              />
+            </button>
+          </div>
+        </div>
+
+        <button
+          onClick={handleSubmit}
+          style={{
+            width: '100%',
+            padding: '14px',
+            backgroundColor: '#2563eb',
+            color: 'white',
+            border: 'none',
+            borderRadius: '12px',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            marginTop: '24px',
+          }}
+        >
+          저장하기
+        </button>
+      </div>
     </div>
   );
 }
@@ -213,4 +215,5 @@ const inputStyle = {
   borderRadius: '12px',
   border: '1px solid #ccc',
   marginTop: '8px',
+  boxSizing: 'border-box',
 };

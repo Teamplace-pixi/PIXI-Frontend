@@ -6,11 +6,12 @@ const BottomNav = () => {
   const location = useLocation();
 
   const tabs = [
-    { label: '홈', path: '/home' },
-    { label: 'AI챗봇', path: '/aichatmain' },
-    { label: 'AI견적', path: '/ai' },
-    { label: '마이페이지', path: '/mypage' },
+    { label: '홈', path: '/home', iconActive: '/navhome-active.svg', iconInactive: '/navhome.svg' },
+    { label: 'AI챗봇', path: '/aichatmain', iconActive: '/navai1-active.svg', iconInactive: '/navai1.svg' },
+    { label: 'AI견적', path: '/ai', iconActive: '/navai2-active.svg', iconInactive: '/navai2.svg' },
+    { label: '마이페이지', path: '/mypage', iconActive: '/navmy-active.svg', iconInactive: '/navmy.svg' },
   ];
+  
 
   return (
     <div
@@ -22,25 +23,42 @@ const BottomNav = () => {
         borderTop: '1px solid #ccc',
         display: 'flex',
         justifyContent: 'space-around',
-        padding: '10px 0',
+        padding: '6px 0',
         zIndex: 100,
       }}
     >
-      {tabs.map((tab) => (
-        <button
-          key={tab.path}
-          onClick={() => navigate(tab.path)}
-          style={{
-            fontSize: '12px',
-            color: location.pathname === tab.path ? '#1A4EC0' : '#666',
-            fontWeight: location.pathname === tab.path ? '600' : '400',
-            background: 'none',
-            border: 'none',
-          }}
-        >
-          {tab.label}
-        </button>
-      ))}
+      {tabs.map((tab) => {
+        const isActive = location.pathname === tab.path;
+        return (
+          <button
+            key={tab.path}
+            onClick={() => navigate(tab.path)}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              fontSize: '10px', 
+              color: isActive ? '#1A4EC0' : '#666',
+              fontWeight: isActive ? '600' : '400',
+              background: 'none',
+              border: 'none',
+              outline: 'none',
+              padding: 0,
+            }}
+          >
+            <img
+              src={isActive ? tab.iconActive : tab.iconInactive}
+              alt={tab.label}
+              style={{
+              width: 20,
+              height: 20,
+              marginBottom: 2,
+              }}
+              />
+            {tab.label}
+          </button>
+        );
+      })}
     </div>
   );
 };
