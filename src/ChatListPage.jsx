@@ -30,31 +30,29 @@ export default function ChatListPage() {
         <h2 style={styles.title}>채팅 목록</h2>
 
         <div style={styles.chatList}>
-          {chatList.map((chatList) => (
+          {chatList.map((chat) => (
             <div
-              key={chatList.roomId}
+              key={chat.roomId}
               style={styles.chatItem}
               onClick={() =>
-                navigate(`/chat/${chatList.roomId}`, {
+                navigate(`/chat/${chat.roomId}`, {
                   state: {
-                    roomId: chatList.roomId,
-                    userId: chatList.userId,
+                    roomId: chat.roomId,
+                    userId: chat.userId,
                   },
                 })
               }
             >
-              <img src={chatList.userImg} alt="avatar" style={styles.avatar} />
+              <img src={chat.userImg} alt="avatar" style={styles.avatar} />
               <div style={styles.chatInfo}>
                 <div style={styles.nameRow}>
-                  <span style={styles.name}>{chatList.userName}</span>
+                  <span style={styles.name}>{chat.userName}</span>
                   <span style={styles.time}>
-                    {chatList.lastMsgTime.replace('T', ' ')}
+                    {chat.lastMsgTime.replace('T', ' ')}
                   </span>
                 </div>
-                <div
-                  style={chatList.read ? styles.message : styles.messageNotRead}
-                >
-                  {chatList.lastMsg}
+                <div style={chat.read ? styles.message : styles.messageNotRead}>
+                  {chat.lastMsg}
                 </div>
               </div>
             </div>
