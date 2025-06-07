@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // .env에서 설정한 baseURL 사용
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL,  // /api → 환경별 주소로
+  baseURL: '/api', // /api → 환경별 주소로
   headers: {
     'Content-Type': 'application/json',
   },

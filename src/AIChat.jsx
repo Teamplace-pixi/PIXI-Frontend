@@ -1,36 +1,115 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import ChatUI from './components/ChatUI';
 import BottomNav from './components/BottomNav';
 import ChatHistorySidebar from './components/ChatHistorySidebar';
+import api from './api';
+import apiAI from './apiAI';
+import { useLocation } from 'react-router-dom';
 
 function AIChat() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [hover, setHover] = useState(false);  // 툴팁 표시 상태
-  const dummyHistories = [
-    { summary: '첫 번째 대화' },
-    { summary: '두 번째 대화' },
-    { summary: '세 번째 대화' },
-  ];
+  const [hover, setHover] = useState(false);
+  const [loginId, setLoginId] = useState('');
+  const [histories, setHistories] = useState([]);
+  const [selectedHistory, setSelectedHistory] = useState([]);
+  const location = useLocation();
+  const initialQuestion = location.state?.initialQuestion || '';
 
-  const handleSelect = (history) => {
-    console.log('선택한 히스토리:', history);
+  // 유저 정보 가져오기
+  useEffect(() => {
+    const fetchLoginId = async () => {
+      try {
+        const response = await api.get('/myPage/edit');
+        setLoginId(response.data.loginId);
+        console.log(loginId);
+      } catch (error) {
+        console.error('유저 정보 로딩 실패:', error);
+      }
+    };
+
+    fetchLoginId();
+  }, []);
+
+  // 히스토리 요약용 (사이드바)
+  useEffect(() => {
+    const fetchHistories = async () => {
+      if (!sidebarOpen || !loginId) return;
+
+      try {
+        const response = await api.get(`/ai/chat/history/${loginId}`);
+        const data = response.data;
+
+        // timestamp 기준 오름차순 정렬
+        const sortedData = [...data].sort(
+          (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+        );
+
+        const grouped = [];
+        let current = [];
+
+        sortedData.forEach((item) => {
+          if (item.user && current.length > 0) {
+            grouped.push([...current]);
+            current = [item];
+          } else {
+            current.push(item);
+          }
+        });
+        if (current.length > 0) grouped.push(current);
+
+        // 요약용 첫 번째 그룹만 사용
+        const summaries =
+          grouped.length > 0
+            ? [
+                {
+                  summary:
+                    grouped[0][0].content.slice(0, 15) +
+                    (grouped[0][0].content.length > 15 ? '...' : ''),
+                  messages: grouped[0],
+                },
+              ]
+            : [];
+
+        setHistories(summaries);
+      } catch (err) {
+        console.error('히스토리 불러오기 실패:', err);
+      }
+    };
+
+    fetchHistories();
+  }, [sidebarOpen, loginId]);
+
+  const handleSelect = async (history) => {
+    console.log('선택한 히스토리 요약:', history);
+
+    try {
+      const response = await api.get(`/ai/chat/history/${loginId}`);
+      const data = response.data;
+
+      const sortedData = [...data].sort(
+        (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+      );
+      setSelectedHistory(sortedData);
+      setSidebarOpen(false);
+    } catch (error) {
+      console.error('전체 히스토리 불러오기 실패:', error);
+    }
   };
 
   return (
     <div style={styles.container}>
       <ChatHistorySidebar
-        histories={dummyHistories}
+        histories={histories}
         onSelect={handleSelect}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
 
       <Header title="AI Chat" />
-      
-      {/* 사이드바 열기 버튼 + 커스텀 툴팁 */}
+
       {!sidebarOpen && (
-        <div 
+        <div
           style={styles.tooltipWrapper}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -38,7 +117,6 @@ function AIChat() {
           <button
             style={styles.openSidebarBtn}
             onClick={() => setSidebarOpen(true)}
-            aria-label="채팅 히스토리 열기"
           >
             ☰
           </button>
@@ -48,7 +126,7 @@ function AIChat() {
 
       <div style={{ ...styles.mainContent, marginLeft: sidebarOpen ? 280 : 0 }}>
         <div style={styles.chatBoxWrapper}>
-          <ChatUI />
+          <ChatUI predefinedHistory={selectedHistory} />
         </div>
       </div>
 
@@ -86,7 +164,7 @@ const styles = {
   },
   tooltip: {
     position: 'absolute',
-    top: '100%',  // 버튼 바로 아래
+    top: '100%',
     left: '50%',
     transform: 'translateX(-50%)',
     marginTop: 6,

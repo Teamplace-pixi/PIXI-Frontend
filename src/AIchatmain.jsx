@@ -1,4 +1,3 @@
-// AIchatmain.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from './components/BottomNav';
@@ -10,8 +9,11 @@ export default function AIchatmain() {
   const handleSubmit = () => {
     if (!question.trim()) return;
     console.log('AI에게 보낸 질문:', question);
-
     navigate('/aichat', { state: { initialQuestion: question } });
+  };
+
+  const handleGoToHistory = () => {
+    navigate('/aichat'); // initialQuestion 없이 history mode로 이동
   };
 
   return (
@@ -52,6 +54,11 @@ export default function AIchatmain() {
           FIXI가 정확한 수리가이드를 제시할 수 있도록 전자기기에 대한 명확하고
           자세한 설명을 바탕으로 질문해주세요!
         </div>
+
+        {/* 기록 보기 버튼 */}
+        <button style={styles.historyButton} onClick={handleGoToHistory}>
+          📜 기록 보기
+        </button>
       </div>
       <BottomNav />
     </>
@@ -63,8 +70,8 @@ const styles = {
     padding: '24px',
     fontFamily: 'sans-serif',
     textAlign: 'center',
-
-    paddingBottom: 'calc(24px + [BottomNav 높이])',
+    paddingBottom: '80px', // BottomNav 높이 고려
+    position: 'relative',
   },
   imageContainer: {
     display: 'flex',
@@ -109,5 +116,18 @@ const styles = {
     maxWidth: '360px',
     marginInline: 'auto',
     lineHeight: '1.4',
+  },
+  historyButton: {
+    position: 'fixed',
+    bottom: '90px',
+    right: '20px',
+    backgroundColor: '#fff',
+    color: '#333',
+    border: '1px solid #ccc',
+    borderRadius: '20px',
+    padding: '8px 12px',
+    fontSize: '13px',
+    cursor: 'pointer',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
   },
 };

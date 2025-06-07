@@ -9,13 +9,13 @@ import {
   Avatar,
 } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import apiAI from '../apiAI'; // AI API 연동
-import api from '../api'; // 마이페이지에서 프로필 id 받아오기 위함
+import apiAI from '../apiAI';
+import api from '../api';
 import './ChatUI.css';
 
 const AVATAR_IMAGE = 'FIXIicon.png';
 
-const ChatUI = () => {
+const ChatUI = ({ predefinedHistory = [] }) => {
   const location = useLocation();
   const initialQuestion = location.state?.initialQuestion || '';
 
@@ -30,18 +30,17 @@ const ChatUI = () => {
     setMessages((prev) => [
       ...prev,
       { direction: 'outgoing', content: userMessage },
-      { direction: 'incoming', content: '입력 중...' }, // 로딩 메시지
+      { direction: 'incoming', content: '입력 중...' },
     ]);
 
     try {
-      const response = await apiAI.post('/ai/chat', {
+      const response = await api.post('/ai/chat', {
         user_id: loginId,
         message: userMessage,
       });
 
       const aiMessage = response.data?.reply || 'AI 응답이 없습니다.';
 
-      // 마지막 "입력 중..." 메시지 제거하고 새 메시지 추가
       setMessages((prev) => [
         ...prev.slice(0, -1),
         { direction: 'incoming', content: aiMessage },
@@ -73,17 +72,21 @@ const ChatUI = () => {
   }, []);
 
   useEffect(() => {
-    if (initialQuestion && loginId && !hasSentInitial.current) {
-      hasSentInitial.current = true; // 다시 실행되지 않도록 설정
-
-      // 메시지 추가 및 전송
+    if (predefinedHistory.length > 0) {
+      const loaded = predefinedHistory.map((msg) => ({
+        direction: msg.user ? 'outgoing' : 'incoming',
+        content: msg.content,
+      }));
+      setMessages(loaded);
+    } else if (initialQuestion && loginId && !hasSentInitial.current) {
+      hasSentInitial.current = true;
       setMessages((prev) => [
         ...prev,
         { direction: 'outgoing', content: initialQuestion },
         { direction: 'incoming', content: '입력 중...' },
       ]);
 
-      apiAI
+      api
         .post('/ai/chat', {
           user_id: loginId,
           message: initialQuestion,
@@ -106,7 +109,7 @@ const ChatUI = () => {
           ]);
         });
     }
-  }, [initialQuestion, loginId]);
+  }, [initialQuestion, loginId, predefinedHistory]);
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -117,33 +120,45 @@ const ChatUI = () => {
           style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
         >
           <MessageList style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
-            {messages.map((msg, idx) => (
-              <Message
-                key={idx}
-                model={{
-                  direction: msg.direction,
-                  type: 'custom',
+            {messages.length === 0 ? (
+              <div
+                style={{
+                  textAlign: 'center',
+                  color: '#888',
+                  marginTop: '2rem',
                 }}
               >
-                {msg.direction === 'incoming' && (
-                  <Avatar src={AVATAR_IMAGE} name="FIXI" />
-                )}
-                <Message.CustomContent>
-                  <div
-                    style={
-                      msg.direction === 'incoming'
-                        ? styles.botBubble
-                        : styles.userBubble
-                    }
-                  >
-                    {msg.direction === 'incoming' && (
-                      <div style={styles.botName}>FIXI</div>
-                    )}
-                    <div>{msg.content}</div>
-                  </div>
-                </Message.CustomContent>
-              </Message>
-            ))}
+                채팅 내역이 없습니다
+              </div>
+            ) : (
+              messages.map((msg, idx) => (
+                <Message
+                  key={idx}
+                  model={{
+                    direction: msg.direction,
+                    type: 'custom',
+                  }}
+                >
+                  {msg.direction === 'incoming' && (
+                    <Avatar src={AVATAR_IMAGE} name="FIXI" />
+                  )}
+                  <Message.CustomContent>
+                    <div
+                      style={
+                        msg.direction === 'incoming'
+                          ? styles.botBubble
+                          : styles.userBubble
+                      }
+                    >
+                      {msg.direction === 'incoming' && (
+                        <div style={styles.botName}>FIXI</div>
+                      )}
+                      <div>{msg.content}</div>
+                    </div>
+                  </Message.CustomContent>
+                </Message>
+              ))
+            )}
           </MessageList>
 
           <MessageInput

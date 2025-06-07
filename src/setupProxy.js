@@ -17,7 +17,7 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://api.hifixi.com',
+      target: process.env.REACT_APP_API_BASE_URL,
       changeOrigin: true,
       pathRewrite: {
         '^/api': '',
