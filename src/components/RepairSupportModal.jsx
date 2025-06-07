@@ -44,6 +44,7 @@ export default function RepairSupportModal({
   }, [applyId]);
 
   const handleSubmitReview = async () => {
+    console.log('후기 제출 버튼 클릭됨');
     if (!applyData || userId == null) return;
 
     if (!reviewCost || !reviewDuration || stars === 0 || !review) {

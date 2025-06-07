@@ -229,6 +229,7 @@ export default function ChatRoom() {
 
               if (!repairMsg) return alert('수리 메시지를 찾을 수 없습니다.');
               const applyRes = await api.get(`/apply/apply_id=${id}`);
+              console.log(applyRes);
               const shopId = applyRes.data.shopId;
 
               await api.put(`/board/board_id=${board}`, {
@@ -314,7 +315,6 @@ export default function ChatRoom() {
     </div>
   );
 }
-
 
 const styles = {
   page: {
