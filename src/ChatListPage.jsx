@@ -7,7 +7,6 @@ import api from './api';
 export default function ChatListPage() {
   const navigate = useNavigate();
   const [chatList, setChatList] = useState([]);
-  const [hasRead, setHasRead] = useState(false);
 
   useEffect(() => {
     const fetchChatList = async () => {
@@ -15,7 +14,6 @@ export default function ChatListPage() {
         const response = await api.get(`/matchChat/rooms`);
         console.log('채팅 목록 응답:', response.data);
         setChatList(response.data);
-        setHasRead(response.data.read);
       } catch (error) {
         console.error('채팅 목록 불러오기 실패:', error);
       }
@@ -53,7 +51,9 @@ export default function ChatListPage() {
                     {chatList.lastMsgTime.replace('T', ' ')}
                   </span>
                 </div>
-                <div style={hasRead ? styles.messageNotRead : styles.message}>
+                <div
+                  style={chatList.read ? styles.messageNotRead : styles.message}
+                >
                   {chatList.lastMsg}
                 </div>
               </div>

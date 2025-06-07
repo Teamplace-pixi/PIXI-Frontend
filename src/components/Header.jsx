@@ -34,6 +34,7 @@ function Header({ title = 'FIXI' }) {
     fetchAlert();
   });
 
+  const baseURL = process.env.REACT_APP_API_BASE_URL;
   const connectStomp = (tokenWs, onMessage) => {
     const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
     const client = new Client({
