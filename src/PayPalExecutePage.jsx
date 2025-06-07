@@ -19,6 +19,7 @@ export default function PayPalExecutePage() {
           },
         });
         console.log('구독 처리 완료:', res.data);
+        alert('구독을 완료하셨습니다!');
         navigate('/myPage');
       } catch (err) {
         console.error('구독 처리 실패:', err);
