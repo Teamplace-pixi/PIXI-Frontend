@@ -20,6 +20,7 @@ export default function ChatRoom() {
   const [id, setApplyId] = useState(null);
   const [board, setBoard] = useState(null);
   const [title, setTitle] = useState(null);
+  const [hasSentStartMessage, setHasSentStartMessage] = useState(false);
 
   const containerRef = useRef(null);
   const token = localStorage.getItem('token');
@@ -110,9 +111,6 @@ export default function ChatRoom() {
     const isRepairSupport =
       parsed?.applyId && parsed.title && parsed?.boardId && parsed?.boardTitle;
 
-    if (parsed?.boardId) setBoard(parsed.boardId);
-    if (parsed?.boardTitle) setTitle(parsed.boardTitle);
-
     return (
       <div
         key={index}
@@ -122,12 +120,12 @@ export default function ChatRoom() {
           style={isMine ? styles.chatBoxRightAfter : styles.chatBoxLeftAfter}
         />
 
-        {msg.msgType?.includes('시작') && (
+        {/* {msg.msgType?.includes('시작') && (
           <p style={styles.label}>[ 수리 시작 ]</p>
         )}
         {msg.msgType?.includes('완료') && (
           <p style={styles.label}>[ 수리 완료 ]</p>
-        )}
+        )} */}
 
         {isRepairSupport ? (
           <div>
@@ -138,6 +136,8 @@ export default function ChatRoom() {
               onClick={() => {
                 setApplyId(parsed.applyId);
                 setShowModal(true);
+                setTitle(parsed.boardTitle);
+                setBoard(parsed.boardId);
               }}
             >
               내용 확인하기
@@ -212,11 +212,14 @@ export default function ChatRoom() {
       {showModal && (
         <RepairSupportModal
           applyId={id}
+          boardId={board}
           onClose={() => setShowModal(false)}
           onStartRepair={async () => {
             try {
               setShowModal(false);
+              if (hasSentStartMessage) return;
               setRepairStarted(true);
+              setHasSentStartMessage(true);
 
               const repairMsg = chatHistory.find((msg) => {
                 try {
@@ -239,7 +242,12 @@ export default function ChatRoom() {
 
               const repairStartMessage = {
                 roomId: roomId,
-                message: `[수리 시작]\n${title}`,
+                message: JSON.stringify({
+                  boardId: board,
+                  boardTitle: title,
+                  title: '수리 시작',
+                  applyId: id,
+                }),
                 receiverId: receiverId,
               };
 
@@ -276,19 +284,31 @@ export default function ChatRoom() {
               });
 
               if (!repairMsg) return alert('수리 메시지를 찾을 수 없습니다.');
-              const parsed = JSON.parse(repairMsg.content);
 
               const applyRes = await api.get(`/apply/apply_id=${id}`);
               const shopId = applyRes.data.shopId;
+              console.log(
+                'applyRes: ',
+                applyRes,
+                'shop: ',
+                shopId,
+                'board: ',
+                board
+              );
 
-              await api.put(`/board/board_id=${parsed.boardId}`, {
+              await api.put(`/board/board_id=${board}`, {
                 status: '모집 완료',
                 shopId: shopId,
               });
 
               const repairCompleteMessage = {
                 roomId: roomId,
-                message: `[수리 완료]\n${parsed.boardTitle}`,
+                message: JSON.stringify({
+                  boardId: board,
+                  boardTitle: title,
+                  title: '수리 완료',
+                  applyId: id,
+                }),
                 receiverId: receiverId,
               };
 

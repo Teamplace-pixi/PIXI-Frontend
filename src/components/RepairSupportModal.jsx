@@ -3,8 +3,10 @@ import api from '../api';
 
 export default function RepairSupportModal({
   applyId,
+  boardId,
   onClose,
   onStartRepair,
+  onCompleteRepair,
 }) {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [review, setReview] = useState('');
@@ -14,12 +16,28 @@ export default function RepairSupportModal({
   const [reviewDuration, setReviewDuration] = useState('');
   const [userId, setUserId] = useState(null);
 
+  const [boardStatus, setBoardStatus] = useState(null);
+  const [reviewed, setReviewed] = useState(false);
+
+  useEffect(() => {
+    if (!boardId) return;
+    const fetchBoard = async () => {
+      try {
+        const res = await api.get(`/board/board_id=${boardId}`);
+        setBoardStatus(res.data.boardStatus);
+      } catch (err) {
+        console.error('board 상태 로드 실패:', err);
+      }
+    };
+    fetchBoard();
+  }, [boardId]);
+
   useEffect(() => {
     // ✅ 사용자 ID 가져오기
     const fetchUserId = async () => {
       try {
         const res = await api.get('/users/userId');
-        setUserId(res.data.user_id);
+        setUserId(res.data.userId);
       } catch (err) {
         console.error('유저 정보 로드 실패:', err);
       }
@@ -45,7 +63,7 @@ export default function RepairSupportModal({
 
   const handleSubmitReview = async () => {
     console.log('후기 제출 버튼 클릭됨');
-    if (!applyData || userId == null) return;
+    // if (!applyData || userId == null) return;
 
     if (!reviewCost || !reviewDuration || stars === 0 || !review) {
       alert('모든 항목을 입력해주세요.');
@@ -56,21 +74,36 @@ export default function RepairSupportModal({
       const payload = {
         user_id: userId,
         shop_id: applyData.shopId,
-        device_id: 0,
+        device_id: 13,
         reviewStar: stars,
         reviewTitle: '수리 후기', // 필요 시 입력란 추가 가능
         reviewContent: review,
         reviewTime: reviewDuration,
-        reviewMoney: parseInt(reviewCost.replace(/[^0-9]/g, ''), 10),
+        reviewMoney: reviewCost,
       };
-
-      await api.post('/shop/review', payload);
+      console.log('후기 시도:', payload);
+      await api.post('/shop/review', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       console.log('후기 제출 완료:', payload);
       alert('후기 등록이 완료되었습니다!');
+      setReviewed(true);
       onClose(); // 모달 닫기
+      onCompleteRepair();
+      setShowReviewForm(false); // 후기 작성 폼 닫기
     } catch (error) {
       console.error('후기 제출 실패:', error);
     }
+  };
+
+  const handleCompleteClick = () => {
+    if (reviewed) {
+      alert('이미 완료한 작업입니다.');
+      return;
+    }
+    onCompleteRepair();
   };
 
   return (
@@ -127,15 +160,27 @@ export default function RepairSupportModal({
               />
             </div>
 
-            <button style={styles.primaryButton} onClick={onStartRepair}>
-              수리 시작하기
-            </button>
-            <button
-              style={styles.secondaryButton}
-              onClick={() => setShowReviewForm(true)}
-            >
-              수리 완료하기
-            </button>
+            {boardStatus === '모집중' && (
+              <button style={styles.primaryButton} onClick={onStartRepair}>
+                수리 시작하기
+              </button>
+            )}
+            {boardStatus === '예약중' && (
+              <button
+                style={styles.primaryButton}
+                onClick={() => setShowReviewForm(true)}
+              >
+                수리 완료하기
+              </button>
+            )}
+            {boardStatus === '모집 완료' && (
+              <button
+                style={styles.secondaryButton}
+                onClick={() => handleCompleteClick()}
+              >
+                수리 완료하기
+              </button>
+            )}
           </>
         ) : (
           <>
