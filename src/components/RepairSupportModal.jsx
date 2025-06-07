@@ -46,6 +46,11 @@ export default function RepairSupportModal({
   const handleSubmitReview = async () => {
     if (!applyData || userId == null) return;
 
+    if (!reviewCost || !reviewDuration || stars === 0 || !review) {
+      alert('모든 항목을 입력해주세요.');
+      return;
+    }
+
     try {
       const payload = {
         user_id: userId,
@@ -55,11 +60,12 @@ export default function RepairSupportModal({
         reviewTitle: '수리 후기', // 필요 시 입력란 추가 가능
         reviewContent: review,
         reviewTime: reviewDuration,
-        reviewMoney: parseInt(reviewCost),
+        reviewMoney: parseInt(reviewCost.replace(/[^0-9]/g, ''), 10),
       };
 
       await api.post('/shop/review', payload);
       console.log('후기 제출 완료:', payload);
+      alert('후기 등록이 완료되었습니다!');
       onClose(); // 모달 닫기
     } catch (error) {
       console.error('후기 제출 실패:', error);
