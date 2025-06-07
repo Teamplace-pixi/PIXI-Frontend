@@ -105,20 +105,9 @@ export default function ChatRoom() {
   const renderMessage = (msg, index) => {
     const isMine = msg.senderId !== receiverId;
 
-    let parsed = null;
+    let parsed;
     try {
-      // content가 문자열이면 쉼표 등 이상한 부분 정리 후 파싱 시도
-      if (typeof msg.content === 'string') {
-        let cleaned = msg.content.trim();
-
-        // 끝에 쉼표 있으면 제거 (JSON 오류 방지)
-        if (cleaned.endsWith(',')) {
-          cleaned = cleaned.slice(0, -1);
-        }
-
-        parsed = JSON.parse(cleaned);
-        console.log('파싱 성공:', parsed);
-      }
+      parsed = JSON.parse(msg.content);
     } catch (e) {
       parsed = null;
       console.error('메시지 파싱 실패:', e);
