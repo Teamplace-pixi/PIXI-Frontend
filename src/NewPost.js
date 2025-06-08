@@ -15,8 +15,8 @@ export default function NewPost() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const deviceId = location.state?.id;
-  const passedDeviceName = location.state?.name;
+  const deviceId = location.state?.id || null;
+  const passedDeviceName = location.state?.name || null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +47,8 @@ export default function NewPost() {
         multipartFiles: [''],
       };
 
+      console.log(boardData);
+
       formData.append(
         'board',
         new Blob([JSON.stringify(boardData)], { type: 'application/json' })
@@ -63,13 +65,18 @@ export default function NewPost() {
       });
 
       console.log('업로드 성공:', response.data);
+      console.log(deviceId);
       alert('글이 등록되었습니다.');
-      navigate('/finder', {
-        state: {
-          id: deviceId || '',
-          name: passedDeviceName || '',
-        },
-      });
+      if (deviceId === null) {
+        navigate('/home');
+      } else {
+        navigate('/finder', {
+          state: {
+            id: deviceId || '',
+            name: passedDeviceName || '',
+          },
+        });
+      }
     } catch (err) {
       console.error('업로드 실패:', err);
       alert('글 등록에 실패했습니다.');
@@ -152,7 +159,11 @@ export default function NewPost() {
         multiple
         accept="image/*"
         onChange={handleFileChange}
-        style={{ marginBottom: '16px', marginLeft: '10px', marginRight: '10px' }} // 파일 입력도 동일 간격 적용
+        style={{
+          marginBottom: '16px',
+          marginLeft: '10px',
+          marginRight: '10px',
+        }} // 파일 입력도 동일 간격 적용
       />
 
       <button onClick={handleSubmit} style={submitButtonStyle}>

@@ -37,34 +37,42 @@ function AIChat() {
       if (!sidebarOpen || !loginId) return;
 
       try {
-        const response = await api.get(`/ai/chat/history/${loginId}`);
-        const data = response.data;
+        // 저장된 세션 ID 리스트 불러오기
+        const sessionPairs =
+          JSON.parse(localStorage.getItem('sessionPairs')) || [];
 
-        // 1. sessionId로 그룹화
-        const groupedBySession = {};
-        data.forEach((item) => {
-          const sid = item.sessionId;
-          if (!groupedBySession[sid]) groupedBySession[sid] = [];
-          groupedBySession[sid].push(item);
-        });
-
-        // 2. newChat이 true인 메시지를 요약으로 사용
-        const summaries = Object.entries(groupedBySession).map(
-          ([sessionId, messages]) => {
-            const newChatMsg = messages.find((msg) => msg.newChat === true);
-            const summaryText = newChatMsg
-              ? newChatMsg.content.slice(0, 15) +
-                (newChatMsg.content.length > 15 ? '...' : '')
-              : '(대화 없음)';
-            return {
-              sessionId,
-              summary: summaryText,
-              messages,
-            };
-          }
+        const userSessions = sessionPairs.filter(
+          (pair) => pair.loginId === loginId
         );
 
-        setHistories(summaries);
+        const historyPromises = userSessions.map((pair) =>
+          api.get(`/ai/chat/history/${pair.loginId}/${pair.sessionId}`)
+        );
+
+        const results = await Promise.all(historyPromises);
+
+        const allHistories = results.map((res, index) => {
+          const sessionId = userSessions[index].sessionId;
+          const messages = res.data;
+
+          // 가장 timestamp가 이른 메시지를 제목으로 사용
+          const sorted = [...messages].sort(
+            (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+          );
+          const summaryText =
+            sorted.length > 0
+              ? sorted[0].content.slice(0, 15) +
+                (sorted[0].content.length > 15 ? '...' : '')
+              : '(대화 없음)';
+
+          return {
+            sessionId,
+            summary: summaryText,
+            messages: sorted,
+          };
+        });
+
+        setHistories(allHistories);
       } catch (err) {
         console.error('히스토리 불러오기 실패:', err);
       }
@@ -74,10 +82,7 @@ function AIChat() {
   }, [sidebarOpen, loginId]);
 
   const handleSelect = (history) => {
-    const sortedData = [...history.messages].sort(
-      (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-    );
-    setSelectedHistory(sortedData);
+    setSelectedHistory(history.messages);
     setSidebarOpen(false);
   };
 

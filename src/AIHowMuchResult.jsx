@@ -17,7 +17,15 @@ const AIHowMuchResult = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowDetails(true);
-      audioRef.current && audioRef.current.play();
+      if (audioRef.current) {
+        // 유저 인터랙션 없으면 실패할 수도 있음 → 무시
+        audioRef.current.play().catch((err) => {
+          console.warn(
+            'Audio autoplay failed (possibly due to no user interaction):',
+            err
+          );
+        });
+      }
     }, 1500); // 파란 영역 애니메이션 후에 회색 영역 등장
 
     return () => clearTimeout(timer);
@@ -59,7 +67,12 @@ const AIHowMuchResult = () => {
 
         <div className="btn-group">
           <button className="btn-outline">견적서 저장하기</button>
-          <button className="btn-primary">구해요로 이동</button>
+          <button
+            className="btn-primary"
+            onClick={() => navigate('/new-post/')}
+          >
+            구해요로 이동
+          </button>
         </div>
       </div>
     </div>
