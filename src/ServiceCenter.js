@@ -211,15 +211,18 @@ const centerNameStyle = {
 
 const contactButtonStyle = {
   display: 'block',
-  margin: '10px auto',
-  padding: '5px 180px',
+  width: '50%', 
+  margin: '10px auto', 
+  padding: '4px 0', 
   backgroundColor: '#FFFFFF',
   color: '#0047B1',
   border: '1px solid #0047B1',
   borderRadius: '30px',
   cursor: 'pointer',
+  textAlign: 'center',
   whiteSpace: 'nowrap',
 };
+
 
 const detailsStyle = {
   margin: '10px 0',
