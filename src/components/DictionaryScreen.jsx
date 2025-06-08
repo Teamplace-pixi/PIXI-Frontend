@@ -26,7 +26,7 @@ function DictionaryScreen({
       <ProgressBar step={step} />
     </div>
 
-      {/* ✅ 메인 컨텐츠 */}
+      
       <div className="mobile-container" style={{ padding: '0 16px', color: '#FFFFFF' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', marginTop: '20px' }}>
           <div style={{ width: '20px', height: '20px', backgroundColor: '#FDC500', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>✔</div>
