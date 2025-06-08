@@ -40,36 +40,29 @@ function AIChat() {
         const response = await api.get(`/ai/chat/history/${loginId}`);
         const data = response.data;
 
-        // timestamp 기준 오름차순 정렬
-        const sortedData = [...data].sort(
-          (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-        );
-
-        const grouped = [];
-        let current = [];
-
-        sortedData.forEach((item) => {
-          if (item.user && current.length > 0) {
-            grouped.push([...current]);
-            current = [item];
-          } else {
-            current.push(item);
-          }
+        // 1. sessionId로 그룹화
+        const groupedBySession = {};
+        data.forEach((item) => {
+          const sid = item.sessionId;
+          if (!groupedBySession[sid]) groupedBySession[sid] = [];
+          groupedBySession[sid].push(item);
         });
-        if (current.length > 0) grouped.push(current);
 
-        // 요약용 첫 번째 그룹만 사용
-        const summaries =
-          grouped.length > 0
-            ? [
-                {
-                  summary:
-                    grouped[0][0].content.slice(0, 15) +
-                    (grouped[0][0].content.length > 15 ? '...' : ''),
-                  messages: grouped[0],
-                },
-              ]
-            : [];
+        // 2. newChat이 true인 메시지를 요약으로 사용
+        const summaries = Object.entries(groupedBySession).map(
+          ([sessionId, messages]) => {
+            const newChatMsg = messages.find((msg) => msg.newChat === true);
+            const summaryText = newChatMsg
+              ? newChatMsg.content.slice(0, 15) +
+                (newChatMsg.content.length > 15 ? '...' : '')
+              : '(대화 없음)';
+            return {
+              sessionId,
+              summary: summaryText,
+              messages,
+            };
+          }
+        );
 
         setHistories(summaries);
       } catch (err) {
@@ -80,21 +73,12 @@ function AIChat() {
     fetchHistories();
   }, [sidebarOpen, loginId]);
 
-  const handleSelect = async (history) => {
-    console.log('선택한 히스토리 요약:', history);
-
-    try {
-      const response = await api.get(`/ai/chat/history/${loginId}`);
-      const data = response.data;
-
-      const sortedData = [...data].sort(
-        (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-      );
-      setSelectedHistory(sortedData);
-      setSidebarOpen(false);
-    } catch (error) {
-      console.error('전체 히스토리 불러오기 실패:', error);
-    }
+  const handleSelect = (history) => {
+    const sortedData = [...history.messages].sort(
+      (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+    );
+    setSelectedHistory(sortedData);
+    setSidebarOpen(false);
   };
 
   return (
