@@ -22,7 +22,9 @@ function DictionaryScreen({
     <div className="mobile-wrapper" onClick={handleClick} style={{ backgroundColor: '#fffff', minHeight: '100vh' }}>
       
       {/* ✅ 고정된 상단 프로그레스 바 */}
+      <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '16px' }}>
       <ProgressBar step={step} />
+    </div>
 
       {/* ✅ 메인 컨텐츠 */}
       <div className="mobile-container" style={{ padding: '0 16px', color: '#FFFFFF' }}>
