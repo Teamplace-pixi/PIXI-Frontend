@@ -10,7 +10,6 @@ import { Client } from '@stomp/stompjs';
 
 export default function ChatRoom() {
   const location = useLocation();
-
   const roomId = location.state?.roomId;
 
   const [chatHistory, setChatHistory] = useState([]);
@@ -19,6 +18,10 @@ export default function ChatRoom() {
   const [showModal, setShowModal] = useState(false);
   const [repairStarted, setRepairStarted] = useState(false);
   const [repairCompleted, setRepairCompleted] = useState(false);
+  const [id, setApplyId] = useState(null);
+  const [board, setBoard] = useState(null);
+  const [title, setTitle] = useState(null);
+  const [hasSentStartMessage, setHasSentStartMessage] = useState(false);
 
   const containerRef = useRef(null);
   const token = localStorage.getItem('token');
@@ -33,8 +36,6 @@ export default function ChatRoom() {
       });
 
       const history = response.data.chathistory;
-
-      // 예시: 최신 메시지가 맨 앞이면 뒤집어서 오래된 메시지가 앞에 오도록
       const orderedHistory =
         history[0]?.timestamp > history[history.length - 1]?.timestamp
           ? [...history].reverse()
@@ -47,12 +48,26 @@ export default function ChatRoom() {
     }
   };
 
+  const userId = parseInt(localStorage.getItem('userId'));
+
   useEffect(() => {
     fetchChatHistory();
     if (tokenWs) {
       connectStomp(tokenWs, (body) => {
-        const newMessage = JSON.parse(body);
-        setChatHistory((prev) => [...prev, newMessage]);
+        const parsed = JSON.parse(body);
+        if (parseInt(parsed.senderId) === userId) return;
+
+        const now = new Date().toISOString();
+        const fixedMessage = {
+          content: parsed.message,
+          senderId: parsed.senderId,
+          receiverId: parsed.receiverId,
+          roomId: parsed.roomId,
+          timestamp: now,
+          msgType: '',
+        };
+
+        setChatHistory((prev) => [...prev, fixedMessage]);
       });
     }
   }, [roomId]);
@@ -68,16 +83,14 @@ export default function ChatRoom() {
 
     try {
       const response = await api.post('/matchChat/send', messageData);
-      console.log('메시지 전송 응답:', response.data);
       setInputText('');
 
       const now = new Date().toISOString();
-
       const sentMessage = {
         ...response.data,
-        content: inputText, // 직접 content 추가
+        content: inputText,
         timestamp: now,
-        msgType: '', // 메시지 타입이 없다면 빈 문자열
+        msgType: '',
       };
 
       setChatHistory((prev) => [...prev, sentMessage]);
@@ -88,6 +101,17 @@ export default function ChatRoom() {
 
   const renderMessage = (msg, index) => {
     const isMine = msg.senderId !== receiverId;
+
+    let parsed;
+    try {
+      parsed = JSON.parse(msg.content);
+    } catch (e) {
+      parsed = null;
+    }
+
+    const isRepairSupport =
+      parsed?.applyId && parsed.title && parsed?.boardId && parsed?.boardTitle;
+
     return (
       <div
         key={index}
@@ -96,20 +120,40 @@ export default function ChatRoom() {
         <span
           style={isMine ? styles.chatBoxRightAfter : styles.chatBoxLeftAfter}
         />
-        {msg.msgType?.includes('시작') && (
+
+        {/* {msg.msgType?.includes('시작') && (
           <p style={styles.label}>[ 수리 시작 ]</p>
         )}
         {msg.msgType?.includes('완료') && (
           <p style={styles.label}>[ 수리 완료 ]</p>
+        )} */}
+
+        {isRepairSupport ? (
+          <div>
+            <p style={styles.label}>[ {parsed.title} ]</p>
+            <p>{parsed.boardTitle}</p>
+            <button
+              style={styles.modalButton}
+              onClick={() => {
+                setApplyId(parsed.applyId);
+                setShowModal(true);
+                setTitle(parsed.boardTitle);
+                setBoard(parsed.boardId);
+              }}
+            >
+              내용 확인하기
+            </button>
+          </div>
+        ) : (
+          <p>{msg.content}</p>
         )}
-        <p>{msg.content}</p>
       </div>
     );
   };
 
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const connectStomp = (tokenWs, onMessage) => {
-    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
+    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
@@ -117,9 +161,7 @@ export default function ChatRoom() {
       },
       debug: (str) => console.log('STOMP:', str),
       onConnect: () => {
-        console.log('🟢 연결됨');
         client.subscribe(`/user/queue/messages.${roomId}`, (message) => {
-          console.log('📩 메시지 수신:', message.body);
           onMessage(message.body);
         });
       },
@@ -127,7 +169,6 @@ export default function ChatRoom() {
         console.error('❌ STOMP 오류', frame.headers['message']);
       },
     });
-
     client.activate();
     return client;
   };
@@ -153,7 +194,6 @@ export default function ChatRoom() {
         {chatHistory.map((msg, idx) => renderMessage(msg, idx))}
       </div>
 
-      {/* 입력창 */}
       <div style={styles.inputContainer}>
         <input
           type="text"
@@ -172,14 +212,124 @@ export default function ChatRoom() {
 
       {showModal && (
         <RepairSupportModal
+          applyId={id}
+          boardId={board}
           onClose={() => setShowModal(false)}
-          onStartRepair={() => {
-            setRepairStarted(true);
-            setShowModal(false);
+          onStartRepair={async () => {
+            try {
+              setShowModal(false);
+              if (hasSentStartMessage) return;
+              setRepairStarted(true);
+              setHasSentStartMessage(true);
+
+              const repairMsg = chatHistory.find((msg) => {
+                try {
+                  const parsed = JSON.parse(msg.content);
+                  return parsed && parsed.boardId && parsed.boardTitle;
+                } catch {
+                  return false;
+                }
+              });
+
+              if (!repairMsg) return alert('수리 메시지를 찾을 수 없습니다.');
+              const applyRes = await api.get(`/apply/apply_id=${id}`);
+              console.log(applyRes);
+              const shopId = applyRes.data.shopId;
+
+              await api.put(`/board/board_id=${board}`, {
+                status: '예약중',
+                shopId: shopId,
+              });
+
+              const repairStartMessage = {
+                roomId: roomId,
+                message: JSON.stringify({
+                  boardId: board,
+                  boardTitle: title,
+                  title: '수리 시작',
+                  applyId: id,
+                }),
+                receiverId: receiverId,
+              };
+
+              const response = await api.post(
+                '/matchChat/send',
+                repairStartMessage
+              );
+
+              const now = new Date().toISOString();
+              const sentMessage = {
+                ...response.data,
+                content: repairStartMessage.message,
+                timestamp: now,
+                msgType: '수리 시작',
+              };
+
+              setChatHistory((prev) => [...prev, sentMessage]);
+            } catch (error) {
+              alert('수리 시작 중 오류가 발생했습니다.');
+            }
           }}
-          onCompleteRepair={() => {
-            setRepairCompleted(true);
-            setShowModal(false);
+          onCompleteRepair={async () => {
+            try {
+              setShowModal(false);
+              setRepairCompleted(true);
+
+              const repairMsg = chatHistory.find((msg) => {
+                try {
+                  const parsed = JSON.parse(msg.content);
+                  return parsed && parsed.boardId && parsed.boardTitle;
+                } catch {
+                  return false;
+                }
+              });
+
+              if (!repairMsg) return alert('수리 메시지를 찾을 수 없습니다.');
+
+              const applyRes = await api.get(`/apply/apply_id=${id}`);
+              const shopId = applyRes.data.shopId;
+              console.log(
+                'applyRes: ',
+                applyRes,
+                'shop: ',
+                shopId,
+                'board: ',
+                board
+              );
+
+              await api.put(`/board/board_id=${board}`, {
+                status: '모집 완료',
+                shopId: shopId,
+              });
+
+              const repairCompleteMessage = {
+                roomId: roomId,
+                message: JSON.stringify({
+                  boardId: board,
+                  boardTitle: title,
+                  title: '수리 완료',
+                  applyId: id,
+                }),
+                receiverId: receiverId,
+              };
+
+              const response = await api.post(
+                '/matchChat/send',
+                repairCompleteMessage
+              );
+
+              const now = new Date().toISOString();
+              const sentMessage = {
+                ...response.data,
+                content: repairCompleteMessage.message,
+                timestamp: now,
+                msgType: '수리 완료',
+              };
+
+              setChatHistory((prev) => [...prev, sentMessage]);
+            } catch (error) {
+              alert('수리 완료 중 오류가 발생했습니다.');
+            }
           }}
         />
       )}
@@ -288,5 +438,15 @@ const styles = {
     color: '#fff',
     fontWeight: 'bold',
     cursor: 'pointer',
+  },
+  modalButton: {
+    marginTop: '8px',
+    padding: '6px 12px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '14px',
   },
 };

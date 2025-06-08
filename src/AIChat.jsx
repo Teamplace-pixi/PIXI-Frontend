@@ -1,36 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import ChatUI from './components/ChatUI';
 import BottomNav from './components/BottomNav';
 import ChatHistorySidebar from './components/ChatHistorySidebar';
+import api from './api';
+import apiAI from './apiAI';
+import { useLocation } from 'react-router-dom';
 
 function AIChat() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [hover, setHover] = useState(false);  // 툴팁 표시 상태
-  const dummyHistories = [
-    { summary: '첫 번째 대화' },
-    { summary: '두 번째 대화' },
-    { summary: '세 번째 대화' },
-  ];
+  const [hover, setHover] = useState(false);
+  const [loginId, setLoginId] = useState('');
+  const [histories, setHistories] = useState([]);
+  const [selectedHistory, setSelectedHistory] = useState([]);
+  const location = useLocation();
+  const initialQuestion = location.state?.initialQuestion || '';
+
+  // 유저 정보 가져오기
+  useEffect(() => {
+    const fetchLoginId = async () => {
+      try {
+        const response = await api.get('/myPage/edit');
+        setLoginId(response.data.loginId);
+        console.log(loginId);
+      } catch (error) {
+        console.error('유저 정보 로딩 실패:', error);
+      }
+    };
+
+    fetchLoginId();
+  }, []);
+
+  // 히스토리 요약용 (사이드바)
+  useEffect(() => {
+    const fetchHistories = async () => {
+      if (!sidebarOpen || !loginId) return;
+
+      try {
+        const response = await api.get(`/ai/chat/history/${loginId}`);
+        const data = response.data;
+
+        // 1. sessionId로 그룹화
+        const groupedBySession = {};
+        data.forEach((item) => {
+          const sid = item.sessionId;
+          if (!groupedBySession[sid]) groupedBySession[sid] = [];
+          groupedBySession[sid].push(item);
+        });
+
+        // 2. newChat이 true인 메시지를 요약으로 사용
+        const summaries = Object.entries(groupedBySession).map(
+          ([sessionId, messages]) => {
+            const newChatMsg = messages.find((msg) => msg.newChat === true);
+            const summaryText = newChatMsg
+              ? newChatMsg.content.slice(0, 15) +
+                (newChatMsg.content.length > 15 ? '...' : '')
+              : '(대화 없음)';
+            return {
+              sessionId,
+              summary: summaryText,
+              messages,
+            };
+          }
+        );
+
+        setHistories(summaries);
+      } catch (err) {
+        console.error('히스토리 불러오기 실패:', err);
+      }
+    };
+
+    fetchHistories();
+  }, [sidebarOpen, loginId]);
 
   const handleSelect = (history) => {
-    console.log('선택한 히스토리:', history);
+    const sortedData = [...history.messages].sort(
+      (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+    );
+    setSelectedHistory(sortedData);
+    setSidebarOpen(false);
   };
 
   return (
     <div style={styles.container}>
       <ChatHistorySidebar
-        histories={dummyHistories}
+        histories={histories}
         onSelect={handleSelect}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
 
       <Header title="AI Chat" />
-      
-      {/* 사이드바 열기 버튼 + 커스텀 툴팁 */}
+
       {!sidebarOpen && (
-        <div 
+        <div
           style={styles.tooltipWrapper}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -38,7 +101,6 @@ function AIChat() {
           <button
             style={styles.openSidebarBtn}
             onClick={() => setSidebarOpen(true)}
-            aria-label="채팅 히스토리 열기"
           >
             ☰
           </button>
@@ -48,7 +110,7 @@ function AIChat() {
 
       <div style={{ ...styles.mainContent, marginLeft: sidebarOpen ? 280 : 0 }}>
         <div style={styles.chatBoxWrapper}>
-          <ChatUI />
+          <ChatUI predefinedHistory={selectedHistory} />
         </div>
       </div>
 
@@ -86,7 +148,7 @@ const styles = {
   },
   tooltip: {
     position: 'absolute',
-    top: '100%',  // 버튼 바로 아래
+    top: '100%',
     left: '50%',
     transform: 'translateX(-50%)',
     marginTop: 6,

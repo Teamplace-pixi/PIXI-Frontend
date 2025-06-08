@@ -30,6 +30,7 @@ import SubscriptionPage from './SubscriptionPage';
 import ChatListPage from './ChatListPage';
 import ChatRoomPage from './ChatRoomPage';
 import Subscribe from './Subscribe';
+import PayPalExecutePage from './PayPalExecutePage';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -75,6 +76,10 @@ function App() {
         <Route path="/subscription" element={<SubscriptionPage />} />
         <Route path="/chatlist" element={<ChatListPage />} />
         <Route path="/chat/:id" element={<ChatRoomPage />} />
+        <Route
+          path="/myPage/paypal/execute-payment"
+          element={<PayPalExecutePage />}
+        />
       </Routes>
     </Router>
   );
