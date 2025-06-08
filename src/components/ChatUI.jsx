@@ -44,6 +44,12 @@ const ChatUI = ({ predefinedHistory = [] }) => {
       });
 
       const aiMessage = response.data?.reply || 'AI 응답이 없습니다.';
+      const newSessionId = response.data?.sessionId;
+
+      // 응답으로 받은 sessionId가 있으면 업데이트
+      if (newSessionId) {
+        setSessionId(newSessionId);
+      }
 
       setMessages((prev) => [
         ...prev.slice(0, -1),
@@ -147,6 +153,13 @@ const ChatUI = ({ predefinedHistory = [] }) => {
         })
         .then((response) => {
           const aiMessage = response.data?.reply || 'AI 응답이 없습니다.';
+          const newSessionId = response.data?.sessionId;
+
+          // 응답으로 받은 sessionId 저장
+          if (newSessionId) {
+            setSessionId(newSessionId);
+          }
+
           setMessages((prev) => [
             ...prev.slice(0, -1),
             { direction: 'incoming', content: aiMessage },
