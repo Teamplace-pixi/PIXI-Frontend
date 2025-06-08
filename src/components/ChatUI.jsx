@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   MainContainer,
   ChatContainer,
@@ -23,8 +23,12 @@ const ChatUI = ({ predefinedHistory = [] }) => {
   const [datas, setDatas] = useState([]);
   const [loginId, setLoginId] = useState('');
   const hasSentInitial = useRef(false);
-  const [sessionId, setSessionId] = useState(null);
+  const [sessionId, setSessionId] = useState('');
   const [newChat, setNewChat] = useState(false);
+
+  const navigate = useNavigate();
+
+  const sessionPairsRef = useRef([]);
 
   const handleSend = async (userMessage) => {
     if (!userMessage.trim()) return;
@@ -44,10 +48,17 @@ const ChatUI = ({ predefinedHistory = [] }) => {
       });
 
       const aiMessage = response.data?.reply || 'AI 응답이 없습니다.';
+      const newSessionId = response.data?.sessionId;
+      const isRecommend = response.data?.recommend || false;
+
+      // 응답으로 받은 sessionId가 있으면 업데이트
+      if (newSessionId) {
+        setSessionId(newSessionId);
+      }
 
       setMessages((prev) => [
         ...prev.slice(0, -1),
-        { direction: 'incoming', content: aiMessage },
+        { direction: 'incoming', content: aiMessage, recommend: isRecommend },
       ]);
 
       if (newChat) setNewChat(false);
@@ -86,50 +97,18 @@ const ChatUI = ({ predefinedHistory = [] }) => {
       setMessages(loaded);
 
       if (predefinedHistory[0]?.sessionId) {
-        setSessionId(parseInt(predefinedHistory[0].sessionId, 10));
+        setSessionId(parseInt(predefinedHistory[0].sessionId));
         setNewChat(false);
       }
     }
   }, [predefinedHistory]);
 
   useEffect(() => {
-    const fetchSessionInfo = async () => {
-      if (!loginId) return;
-
-      try {
-        const res = await api.get(`/ai/chat/history/${loginId}`);
-        const data = res.data;
-
-        const newChats = data.filter((item) => item.newChat === true);
-        const sorted = newChats.sort(
-          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-        );
-
-        if (sorted.length > 0) {
-          const latestSession = parseInt(sorted[0].sessionId, 10);
-          setSessionId(latestSession + 1);
-        } else {
-          setSessionId(1);
-        }
-
-        setNewChat(true);
-      } catch (err) {
-        console.error('세션 정보 로딩 실패:', err);
-      }
-    };
-
-    if (initialQuestion && predefinedHistory.length === 0 && loginId) {
-      fetchSessionInfo();
-    }
-  }, [initialQuestion, loginId, predefinedHistory]);
-
-  useEffect(() => {
     if (
       initialQuestion &&
       loginId &&
       !hasSentInitial.current &&
-      newChat &&
-      sessionId !== null
+      predefinedHistory.length === 0
     ) {
       hasSentInitial.current = true;
       setMessages((prev) => [
@@ -142,11 +121,18 @@ const ChatUI = ({ predefinedHistory = [] }) => {
         .post('/ai/chat', {
           login_id: loginId,
           message: initialQuestion,
-          sessionId,
+          sessionId: '',
           newChat: true,
         })
         .then((response) => {
           const aiMessage = response.data?.reply || 'AI 응답이 없습니다.';
+          const newSessionId = response.data?.sessionId;
+
+          // 응답으로 받은 sessionId 저장
+          if (newSessionId) {
+            setSessionId(newSessionId);
+          }
+
           setMessages((prev) => [
             ...prev.slice(0, -1),
             { direction: 'incoming', content: aiMessage },
@@ -165,6 +151,33 @@ const ChatUI = ({ predefinedHistory = [] }) => {
         });
     }
   }, [initialQuestion, loginId, sessionId, newChat]);
+
+  // sessionId 저장 및 localStorage 저장
+  useEffect(() => {
+    if (loginId && sessionId) {
+      const exists = sessionPairsRef.current.some(
+        (p) => p.loginId === loginId && p.sessionId === sessionId
+      );
+      if (!exists && sessionId.length > 10) {
+        const newPair = { loginId, sessionId };
+        sessionPairsRef.current.push(newPair);
+        console.log('세션 저장됨:', newPair);
+
+        // 🔽 localStorage 업데이트
+        const storedPairs = JSON.parse(
+          localStorage.getItem('sessionPairs') || '[]'
+        );
+        const isAlreadyStored = storedPairs.some(
+          (p) => p.loginId === loginId && p.sessionId === sessionId
+        );
+        if (!isAlreadyStored) {
+          const updatedPairs = [...storedPairs, newPair];
+          localStorage.setItem('sessionPairs', JSON.stringify(updatedPairs));
+          console.log('로컬스토리지 저장됨:', updatedPairs);
+        }
+      }
+    }
+  }, [loginId, sessionId]);
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -209,6 +222,15 @@ const ChatUI = ({ predefinedHistory = [] }) => {
                         <div style={styles.botName}>FIXI</div>
                       )}
                       <div>{msg.content}</div>
+
+                      {msg.recommend && (
+                        <button
+                          style={styles.recommendButton}
+                          onClick={() => navigate('/new-post/')}
+                        >
+                          수리기사를 구해요!
+                        </button>
+                      )}
                     </div>
                   </Message.CustomContent>
                 </Message>
@@ -256,6 +278,16 @@ const styles = {
   input: {
     borderTop: '1px solid #ccc',
     padding: '8px',
+  },
+  recommendButton: {
+    marginTop: '10px',
+    padding: '8px 12px',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '14px',
   },
 };
 
