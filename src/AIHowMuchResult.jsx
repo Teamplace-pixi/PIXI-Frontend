@@ -15,6 +15,7 @@ const AIHowMuchResult = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [saving, setSaving] = useState(false);
   const audioRef = useRef(null);
+  const [loginId, setLoginId] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -40,6 +41,16 @@ const AIHowMuchResult = () => {
   const { estimatedCost, repairMethod, partEstimates, caution } = estimate;
 
   const handleSaveEstimate = async () => {
+    const fetchMyPage = async () => {
+      try {
+        const response = await api.get('/myPage/edit');
+        setLoginId(response.data.loginId);
+      } catch (error) {
+        console.error('마이페이지 불러오기 실패:', error);
+      }
+    };
+
+    fetchMyPage();
     try {
       setSaving(true);
       const dataSet = {
@@ -53,17 +64,14 @@ const AIHowMuchResult = () => {
           : [],
         caution: estimate.caution || '',
       };
+      console.log('dataSet: ', dataSet, 'estimate: ', estimate);
 
-      const response = await api.post('/ai/estimate/save', {
+      const response = await api.post('/ai/estimate/save', dataSet, {
+        params: { loginId },
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dataSet),
       });
-
-      if (!response.ok) {
-        throw new Error(`Failed to save estimate (status ${response.status})`);
-      }
 
       alert('견적서가 성공적으로 저장되었습니다.');
       navigate('/home');
