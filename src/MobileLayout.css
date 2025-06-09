@@ -11,6 +11,7 @@
 
   background-color: #0546BE;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .mobile-container {
@@ -36,7 +37,7 @@
   max-width: 300px;  /* ✅ 기본 최대 크기 설정 */
   height: auto;
 
-  margin-top: 40px;
+  margin-bottom: 0;
 
   opacity: 0;
   transform: translateY(50px);

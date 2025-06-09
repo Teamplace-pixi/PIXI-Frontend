@@ -10,7 +10,7 @@ function Page2() {
       description="#AI 챗봇을 통해 개인형 맞춤 정보를 제공받을 수 있어요"
       path="/page3"
       titleColor="#FDC500"
-      imageSrc="page2.png"  // 여기 이미지 경로 추가
+      imageSrc="page22.png"  // 여기 이미지 경로 추가
     />
   );
 }

@@ -15,7 +15,7 @@ function Page3() {
       description="#AI가 분석한 세부적인 원인과 수리가 가능한 수리센터의 정보를 제공해드려요"
       path="/page4"
       titleColor="#FDC500"
-      imageSrc="page3.png"  // 이미지 경로 추가
+      imageSrc="page33.png"  // 이미지 경로 추가
     />
   );
 }

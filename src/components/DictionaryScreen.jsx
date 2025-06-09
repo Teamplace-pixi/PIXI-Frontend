@@ -27,7 +27,7 @@ function DictionaryScreen({
     </div>
 
       
-      <div className="mobile-container" style={{ padding: '0 16px', color: '#FFFFFF' }}>
+      <div className="mobile-container" style={{ padding: '0 16px', color: '#FFFFFF',justifyContent: 'space-between', }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', marginTop: '20px' }}>
           <div style={{ width: '20px', height: '20px', backgroundColor: '#FDC500', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>✔</div>
           <p style={{ color: titleColor, fontWeight: 'bold', fontSize: '14px' }}>{title}</p>
@@ -39,13 +39,21 @@ function DictionaryScreen({
 
         <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', lineHeight: '1.6' }}>{description}</p>
 
-        {/* ✅ 이미지 경로를 prop으로 받아 사용 */}
+        
         <img
           src={imageSrc}
           alt="제품 이미지"
           className="floating-image"
-          style={{ display: 'block', margin: '20px auto 0 auto' }}
+          style={{
+            display: 'block',
+            margin: 'auto auto 0 auto',
+            marginBottom: '0',
+            maxWidth: '75%',        
+         
+            objectFit: 'contain',   
+            }}
         />
+
       </div>
     </div>
   );
