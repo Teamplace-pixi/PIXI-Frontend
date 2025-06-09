@@ -187,7 +187,7 @@ const ChatUI = ({ predefinedHistory = [] }) => {
         <ChatContainer
           style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
         >
-          <MessageList style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+          <MessageList style={{ flex: 1, overflowY: 'auto', padding: '1rem',paddingBottom: '60px', }}>
             {messages.length === 0 ? (
               <div
                 style={{

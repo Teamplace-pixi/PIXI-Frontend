@@ -179,6 +179,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: 12,
+    paddingBottom: '108px',
   },
   bottomNavWrapper: {
     position: 'fixed',
