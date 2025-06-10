@@ -355,7 +355,7 @@ const styles = {
   },
   container: {
     paddingTop: '80px',
-    paddingBottom: '70px',
+    paddingBottom: '110px',
     paddingLeft: '16px',
     paddingRight: '16px',
     display: 'flex',
