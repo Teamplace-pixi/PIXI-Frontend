@@ -136,6 +136,7 @@ export default function NewPost() {
       />
 
       <label style={labelStyle}>필요 날짜</label>
+      
       <input
         name="date"
         type="date"
