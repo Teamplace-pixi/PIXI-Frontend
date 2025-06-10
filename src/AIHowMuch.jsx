@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './AIHowMuch.css';
 import BottomNav from './components/BottomNav';
 import { useNavigate } from 'react-router-dom';
+import GenericModal from './components/GenericModal';
 import api from './api';
 
 const phoneSteps = [
@@ -89,11 +90,18 @@ const AIHowMuch = () => {
   const [deviceCategory, setDeviceCategory] = useState('');
   const [answers, setAnswers] = useState({});
   const [inputValue, setInputValue] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
+  // 여기 구독 여부는 실제 API나 Context에서 받아오면 됨 (현재 예시용)
+  const isSubscribed = false;
+
   const navigate = useNavigate();
 
   const steps = deviceCategory === '휴대폰' ? phoneSteps : accessorySteps;
   const totalSteps = steps.length;
   const percent = (Object.keys(answers).length / totalSteps) * 100;
+
+  
 
   const handleDeviceCategory = (category) => {
     setDeviceCategory(category);
@@ -122,6 +130,11 @@ const AIHowMuch = () => {
   };
 
   const handleSubmitClick = () => {
+
+    if (!isSubscribed) {
+      setShowModal(true);
+      return;
+    }
     // payload 구성
     const payload =
       deviceCategory === '휴대폰'
@@ -287,6 +300,41 @@ const AIHowMuch = () => {
         )}
       </div>
       <BottomNav />
+      {showModal && (
+        <GenericModal
+          title="아직 구독을 안하셨네요?"
+          onClose={() => setShowModal(false)}
+        >
+          <div style={{ textAlign: 'center', marginBottom: '12px' }}>
+            <img
+              src="subscribe-info-image.png"
+              alt="구독 안내 이미지"
+              style={{ width: '250px', height: '202.2px' }}
+            />
+          </div>
+
+          <p>월 2900원으로 AI견적을 포함한 다양한 기능을 이용해보세요!</p>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
+            <button
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#006FFF',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '20px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setShowModal(false);
+                navigate('/subscribe');
+              }}
+            >
+              구독하러 가기
+            </button>
+          </div>
+        </GenericModal>
+      )}
     </>
   );
 };

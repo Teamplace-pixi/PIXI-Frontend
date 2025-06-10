@@ -277,10 +277,10 @@ export default function PostDetail() {
                   src={url}
                   alt={`게시글 이미지 ${index + 1}`}
                   style={{
-                    width: '300px', // 고정 가로 크기
-                    maxWidth: '100%', // 작은 화면에서는 300px보다 작아질 수 있게
-                    height: 'auto', // 세로 비율 유지
-                    maxHeight: '300px', // 최대 높이 제한
+                    width: '300px',       // 고정 가로 크기
+                    maxWidth: '100%',     // 작은 화면에서는 300px보다 작아질 수 있게
+                    height: 'auto',       // 세로 비율 유지
+                    maxHeight: '300px',   // 최대 높이 제한
                     objectFit: 'cover',
                     borderRadius: '8px',
                     marginBottom: '10px',
@@ -297,7 +297,7 @@ export default function PostDetail() {
       {user?.rollId === 1 && (
         <div
           style={{
-            backgroundColor: '#F8F8F8',
+            
             padding: '16px',
             position: 'fixed',
             bottom: '60px',
