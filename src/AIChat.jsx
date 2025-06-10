@@ -175,11 +175,13 @@ const styles = {
     transition: 'margin-left 0.3s ease',
   },
   chatBoxWrapper: {
+    flex: 1, // ✅ 높이 차지
+    overflowY: 'auto', // ✅ 메시지 내역만 스크롤되도록
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
     gap: 12,
-    paddingBottom: '108px',
+    paddingBottom: '108px', // ✅ 입력창+네비게이션 높이만큼 여유 공간
   },
   bottomNavWrapper: {
     position: 'fixed',
