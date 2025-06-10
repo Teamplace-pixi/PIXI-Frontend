@@ -77,7 +77,12 @@ export default function SettingsPage() {
     } else if (sub === false) {
       items.push({ label: '결제', onClick: () => navigate('/subscribe') });
     }
-
+    items.push({
+      label: '견적서 관리',
+      onClick: () => navigate('/estimate-history'),
+    });
+    
+    
     items.push(
       { divider: true },
       {
