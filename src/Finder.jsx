@@ -218,7 +218,7 @@ export default function Finder({ posts }) {
       borderRadius: '16px',
       padding: '16px',
       marginBottom: '12px',
-      backgroundColor: '#fff',
+      backgroundColor: '#F8F8F8',
     },
     repairCenterName: {
       fontWeight: 'bold',

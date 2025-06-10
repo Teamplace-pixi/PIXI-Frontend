@@ -138,9 +138,9 @@ export default function NewPost() {
       <label style={labelStyle}>필요 날짜</label>
       <input
         name="date"
+        type="date"
         value={form.date}
         onChange={handleChange}
-        placeholder="2000-00-00 형식으로 입력해주세요"
         style={inputStyle}
       />
 
