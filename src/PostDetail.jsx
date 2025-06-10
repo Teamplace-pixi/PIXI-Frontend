@@ -8,8 +8,8 @@ import RepairapplyModal from './components/RepairapplyModal';
 
 let options = [
   { value: '모집중', label: '모집중' },
-  { value: '예약중', label: '예약중' },
-  { value: '모집 완료', label: '모집 완료' },
+  // { value: '예약중', label: '예약중' },
+  // { value: '모집 완료', label: '모집 완료' },
   { value: '삭제하기', label: '삭제하기' },
 ];
 
@@ -121,7 +121,7 @@ export default function PostDetail() {
                 try {
                   await api.put(`/board/board_id=${boardId}`, {
                     status: e.value,
-                    shopId: 470,
+                    shopId: 0,
                   });
                   setSelectValue(e.value);
                   alert(`게시글 상태가 '${e.value}'(으)로 변경되었습니다.`);
@@ -277,10 +277,10 @@ export default function PostDetail() {
                   src={url}
                   alt={`게시글 이미지 ${index + 1}`}
                   style={{
-                    width: '300px',       // 고정 가로 크기
-                    maxWidth: '100%',     // 작은 화면에서는 300px보다 작아질 수 있게
-                    height: 'auto',       // 세로 비율 유지
-                    maxHeight: '300px',   // 최대 높이 제한
+                    width: '300px', // 고정 가로 크기
+                    maxWidth: '100%', // 작은 화면에서는 300px보다 작아질 수 있게
+                    height: 'auto', // 세로 비율 유지
+                    maxHeight: '300px', // 최대 높이 제한
                     objectFit: 'cover',
                     borderRadius: '8px',
                     marginBottom: '10px',

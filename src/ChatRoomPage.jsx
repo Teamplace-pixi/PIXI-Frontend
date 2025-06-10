@@ -7,7 +7,6 @@ import api from './api';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
-
 export default function ChatRoom() {
   const location = useLocation();
   const roomId = location.state?.roomId;
@@ -52,8 +51,11 @@ export default function ChatRoom() {
 
   useEffect(() => {
     fetchChatHistory();
-    if (tokenWs) {
-      connectStomp(tokenWs, (body) => {
+
+    let stompClient;
+
+    if (tokenWs && !stompClient) {
+      stompClient = connectStomp(tokenWs, (body) => {
         const parsed = JSON.parse(body);
         if (parseInt(parsed.senderId) === userId) return;
 
@@ -67,9 +69,21 @@ export default function ChatRoom() {
           msgType: '',
         };
 
-        setChatHistory((prev) => [...prev, fixedMessage]);
+        setChatHistory((prev) => {
+          const isDuplicate = prev.some(
+            (msg) =>
+              msg.content === fixedMessage.content &&
+              msg.senderId === fixedMessage.senderId &&
+              msg.roomId === fixedMessage.roomId
+          );
+          return isDuplicate ? prev : [...prev, fixedMessage];
+        });
       });
     }
+
+    return () => {
+      if (stompClient) stompClient.deactivate();
+    };
   }, [roomId]);
 
   const handleSend = async () => {
@@ -88,7 +102,7 @@ export default function ChatRoom() {
       const now = new Date().toISOString();
       const sentMessage = {
         ...response.data,
-        content: inputText,
+        content: messageData.message,
         timestamp: now,
         msgType: '',
       };
@@ -265,6 +279,7 @@ export default function ChatRoom() {
                 msgType: '수리 시작',
               };
 
+              console.log(sentMessage);
               setChatHistory((prev) => [...prev, sentMessage]);
             } catch (error) {
               alert('수리 시작 중 오류가 발생했습니다.');
@@ -298,7 +313,7 @@ export default function ChatRoom() {
               );
 
               await api.put(`/board/board_id=${board}`, {
-                status: '모집 완료',
+                status: '모집완료',
                 shopId: shopId,
               });
 
