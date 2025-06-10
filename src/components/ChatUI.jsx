@@ -56,6 +56,8 @@ const ChatUI = ({ predefinedHistory = [] }) => {
         setSessionId(newSessionId);
       }
 
+      console.log('메세지 주고 받음: ', sessionId, newChat);
+
       setMessages((prev) => [
         ...prev.slice(0, -1),
         { direction: 'incoming', content: aiMessage, recommend: isRecommend },
@@ -97,7 +99,7 @@ const ChatUI = ({ predefinedHistory = [] }) => {
       setMessages(loaded);
 
       if (predefinedHistory[0]?.sessionId) {
-        setSessionId(parseInt(predefinedHistory[0].sessionId));
+        setSessionId(predefinedHistory[0].sessionId);
         setNewChat(false);
       }
     }
@@ -132,6 +134,7 @@ const ChatUI = ({ predefinedHistory = [] }) => {
           if (newSessionId) {
             setSessionId(newSessionId);
           }
+          console.log('메세지 주고 받음: ', sessionId, newChat);
 
           setMessages((prev) => [
             ...prev.slice(0, -1),
@@ -187,7 +190,14 @@ const ChatUI = ({ predefinedHistory = [] }) => {
         <ChatContainer
           style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
         >
-          <MessageList style={{ flex: 1, overflowY: 'auto', padding: '1rem',paddingBottom: '60px', }}>
+          <MessageList
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              padding: '1rem',
+              paddingBottom: '60px',
+            }}
+          >
             {messages.length === 0 ? (
               <div
                 style={{

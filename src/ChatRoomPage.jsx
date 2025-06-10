@@ -254,33 +254,6 @@ export default function ChatRoom() {
                 status: '예약중',
                 shopId: shopId,
               });
-
-              const repairStartMessage = {
-                roomId: roomId,
-                message: JSON.stringify({
-                  boardId: board,
-                  boardTitle: title,
-                  title: '수리 시작',
-                  applyId: id,
-                }),
-                receiverId: receiverId,
-              };
-
-              const response = await api.post(
-                '/matchChat/send',
-                repairStartMessage
-              );
-
-              const now = new Date().toISOString();
-              const sentMessage = {
-                ...response.data,
-                content: repairStartMessage.message,
-                timestamp: now,
-                msgType: '수리 시작',
-              };
-
-              console.log(sentMessage);
-              setChatHistory((prev) => [...prev, sentMessage]);
             } catch (error) {
               alert('수리 시작 중 오류가 발생했습니다.');
             }
@@ -316,32 +289,6 @@ export default function ChatRoom() {
                 status: '모집완료',
                 shopId: shopId,
               });
-
-              const repairCompleteMessage = {
-                roomId: roomId,
-                message: JSON.stringify({
-                  boardId: board,
-                  boardTitle: title,
-                  title: '수리 완료',
-                  applyId: id,
-                }),
-                receiverId: receiverId,
-              };
-
-              const response = await api.post(
-                '/matchChat/send',
-                repairCompleteMessage
-              );
-
-              const now = new Date().toISOString();
-              const sentMessage = {
-                ...response.data,
-                content: repairCompleteMessage.message,
-                timestamp: now,
-                msgType: '수리 완료',
-              };
-
-              setChatHistory((prev) => [...prev, sentMessage]);
             } catch (error) {
               alert('수리 완료 중 오류가 발생했습니다.');
             }
