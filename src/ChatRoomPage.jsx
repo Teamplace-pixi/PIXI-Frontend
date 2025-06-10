@@ -126,6 +126,9 @@ export default function ChatRoom() {
     const isRepairSupport =
       parsed?.applyId && parsed.title && parsed?.boardId && parsed?.boardTitle;
 
+    const isRepairNotice =
+      parsed && parsed.title && parsed.boardTitle && !parsed.applyId; // 수리시작/완료 메시지
+
     return (
       <div
         key={index}
@@ -142,17 +145,17 @@ export default function ChatRoom() {
           <p style={styles.label}>[ 수리 완료 ]</p>
         )} */}
 
-        {isRepairSupport ? (
+        {isRepairSupport || isRepairNotice ? (
           <div>
             <p style={styles.label}>[ {parsed.title} ]</p>
             <p>{parsed.boardTitle}</p>
             <button
               style={styles.modalButton}
               onClick={() => {
-                setApplyId(parsed.applyId);
+                setApplyId(parsed.applyId || id);
                 setShowModal(true);
                 setTitle(parsed.boardTitle);
-                setBoard(parsed.boardId);
+                setBoard(parsed.boardId || board);
               }}
             >
               내용 확인하기
@@ -254,6 +257,21 @@ export default function ChatRoom() {
                 status: '예약중',
                 shopId: shopId,
               });
+
+              // ✅ 채팅 내역에 직접 메시지 추가
+              const now = new Date().toISOString();
+              const repairStartMessage = {
+                content: JSON.stringify({
+                  boardTitle: title,
+                  title: '수리 시작',
+                }),
+                senderId: userId,
+                receiverId: receiverId,
+                roomId: roomId,
+                timestamp: now,
+                msgType: '수리 시작',
+              };
+              setChatHistory((prev) => [...prev, repairStartMessage]);
             } catch (error) {
               alert('수리 시작 중 오류가 발생했습니다.');
             }
@@ -289,6 +307,21 @@ export default function ChatRoom() {
                 status: '모집완료',
                 shopId: shopId,
               });
+
+              // ✅ 채팅 내역에 직접 메시지 추가
+              const now = new Date().toISOString();
+              const repairCompleteMessage = {
+                content: JSON.stringify({
+                  boardTitle: title,
+                  title: '수리 완료',
+                }),
+                senderId: userId,
+                receiverId: receiverId,
+                roomId: roomId,
+                timestamp: now,
+                msgType: '수리 완료',
+              };
+              setChatHistory((prev) => [...prev, repairCompleteMessage]);
             } catch (error) {
               alert('수리 완료 중 오류가 발생했습니다.');
             }
