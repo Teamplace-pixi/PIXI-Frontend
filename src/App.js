@@ -31,6 +31,7 @@ import ChatListPage from './ChatListPage';
 import ChatRoomPage from './ChatRoomPage';
 import Subscribe from './Subscribe';
 import PayPalExecutePage from './PayPalExecutePage';
+import Estimatehistory from './Estimatehistory';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -56,6 +57,7 @@ function App() {
         <Route path="/aichatmain" element={<AIchatmain />} />
         <Route path="/ai" element={<AIHowMuch />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/estimate-history" element={<Estimatehistory />} />
         <Route
           path="/new-post"
           element={<NewPost onAddPost={handleAddPost} />}
