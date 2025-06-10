@@ -17,6 +17,9 @@ const AIHowMuchHistory = () => {
   const audioRef = useRef(null);
   const [loginId, setLoginId] = useState('');
 
+  console.log('location.state:', location.state);
+  console.log('estimate:', estimate);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowDetails(true);
@@ -40,49 +43,6 @@ const AIHowMuchHistory = () => {
 
   const { estimatedCost, repairMethod, partEstimates, caution } = estimate;
 
-  const handleSaveEstimate = async () => {
-    const fetchMyPage = async () => {
-      try {
-        const response = await api.get('/myPage/edit');
-        setLoginId(response.data.loginId);
-      } catch (error) {
-        console.error('마이페이지 불러오기 실패:', error);
-      }
-    };
-
-    fetchMyPage();
-    try {
-      setSaving(true);
-      const dataSet = {
-        estimatedCost: estimate.estimatedCost || '',
-        repairMethod: estimate.repairMethod || '',
-        partEstimates: Array.isArray(estimate.partEstimates)
-          ? estimate.partEstimates.map((part) => ({
-              partName: part.partName,
-              price: part.price,
-            }))
-          : [],
-        caution: estimate.caution || '',
-      };
-      console.log('dataSet: ', dataSet, 'estimate: ', estimate);
-
-      const response = await api.post('/ai/estimate/save', dataSet, {
-        params: { loginId },
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      alert('견적서가 성공적으로 저장되었습니다.');
-      navigate('/home');
-    } catch (error) {
-      console.error('견적서 저장 실패:', error);
-      alert('견적서 저장 중 오류가 발생했습니다.');
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
     <div className="receipt-container">
       <audio ref={audioRef} src="/cashier-sound.mp3" preload="auto" />
@@ -101,24 +61,19 @@ const AIHowMuchHistory = () => {
         <p className="symptom">{repairMethod || initSymptom}</p>
 
         <ul className="price-list">
-          {partEstimates.map((part, idx) => (
-            <li key={idx}>
-              <span>● {part.partName}</span>
-              <span>- {formatPrice(part.price)}</span>
-            </li>
-          ))}
+          {(Array.isArray(partEstimates) ? partEstimates : []).map(
+            (part, idx) => (
+              <li key={idx}>
+                <span>● {part.partName}</span>
+                <span>- {formatPrice(part.price)}</span>
+              </li>
+            )
+          )}
         </ul>
 
         {caution && <p className="warning">💡 {caution}</p>}
 
         <div className="btn-group">
-          <button
-            className="btn-outline"
-            onClick={handleSaveEstimate}
-            disabled={saving}
-          >
-            {saving ? '저장 중...' : '견적서 저장하기'}
-          </button>
           <button
             className="btn-primary"
             onClick={() => navigate('/new-post/')}
@@ -131,4 +86,4 @@ const AIHowMuchHistory = () => {
   );
 };
 
-export default AIHowMuchResult;
+export default AIHowMuchHistory;

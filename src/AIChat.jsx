@@ -10,12 +10,13 @@ import { useLocation } from 'react-router-dom';
 function AIChat() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hover, setHover] = useState(false);
-  const [loginId, setLoginId] = useState('');
+
   const [histories, setHistories] = useState([]);
   const [selectedHistory, setSelectedHistory] = useState([]);
   const location = useLocation();
   const initialQuestion = location.state?.initialQuestion || '';
 
+  const [loginId, setLoginId] = useState('');
   // 유저 정보 가져오기
   useEffect(() => {
     const fetchLoginId = async () => {
