@@ -32,6 +32,7 @@ import ChatRoomPage from './ChatRoomPage';
 import Subscribe from './Subscribe';
 import PayPalExecutePage from './PayPalExecutePage';
 import Estimatehistory from './Estimatehistory';
+import AIHowMuchHistory from './AIHowMuchHistory';
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -82,6 +83,7 @@ function App() {
           path="/myPage/paypal/execute-payment"
           element={<PayPalExecutePage />}
         />
+        <Route path="/estimate-detail" element={<AIHowMuchHistory />} />
       </Routes>
     </Router>
   );
