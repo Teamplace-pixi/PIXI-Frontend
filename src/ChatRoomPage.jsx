@@ -7,7 +7,6 @@ import api from './api';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
-
 export default function ChatRoom() {
   const location = useLocation();
   const roomId = location.state?.roomId;
@@ -52,8 +51,11 @@ export default function ChatRoom() {
 
   useEffect(() => {
     fetchChatHistory();
-    if (tokenWs) {
-      connectStomp(tokenWs, (body) => {
+
+    let stompClient;
+
+    if (tokenWs && !stompClient) {
+      stompClient = connectStomp(tokenWs, (body) => {
         const parsed = JSON.parse(body);
         if (parseInt(parsed.senderId) === userId) return;
 
@@ -67,9 +69,21 @@ export default function ChatRoom() {
           msgType: '',
         };
 
-        setChatHistory((prev) => [...prev, fixedMessage]);
+        setChatHistory((prev) => {
+          const isDuplicate = prev.some(
+            (msg) =>
+              msg.content === fixedMessage.content &&
+              msg.senderId === fixedMessage.senderId &&
+              msg.roomId === fixedMessage.roomId
+          );
+          return isDuplicate ? prev : [...prev, fixedMessage];
+        });
       });
     }
+
+    return () => {
+      if (stompClient) stompClient.deactivate();
+    };
   }, [roomId]);
 
   const handleSend = async () => {
@@ -88,7 +102,7 @@ export default function ChatRoom() {
       const now = new Date().toISOString();
       const sentMessage = {
         ...response.data,
-        content: inputText,
+        content: messageData.message,
         timestamp: now,
         msgType: '',
       };
@@ -112,6 +126,9 @@ export default function ChatRoom() {
     const isRepairSupport =
       parsed?.applyId && parsed.title && parsed?.boardId && parsed?.boardTitle;
 
+    const isRepairNotice =
+      parsed && parsed.title && parsed.boardTitle && !parsed.applyId; // 수리시작/완료 메시지
+
     return (
       <div
         key={index}
@@ -128,17 +145,17 @@ export default function ChatRoom() {
           <p style={styles.label}>[ 수리 완료 ]</p>
         )} */}
 
-        {isRepairSupport ? (
+        {isRepairSupport || isRepairNotice ? (
           <div>
             <p style={styles.label}>[ {parsed.title} ]</p>
             <p>{parsed.boardTitle}</p>
             <button
               style={styles.modalButton}
               onClick={() => {
-                setApplyId(parsed.applyId);
+                setApplyId(parsed.applyId || id);
                 setShowModal(true);
                 setTitle(parsed.boardTitle);
-                setBoard(parsed.boardId);
+                setBoard(parsed.boardId || board);
               }}
             >
               내용 확인하기
@@ -241,31 +258,20 @@ export default function ChatRoom() {
                 shopId: shopId,
               });
 
+              // ✅ 채팅 내역에 직접 메시지 추가
+              const now = new Date().toISOString();
               const repairStartMessage = {
-                roomId: roomId,
-                message: JSON.stringify({
-                  boardId: board,
+                content: JSON.stringify({
                   boardTitle: title,
                   title: '수리 시작',
-                  applyId: id,
                 }),
+                senderId: userId,
                 receiverId: receiverId,
-              };
-
-              const response = await api.post(
-                '/matchChat/send',
-                repairStartMessage
-              );
-
-              const now = new Date().toISOString();
-              const sentMessage = {
-                ...response.data,
-                content: repairStartMessage.message,
+                roomId: roomId,
                 timestamp: now,
                 msgType: '수리 시작',
               };
-
-              setChatHistory((prev) => [...prev, sentMessage]);
+              setChatHistory((prev) => [...prev, repairStartMessage]);
             } catch (error) {
               alert('수리 시작 중 오류가 발생했습니다.');
             }
@@ -298,35 +304,24 @@ export default function ChatRoom() {
               );
 
               await api.put(`/board/board_id=${board}`, {
-                status: '모집 완료',
+                status: '모집완료',
                 shopId: shopId,
               });
 
+              // ✅ 채팅 내역에 직접 메시지 추가
+              const now = new Date().toISOString();
               const repairCompleteMessage = {
-                roomId: roomId,
-                message: JSON.stringify({
-                  boardId: board,
+                content: JSON.stringify({
                   boardTitle: title,
                   title: '수리 완료',
-                  applyId: id,
                 }),
+                senderId: userId,
                 receiverId: receiverId,
-              };
-
-              const response = await api.post(
-                '/matchChat/send',
-                repairCompleteMessage
-              );
-
-              const now = new Date().toISOString();
-              const sentMessage = {
-                ...response.data,
-                content: repairCompleteMessage.message,
+                roomId: roomId,
                 timestamp: now,
                 msgType: '수리 완료',
               };
-
-              setChatHistory((prev) => [...prev, sentMessage]);
+              setChatHistory((prev) => [...prev, repairCompleteMessage]);
             } catch (error) {
               alert('수리 완료 중 오류가 발생했습니다.');
             }
