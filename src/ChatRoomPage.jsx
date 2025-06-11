@@ -26,6 +26,21 @@ export default function ChatRoom() {
   const token = localStorage.getItem('token');
   const tokenWs = localStorage.getItem('tokenWs');
 
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    const fetchLoginId = async () => {
+      try {
+        const response = await api.get('/users/userId');
+        setUserId(response.data.userId);
+        console.log(userId, '정보');
+      } catch (error) {
+        console.error('유저 정보 로딩 실패:', error);
+      }
+    };
+
+    fetchLoginId();
+  }, []);
   const fetchChatHistory = async () => {
     try {
       const response = await api.get(`/matchChat/room/${roomId}`, {
@@ -47,8 +62,6 @@ export default function ChatRoom() {
     }
   };
 
-  const userId = parseInt(localStorage.getItem('userId'));
-
   useEffect(() => {
     fetchChatHistory();
 
@@ -58,7 +71,7 @@ export default function ChatRoom() {
       stompClient = connectStomp(tokenWs, (body) => {
         const parsed = JSON.parse(body);
         if (parseInt(parsed.senderId) === userId) return;
-
+        console.log(parsed.senderId, '보낸사람');
         const now = new Date().toISOString();
         const fixedMessage = {
           content: parsed.message,
@@ -114,7 +127,11 @@ export default function ChatRoom() {
   };
 
   const renderMessage = (msg, index) => {
-    const isMine = msg.senderId === userId;
+    let isMine = msg.senderId !== receiverId;
+    if (msg.senderId == null) {
+      isMine = false;
+    }
+    console.log(receiverId, msg.senderId, userId, 'kkkk');
 
     let parsed;
     try {
