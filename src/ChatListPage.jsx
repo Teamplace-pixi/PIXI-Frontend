@@ -52,7 +52,17 @@ export default function ChatListPage() {
                   </span>
                 </div>
                 <div style={chat.read ? styles.message : styles.messageNotRead}>
-                  {chat.lastMsg}
+                  {(() => {
+                    try {
+                      const parsed = JSON.parse(chat.lastMsg);
+                      if (parsed.title && parsed.boardTitle) {
+                        return `[${parsed.title}] ${parsed.boardTitle}`;
+                      }
+                    } catch (e) {
+                      // JSON 파싱 실패 시 그냥 출력
+                    }
+                    return chat.lastMsg;
+                  })()}
                 </div>
               </div>
             </div>

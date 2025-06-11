@@ -38,7 +38,11 @@ const AIHowMuchLoading = () => {
 
   return (
     <div className="loading-container">
-      <img src="/loadinging-unscreen.gif" alt="Loading..." className="loading-gif" />{' '}
+      <img
+        src="/loadinging-unscreen.gif"
+        alt="Loading..."
+        className="loading-gif"
+      />{' '}
       {/* GIF 이미지 추가 */}
       <p className="loading-text">견적 확인중입니다．．．</p>
     </div>

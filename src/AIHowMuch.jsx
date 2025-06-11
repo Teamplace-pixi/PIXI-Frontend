@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AIHowMuch.css';
 import BottomNav from './components/BottomNav';
 import { useNavigate } from 'react-router-dom';
@@ -93,15 +93,28 @@ const AIHowMuch = () => {
   const [showModal, setShowModal] = useState(false);
 
   // 여기 구독 여부는 실제 API나 Context에서 받아오면 됨 (현재 예시용)
-  const isSubscribed = false;
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 구독 정보 가져오기
+        const infoResponse = await api.get('/myPage/paypal');
+        setIsSubscribed(infoResponse.data.sub);
+        console.log('구독 정보:', infoResponse.data);
+      } catch (error) {
+        console.error('데이터 요청 실패:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const navigate = useNavigate();
 
   const steps = deviceCategory === '휴대폰' ? phoneSteps : accessorySteps;
   const totalSteps = steps.length;
   const percent = (Object.keys(answers).length / totalSteps) * 100;
-
-  
 
   const handleDeviceCategory = (category) => {
     setDeviceCategory(category);
@@ -130,7 +143,6 @@ const AIHowMuch = () => {
   };
 
   const handleSubmitClick = () => {
-
     if (!isSubscribed) {
       setShowModal(true);
       return;
@@ -315,7 +327,13 @@ const AIHowMuch = () => {
 
           <p>월 2900원으로 AI견적을 포함한 다양한 기능을 이용해보세요!</p>
 
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: '12px',
+            }}
+          >
             <button
               style={{
                 padding: '8px 16px',
