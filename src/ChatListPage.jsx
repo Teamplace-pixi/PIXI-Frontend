@@ -43,7 +43,11 @@ export default function ChatListPage() {
                 })
               }
             >
-              <img src={chat.userImg} alt="avatar" style={styles.avatar} />
+              <img
+                src={chat.userImg || '/profile.png'}
+                alt="avatar"
+                style={styles.avatar}
+              />
               <div style={styles.chatInfo}>
                 <div style={styles.nameRow}>
                   <span style={styles.name}>{chat.userName}</span>
