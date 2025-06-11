@@ -14,13 +14,13 @@ export default function GenericModal({ title, children, onClose }) {
   );
 }
 
-// GenericModal.jsx
+
 
 const styles = {
     overlay: {
       position: 'fixed',
       top: 0, left: 0, right: 0, bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.4)', // 배경 흐리게
+      backgroundColor: 'rgba(0, 0, 0, 0.4)', 
       zIndex: 9,
     },
     modalContainer: {

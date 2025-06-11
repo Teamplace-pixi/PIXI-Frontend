@@ -33,7 +33,7 @@ export default function RepairSupportModal({
   }, [boardId]);
 
   useEffect(() => {
-    // ✅ 사용자 ID 가져오기
+    // 사용자 ID 가져오기
     const fetchUserId = async () => {
       try {
         const res = await api.get('/users/userId');

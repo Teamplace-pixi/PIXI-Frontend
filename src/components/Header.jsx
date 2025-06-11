@@ -16,12 +16,12 @@ function Header({ title = 'FIXI' }) {
     connectStomp(tokenWs, (body) => {
       const parsed = JSON.parse(body);
       console.log('📩 실시간 알림 수신:', parsed);
-      setHasAlert(true); // 🔔 실시간 메시지 도착 시 알림 표시
+      setHasAlert(true); 
     });
   }, [tokenWs]);
 
   useEffect(() => {
-    // ✅ 최초 알림 상태 확인
+    
     const fetchAlert = async () => {
       try {
         const res = await api.get(`/matchChat/Alert`);
@@ -36,7 +36,7 @@ function Header({ title = 'FIXI' }) {
 
   const baseURL = process.env.REACT_APP_API_BASE_URL;
   const connectStomp = (tokenWs, onMessage) => {
-    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); // 백엔드에서 지정한 WebSocket endpoint
+    const socket = new SockJS(`${baseURL}/ws?token=${tokenWs}`); 
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {

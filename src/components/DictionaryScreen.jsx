@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../MobileLayout.css';
-import ProgressBar from './ProgressBar'; // ✅ 컴포넌트 분리 활용
+import ProgressBar from './ProgressBar';
 
 function DictionaryScreen({
   title = '제품가격 확인',
@@ -10,7 +10,7 @@ function DictionaryScreen({
   path = '/',
   step = 1,
   titleColor = '#FFD700',
-  imageSrc = 'FIXIicon.png', // ✅ 이미지 경로를 prop으로 받기
+  imageSrc = 'FIXIicon.png',
 }) {
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ function DictionaryScreen({
   return (
     <div className="mobile-wrapper" onClick={handleClick} style={{ backgroundColor: '#fffff', minHeight: '100vh' }}>
       
-      {/* ✅ 고정된 상단 프로그레스 바 */}
+     
       <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '16px' }}>
       <ProgressBar step={step} />
     </div>

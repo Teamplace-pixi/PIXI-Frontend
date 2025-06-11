@@ -1,4 +1,3 @@
-// components/RepairSupportCard.jsx
 import React from 'react';
 
 export default function RepairSupportCard({ title, content, onClick }) {

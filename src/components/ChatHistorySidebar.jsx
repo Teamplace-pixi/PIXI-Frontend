@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function ChatHistorySidebar({ histories = [], onSelect, isOpen, onClose }) {
-  if (!isOpen) return null; // 열려있지 않으면 안보임
+  if (!isOpen) return null; 
 
   return (
     <div style={styles.sidebar}>

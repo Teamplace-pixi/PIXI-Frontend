@@ -1,5 +1,3 @@
-// RepairapplyModal.jsx
-
 import React, { useState } from 'react';
 import api from '../api';
 import { useLocation } from 'react-router-dom';
@@ -21,10 +19,10 @@ export default function RepairapplyModal({ onClose }) {
 
     try {
       const payload = {
-        boardId: boardId, // 부모에서 prop으로 전달
+        boardId: boardId, 
         applyContent: applyContent,
         applyCost: parseInt(applyCost),
-        applyDate: applyDate + 'T00:00:00.0000', // 날짜 형식에 맞게 변환
+        applyDate: applyDate + 'T00:00:00.0000', 
       };
       console.log('지원 요청:', payload);
 
@@ -34,13 +32,13 @@ export default function RepairapplyModal({ onClose }) {
 
       try {
         await api.put(`/board/board_id=${boardId}`, {
-          status: '예약중', // 상태를 '예약중'으로 변경
+          status: '예약중', 
         });
       } catch (err) {
         console.error(err);
       }
 
-      onClose(); // 모달 닫기
+      onClose(); 
     } catch (error) {
       console.error('지원 실패:', error);
       alert('지원 요청 중 오류가 발생했습니다.');
@@ -50,7 +48,7 @@ export default function RepairapplyModal({ onClose }) {
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
-        {/* 상단 헤더 */}
+        
         <div style={styles.header}>
           <h2 style={styles.title}>수리 지원하기</h2>
           <p style={styles.subTitle}>지원을 위해 아래 폼을 작성해 주세요!</p>
@@ -59,7 +57,7 @@ export default function RepairapplyModal({ onClose }) {
           </button>
         </div>
 
-        {/* 입력 영역 */}
+       
         <div style={styles.formGroup}>
           <label style={styles.label}>수리 가능한 예상 금액</label>
           <div style={styles.inputBox}>
@@ -97,7 +95,7 @@ export default function RepairapplyModal({ onClose }) {
           />
         </div>
 
-        {/* 지원하기 버튼 */}
+        
         <button style={styles.submitBtn} onClick={() => handleSubmit()}>
           지원하기
         </button>

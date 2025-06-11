@@ -1,14 +1,14 @@
 .cs-message--incoming .cs-message__content {
-  background-color: #FFFFFF !important; /* 배경색을 하얀색으로 강제 설정! */
-  color: #000000; /* 혹시 모를 텍스트 색상 문제 방지 (필요에 따라 조절) */
-  border-radius: 16px; /* 네가 원하는 둥근 모서리 유지 */
-  padding: 12px 16px; /* 네가 원하는 패딩 유지 */
-  /* maxWidth나 다른 스타일도 필요하다면 여기서 덮어쓸 수 있습니다. */
+  background-color: #FFFFFF !important; 
+  color: #000000; 
+  border-radius: 16px; 
+  padding: 12px 16px; 
+  
 }
 
 .cs-message--outgoing .cs-message__content {
-  background-color: #FFFFFF !important; /* 배경색을 하얀색으로 강제 설정! */
-  color: #000000; /* 텍스트 색상이 하얀 배경 위에서 잘 보이도록 검정색으로 */
-  border-radius: 16px; /* 사용자 말풍선도 둥글게 */
-  padding: 12px 16px; /* 사용자 말풍선 패딩 */
+  background-color: #FFFFFF !important; 
+  color: #000000; 
+  border-radius: 16px; 
+  padding: 12px 16px; 
 }

@@ -1,4 +1,3 @@
-// src/components/ProgressBar.js
 import React from 'react';
 import './ProgressBar.css';
 
@@ -11,12 +10,11 @@ function ProgressBar({ step }) {
         position: 'fixed',
         top: 0,
         left: '50%',
-        transform: 'translateX(-50%)',  // 화면 중앙 정렬
-        zIndex: 1000,
+        transform: 'translateX(-50%)', 
         display: 'flex',
         padding: '8px',
         backgroundColor: '#0546BE',
-        width: '392px',  // 너비 고정
+        width: '392px', 
         borderRadius: '4px',
       }}
     >
