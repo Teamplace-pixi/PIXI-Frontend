@@ -12,7 +12,8 @@ const FIXI_CENTER_DATA = {
   shopOpenTime: '10:00 ~ 20:00',
   shopCall: '010-8020-8882',
   shopCertification: 'FIXI 공식 인증업체',
-  shopDetail: '기존 전자상가 지점에서 용산역 앞 레미안 더 센터 지하 1층으로 이전하였습니다^^ 방문시 주차권 2~4시간 주차권이 제공됩니다! 편하게 방문해주세요!',
+  shopDetail:
+    '기존 전자상가 지점에서 용산역 앞 레미안 더 센터 지하 1층으로 이전하였습니다^^ 방문시 주차권 2~4시간 주차권이 제공됩니다! 편하게 방문해주세요!',
   thumb: '/goodfixer.png',
 };
 
@@ -34,7 +35,7 @@ const ServiceCenter = () => {
         setLoading(false);
         return;
       }
-  
+
       try {
         const response = await api.get(`/shop/shop_id=${shopId}`);
         console.log('센터 데이터:', response.data);
@@ -46,11 +47,8 @@ const ServiceCenter = () => {
       }
     };
 
-
     if (shopId) fetchCenterData();
-
   }, [shopId]);
-  
 
   // 리뷰 정보 불러오기
   useEffect(() => {
@@ -136,10 +134,9 @@ const CenterInfo = ({ center }) => (
 const CenterDetails = ({ center }) => (
   <div style={detailsStyle}>
     <p>
-      
       <img
-        src="/Location.svg" 
-        alt="Location"    // 대체 텍스트 (스크린 리더용)
+        src="/Location.svg"
+        alt="Location" // 대체 텍스트 (스크린 리더용)
         style={{ width: '16px', height: '16px', marginRight: '4px' }} // 스타일 (크기, 간격 등)
       />
       {center.shopLoc}
@@ -166,7 +163,9 @@ const CenterDetails = ({ center }) => (
         alt="Certification"
         style={{ width: '16px', height: '16px', marginRight: '4px' }}
       />
-      {center.shopCertification}
+      {center.shopCertification?.startsWith('https')
+        ? 'FIXI 인증 업체입니다.'
+        : '아직 인증하지 않은 업체입니다.'}
     </p>
   </div>
 );
@@ -187,7 +186,6 @@ const containerStyle = {
   margin: '0 auto', // 가운데 정렬
   backgroundColor: '#F8F8F8',
 };
-
 
 const centerInfoStyle = {
   borderRadius: '8px',
@@ -211,9 +209,9 @@ const centerNameStyle = {
 
 const contactButtonStyle = {
   display: 'block',
-  width: '50%', 
-  margin: '10px auto', 
-  padding: '4px 0', 
+  width: '50%',
+  margin: '10px auto',
+  padding: '4px 0',
   backgroundColor: '#FFFFFF',
   color: '#0047B1',
   border: '1px solid #0047B1',
@@ -222,7 +220,6 @@ const contactButtonStyle = {
   textAlign: 'center',
   whiteSpace: 'nowrap',
 };
-
 
 const detailsStyle = {
   margin: '10px 0',
