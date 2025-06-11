@@ -163,7 +163,7 @@ export default function Finder({ posts }) {
       border: '1px solid #E3E3E3',
     },
     deviceNameStyle: {
-      // deviceName과의 혼동을 피하기 위해 스타일 이름 변경
+      
       marginTop: '8px',
       fontWeight: 'bold',
       fontSize: '16px',
@@ -368,9 +368,9 @@ reviewTag: {
   borderRadius: '12px',
   fontSize: '12px',
 },
-separator: { // ✨ separator 스타일 추가! ✨
-  borderTop: '10px solid #F4F4F6', // 1px 두께의 실선 회색
-  margin: '30px 0', // 위아래 간격 조절 (원하는 만큼!)
+separator: {
+  borderTop: '10px solid #F4F4F6', 
+  margin: '30px 0',
 },
   };
 
