@@ -114,7 +114,7 @@ export default function ChatRoom() {
   };
 
   const renderMessage = (msg, index) => {
-    const isMine = msg.senderId !== receiverId;
+    const isMine = msg.senderId === userId;
 
     let parsed;
     try {
@@ -137,14 +137,6 @@ export default function ChatRoom() {
         <span
           style={isMine ? styles.chatBoxRightAfter : styles.chatBoxLeftAfter}
         />
-
-        {/* {msg.msgType?.includes('시작') && (
-          <p style={styles.label}>[ 수리 시작 ]</p>
-        )}
-        {msg.msgType?.includes('완료') && (
-          <p style={styles.label}>[ 수리 완료 ]</p>
-        )} */}
-
         {isRepairSupport || isRepairNotice ? (
           <div>
             <p style={styles.label}>[ {parsed.title} ]</p>
