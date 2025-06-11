@@ -128,7 +128,7 @@ export default function ChatRoom() {
 
   const renderMessage = (msg, index) => {
     let isMine = msg.senderId !== receiverId;
-    if (msg.senderId == null) {
+    if (msg.senderId == null && userId == msg.receiverId) {
       isMine = false;
     }
     console.log(receiverId, msg.senderId, userId, 'kkkk');
