@@ -11,7 +11,7 @@ const FIXI_CENTER_DATA = {
   shopLoc: '서울시 용산구',
   shopOpenTime: '10:00 ~ 20:00',
   shopCall: '010-8020-8882',
-  shopCertification: 'FIXI 공식 인증업체',
+  shopCertification: 'https',
   shopDetail:
     '기존 전자상가 지점에서 용산역 앞 레미안 더 센터 지하 1층으로 이전하였습니다^^ 방문시 주차권 2~4시간 주차권이 제공됩니다! 편하게 방문해주세요!',
   thumb: '/goodfixer.png',
